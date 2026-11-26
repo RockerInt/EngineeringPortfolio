@@ -19,17 +19,12 @@ const { href, lang, class: className } = Astro.props;
   a {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: var(--space-2xs);
   }
 
   a :global(svg) {
     width: 1em;
     height: 1em;
     flex: none;
-    transition: transform var(--fast) var(--ease);
-  }
-
-  a:hover :global(svg) {
-    transform: translate(2px, -2px);
   }
 </style>

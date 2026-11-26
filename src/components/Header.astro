@@ -20,8 +20,7 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
 <header class="site-header">
   <div class="container bar">
     <a class="brand" href={href(lang, 'home')} aria-current={page === 'home' ? 'page' : undefined}>
-      <span class="mark" aria-hidden="true">JJ</span>
-      <span>{SITE.name}</span>
+      {SITE.name}
     </a>
 
     <button class="toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
@@ -69,47 +68,35 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
 </script>
 
 <style>
+  /* A slab: one heavy bar, a step darker than the sheet. */
   .site-header {
     position: sticky;
     top: 0;
-    z-index: 50;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
+    z-index: var(--z-sticky-nav);
+    background: var(--color-paper-3);
+    border-bottom: var(--rule-heavy) solid var(--color-rule);
   }
 
   .bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
-    min-height: 4rem;
+    gap: var(--space-lg);
+    min-height: 72px;
   }
 
   .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.7rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--text-lg);
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+    text-decoration: none;
     white-space: nowrap;
   }
 
-  .mark {
-    display: grid;
-    place-items: center;
-    width: 1.75rem;
-    height: 1.75rem;
-    border: 1px solid var(--border-strong);
-    border-radius: 4px;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--accent);
-    transition: border-color var(--fast) var(--ease);
-  }
-
-  .brand:hover .mark {
-    border-color: var(--accent);
+  .brand:hover {
+    color: var(--color-ink-2);
   }
 
   .nav,
@@ -119,54 +106,57 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
   }
 
   .nav {
-    gap: 1.25rem;
+    gap: var(--space-lg);
   }
 
   .nav ul {
-    gap: 0.25rem;
+    gap: var(--space-lg);
   }
 
   .nav li a {
-    position: relative;
-    display: block;
-    padding: 0.5rem 0.6rem;
+    display: flex;
+    align-items: center;
+    min-height: 72px;
     font-size: var(--text-sm);
-    color: var(--muted);
+    font-weight: 500;
+    color: var(--color-ink-2);
+    text-decoration: none;
     white-space: nowrap;
-    transition: color var(--fast) var(--ease);
+    box-shadow: inset 0 0 0 0 var(--color-ink);
   }
 
-  .nav li a:hover,
+  .nav li a:hover {
+    color: var(--color-ink);
+  }
+
+  /* Current section: the line itself, drawn heavier at the bar's foot. */
   .nav li a[aria-current] {
-    color: var(--text);
-  }
-
-  /* Active indicator: a short rule under the link, not color alone. */
-  .nav li a[aria-current]::after {
-    content: '';
-    position: absolute;
-    left: 0.6rem;
-    right: 0.6rem;
-    bottom: 0.1rem;
-    height: 1px;
-    background: var(--accent);
+    color: var(--color-ink);
+    box-shadow: inset 0 -4px 0 0 var(--color-ink);
   }
 
   .toggle {
     display: none;
     place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    margin-right: -0.6rem;
+    width: 48px;
+    height: 48px;
     background: none;
-    border: 0;
-    color: var(--text);
+    border: var(--rule-hair) solid var(--color-rule);
+    color: var(--color-ink);
     cursor: pointer;
   }
 
+  .toggle:hover {
+    background: var(--color-paper);
+  }
+
+  .toggle:active {
+    transform: translateY(1px);
+  }
+
   .toggle :global(svg) {
-    width: 1.4rem;
-    height: 1.4rem;
+    width: 24px;
+    height: 24px;
   }
 
   .toggle :global(.icon-close),
@@ -178,7 +168,7 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
     display: block;
   }
 
-  @media (max-width: 64rem) {
+  @media (max-width: 68rem) {
     .toggle {
       display: grid;
     }
@@ -191,12 +181,12 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
       right: 0;
       flex-direction: column;
       align-items: stretch;
-      gap: 1.25rem;
-      max-height: calc(100dvh - 4rem);
+      gap: var(--space-lg);
+      max-height: calc(100dvh - 72px);
       overflow-y: auto;
-      padding: 0.5rem var(--gutter) 1.5rem;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
+      padding: var(--space-xs) var(--gutter) var(--space-lg);
+      background: var(--color-paper-3);
+      border-bottom: var(--rule-heavy) solid var(--color-rule);
     }
 
     .nav[data-open] {
@@ -210,18 +200,14 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
     }
 
     .nav li a {
-      padding: 0.95rem 0;
-      font-size: 1.125rem;
-      border-bottom: 1px solid var(--border);
+      min-height: 56px;
+      font-size: var(--text-lg);
+      border-bottom: var(--rule-hair) solid var(--color-rule-2);
     }
 
-    .nav li a[aria-current]::after {
-      left: 0;
-      right: auto;
-      top: 50%;
-      bottom: auto;
-      width: 0.5rem;
-      margin-left: -1rem;
+    .nav li a[aria-current] {
+      box-shadow: inset 4px 0 0 0 var(--color-ink);
+      padding-left: var(--space-md);
     }
 
     .nav :global(.lang) {

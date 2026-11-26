@@ -8,7 +8,7 @@ role: Diseño, desarrollo y contenido
 stack: [Astro]
 url: https://video.jjimenez.net/
 cover: ../../../assets/projects/audiovisual-portfolio.jpg
-coverAlt: Hero del portafolio audiovisual — «Jonathan Jiménez» en tipografía de gran formato sobre una fotografía oscura de un operador de cámara grabando una presentación musical en vivo.
+coverAlt: "Hero del portafolio audiovisual: «Jonathan Jiménez» en tipografía de gran formato sobre una fotografía oscura de un operador de cámara grabando una presentación musical en vivo."
 order: 7
 ---
 ## Propósito
@@ -17,10 +17,10 @@ Fuera del software trabajo en producción audiovisual: cinematografía, direcci�
 
 ## La experiencia
 
-- **La imagen primero** — una identidad oscura y cinematográfica donde la fotografía de producciones reales sostiene la página.
-- **Trabajo seleccionado, con roles** — cada producción indica qué fue y cuál fue mi participación, desde la cobertura de un congreso hasta la grabación en vivo de un álbum con ocho cámaras.
-- **Capacidades** — producción y postproducción, descritas desde la planificación y la captura hasta la imagen final.
-- **Detrás del encuadre** — una mirada al proceso de cada producción: contexto, cámaras y decisiones.
+- **La imagen primero**: una identidad oscura y cinematográfica donde la fotografía de producciones reales sostiene la página.
+- **Trabajo seleccionado, con roles**: cada producción indica qué fue y cuál fue mi participación, desde la cobertura de un congreso hasta la grabación en vivo de un álbum con ocho cámaras.
+- **Capacidades**: producción y postproducción, descritas desde la planificación y la captura hasta la imagen final.
+- **Detrás del encuadre**: una mirada al proceso de cada producción: contexto, cámaras y decisiones.
 
 ## Qué representa
 

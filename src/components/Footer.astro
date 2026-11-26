@@ -15,79 +15,118 @@ const d = t(lang);
 ---
 
 <footer class="site-footer">
-  <div class="container top">
-    <p class="id">
-      <span class="name">{SITE.name}</span>
-      <span class="muted">{d.role}</span>
-    </p>
-    <nav aria-label={d.footer.sections}>
-      <ul>
-        {FOOTER_NAV.map((key) => <li><a href={href(lang, key)}>{d.nav[key]}</a></li>)}
-      </ul>
-    </nav>
-  </div>
+  <div class="container">
+    <p class="statement">{d.statement[0]}<br />{d.statement[1]}</p>
 
-  <div class="container base">
-    <p class="muted note">© {new Date().getFullYear()} {SITE.name} · {d.location} · {d.footer.note}</p>
-    <ul aria-label={d.footer.elsewhere}>
-      <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
-      <li><ExtLink href={SITE.github} lang={lang}>GitHub</ExtLink></li>
-      <li><ExtLink href={SITE.linkedin} lang={lang}>LinkedIn</ExtLink></li>
-    </ul>
-    <LangSwitch lang={lang} page={page} sub={sub} />
+    <div class="cols">
+      <p class="id">
+        <span class="name">{SITE.name}</span>
+        <span>{d.role}</span>
+        <span>{d.location}</span>
+      </p>
+      <nav aria-label={d.footer.sections}>
+        <ul>
+          {FOOTER_NAV.map((key) => <li><a href={href(lang, key)}>{d.nav[key]}</a></li>)}
+        </ul>
+      </nav>
+      <ul aria-label={d.footer.elsewhere}>
+        <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+        <li><ExtLink href={SITE.github} lang={lang}>GitHub</ExtLink></li>
+        <li><ExtLink href={SITE.linkedin} lang={lang}>LinkedIn</ExtLink></li>
+      </ul>
+    </div>
+
+    <div class="base">
+      <p>© {new Date().getFullYear()} {SITE.name}</p>
+      <p>{d.footer.note}</p>
+      <LangSwitch lang={lang} page={page} sub={sub} />
+    </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    border-top: 1px solid var(--border);
-    padding-block: clamp(2.5rem, 5vw, 3.5rem) 2rem;
+    background: var(--color-paper-3);
+    border-top: var(--rule-heavy) solid var(--color-rule);
+    padding-block: var(--space-3xl) var(--space-xl);
     font-size: var(--text-sm);
   }
 
-  .top,
-  .base,
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.75rem 1.75rem;
+  /* The closing statement, set at the section size. */
+  .statement {
+    max-width: none;
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--text-head);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.05;
+    text-transform: uppercase;
+    overflow-wrap: break-word;
   }
 
-  .top {
-    justify-content: space-between;
+  .cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl) var(--gap-columns);
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-lg);
+    border-top: var(--rule-hair) solid var(--color-rule);
   }
 
   .id {
     display: grid;
-    gap: 0.15rem;
+    gap: var(--space-2xs);
+    align-content: start;
+    max-width: none;
+    color: var(--color-ink-2);
   }
 
   .name {
-    font-size: var(--text-lg);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-weight: 500;
+    color: var(--color-ink);
   }
 
-  li a {
-    display: inline-block;
-    padding-block: 0.35rem;
-    color: var(--muted);
-    transition: color var(--fast) var(--ease);
+  ul {
+    display: grid;
+    gap: var(--space-2xs);
+    align-content: start;
   }
 
-  li a:hover {
-    color: var(--text);
+  nav ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--gap-columns);
+  }
+
+  li :global(a) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  li :global(a:hover) {
+    text-decoration: underline;
   }
 
   .base {
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    margin-top: clamp(2rem, 4vw, 3rem);
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--border);
+    gap: var(--space-sm) var(--space-lg);
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-lg);
+    border-top: var(--rule-hair) solid var(--color-rule-2);
+    color: var(--color-muted);
   }
 
-  .note {
+  .base p:nth-child(2) {
     margin-right: auto;
+  }
+
+  @media (min-width: 48rem) {
+    .cols {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
+    }
   }
 </style>

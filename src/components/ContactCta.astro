@@ -1,5 +1,4 @@
 ---
-import ArrowRight from '@lucide/astro/icons/arrow-right';
 import ExtLink from './ExtLink.astro';
 import { href, t, type Lang } from '@/i18n';
 import { SITE } from '@/lib/site';
@@ -14,61 +13,77 @@ const d = t(lang);
 const title = Astro.props.title ?? d.cta.title;
 ---
 
-<section class="cta">
+<section class="cta band">
   <div class="container inner">
-    <p class="mono reveal">{d.cta.label}</p>
-    <h2 class="reveal">{title}</h2>
-    <p class="lead reveal">{d.cta.text}</p>
-    <p class="reveal"><a class="mail" href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
-    <p class="links reveal">
-      <a class="link" href={href(lang, 'contact')}>{d.cta.primary}<ArrowRight aria-hidden="true" /></a>
-      <ExtLink href={SITE.linkedin} lang={lang} class="link">LinkedIn</ExtLink>
-      <ExtLink href={SITE.github} lang={lang} class="link">GitHub</ExtLink>
-    </p>
+    <div>
+      <h2>{title}</h2>
+      <p class="lead">{d.cta.text}</p>
+    </div>
+    <div class="act">
+      <a class="mail" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      <p class="links">
+        <a class="link" href={href(lang, 'contact')}>{d.cta.primary}</a>
+        <ExtLink href={SITE.linkedin} lang={lang} class="link">LinkedIn</ExtLink>
+        <ExtLink href={SITE.github} lang={lang} class="link">GitHub</ExtLink>
+      </p>
+    </div>
   </div>
 </section>
 
 <style>
-  .cta {
-    border-top: 1px solid var(--border);
-    padding-block: var(--space-section);
-  }
-
   .inner {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
-    justify-items: start;
+    gap: var(--space-xl) var(--gap-columns);
+    align-items: end;
   }
 
   h2 {
-    font-size: var(--text-3xl);
-    letter-spacing: -0.035em;
     max-width: 18ch;
+    text-wrap: balance;
   }
 
-  /* The address is the call to action: set as type, not as a button. */
+  .lead {
+    margin-top: var(--space-lg);
+    color: var(--color-ink-2);
+  }
+
+  .act {
+    display: grid;
+    gap: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: var(--rule-heavy) solid var(--color-rule);
+  }
+
+  /* The address is the action: set at the title size on its own line. */
   .mail {
-    display: inline-block;
-    margin-top: 1rem;
-    padding-bottom: 0.2em;
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
     font-size: var(--text-2xl);
-    font-weight: 500;
-    letter-spacing: -0.03em;
-    line-height: 1.15;
+    letter-spacing: var(--tracking-display);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
     overflow-wrap: anywhere;
-    border-bottom: 1px solid var(--accent);
-    transition: color var(--fast) var(--ease);
+  }
+
+  @media (max-width: 40rem) {
+    .mail {
+      font-size: var(--text-title);
+    }
   }
 
   .mail:hover {
-    color: var(--accent);
+    text-decoration-color: transparent;
   }
 
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 1.75rem;
-    font-size: var(--text-sm);
+  .mail:active {
+    color: var(--color-ink-2);
+  }
+
+  @media (min-width: 60rem) {
+    .inner {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
   }
 </style>

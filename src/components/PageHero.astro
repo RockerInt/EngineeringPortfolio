@@ -6,59 +6,58 @@ interface Props {
   label: string;
   heading: string;
   lead?: string;
-  /** Parent section, rendered as a breadcrumb on detail pages. */
+  /** Parent section, rendered in the breadcrumb on detail pages. */
   parent?: PageKey;
 }
 
 const { lang, label, heading, lead, parent } = Astro.props;
 const d = t(lang);
 const hasAside = Astro.slots.has('aside');
+// Long heads step down a size (craft: headline by length).
+const long = heading.length > 50;
+// A head built on one long unbroken name scales with the screen so it never breaks mid-word.
+const tight = heading.split(/\s+/).some((word) => word.length > 12);
 ---
 
 <header class="page-hero">
   <div class:list={['container', { split: hasAside }]}>
-    <div>
-    {
-      parent ? (
-        <nav aria-label={d.nav.breadcrumb} class="crumbs mono rise">
-          <ol>
-            <li><a href={href(lang, 'home')}>{d.nav.home}</a></li>
-            <li><a href={href(lang, parent)}>{d.nav[parent]}</a></li>
-            <li aria-current="page">{label}</li>
-          </ol>
-        </nav>
-      ) : (
-        <p class="mono rise label">{label}</p>
-      )
-    }
-    <h1 class="rise" style="--i:1">{heading}</h1>
-    {lead && <p class="lead rise" style="--i:2">{lead}</p>}
-    <slot />
+    <div class="text">
+      <nav aria-label={d.nav.breadcrumb} class="crumbs">
+        <ol>
+          <li><a href={href(lang, 'home')}>{d.nav.home}</a></li>
+          {parent && <li><a href={href(lang, parent)}>{d.nav[parent]}</a></li>}
+          <li aria-current="page">{label}</li>
+        </ol>
+      </nav>
+      <h1 class:list={{ long, tight }}>{heading}</h1>
+      {lead && <p class="lead">{lead}</p>}
+      <slot />
     </div>
-    {hasAside && <div class="aside rise" style="--i:2"><slot name="aside" /></div>}
+    {hasAside && <div class="aside"><slot name="aside" /></div>}
   </div>
 </header>
 
 <style>
+  /* Banner: the first section shows above the fold. */
   .page-hero {
-    position: relative;
-    padding-block: clamp(4rem, 9vw, 8rem) clamp(3rem, 6vw, 5rem);
+    padding-block: var(--space-2xl) var(--space-lg);
+    border-bottom: var(--rule-hair) solid var(--color-rule-2);
   }
 
   .split {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 2.5rem var(--col-gap);
+    gap: var(--space-xl) var(--space-3xl);
+    align-items: center;
   }
 
   .aside {
-    max-width: 22rem;
+    max-width: 20rem;
   }
 
-  @media (min-width: 56rem) {
+  @media (min-width: 60rem) {
     .split {
-      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
-      align-items: end;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
     }
 
     .aside {
@@ -66,40 +65,46 @@ const hasAside = Astro.slots.has('aside');
     }
   }
 
-  .label::before {
-    content: '/ ';
-    color: var(--accent);
+  h1 {
+    margin-top: var(--space-lg);
+    max-width: 22ch;
+    text-wrap: balance;
   }
 
-  h1 {
-    margin-top: 1.5rem;
-    font-size: var(--text-3xl);
-    letter-spacing: -0.035em;
-    max-width: 20ch;
+  h1.long {
+    max-width: 26ch;
+    font-size: var(--text-display-s);
+  }
+
+  h1.tight {
+    max-width: none;
+    font-size: min(8vw, var(--text-display));
   }
 
   .lead {
-    margin-top: 1.75rem;
+    margin-top: var(--space-lg);
+    color: var(--color-ink-2);
   }
 
   .crumbs ol {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: var(--space-xs);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-muted);
   }
 
   .crumbs li + li::before {
     content: '/';
-    margin-right: 0.5rem;
-    color: var(--accent);
+    margin-right: var(--space-xs);
   }
 
-  .crumbs a {
-    transition: color var(--fast) var(--ease);
+  .crumbs a:hover {
+    text-decoration-color: transparent;
   }
 
-  .crumbs a:hover,
   .crumbs [aria-current] {
-    color: var(--text);
+    color: var(--color-ink);
   }
 </style>

@@ -2,7 +2,7 @@
 title: Alwon
 section: engineering
 category: Operational intelligence platform for retail
-summary: Platform engineering as Founding Engineer — architecture, backend, integration, event processing and data.
+summary: "Platform engineering as Founding Engineer: architecture, backend, integration, event processing and data."
 kind: professional-experience
 role: Founding Engineer
 stack: [TypeScript, Next.js, React, Cloudflare Workers, Supabase, PostgreSQL, LangGraph, Zod, Vitest, Playwright]
@@ -18,12 +18,12 @@ Alwon is an operational intelligence platform for retail. I work on it as Foundi
 
 My contribution spans the technical foundations of the platform:
 
-- **Software architecture** — defining how the platform is structured and how its parts communicate.
-- **Backend engineering** — services and APIs in TypeScript.
-- **Systems integration** — connecting the platform with the systems that feed it.
-- **Event processing** — moving and reacting to operational events through messaging infrastructure.
-- **Data platforms** — the persistence and data layers the product is built on.
-- **Artificial intelligence capabilities** — as part of the product's technical direction.
+- **Software architecture**: defining how the platform is structured and how its parts communicate.
+- **Backend engineering**: services and APIs in TypeScript.
+- **Systems integration**: connecting the platform with the systems that feed it.
+- **Event processing**: moving and reacting to operational events through messaging infrastructure.
+- **Data platforms**: the persistence and data layers the product is built on.
+- **Artificial intelligence capabilities**: as part of the product's technical direction.
 
 ## Technology context
 

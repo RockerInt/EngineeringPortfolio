@@ -4,6 +4,7 @@ import PageHero from '@/components/PageHero.astro';
 import Section from '@/components/Section.astro';
 import WorkRow from '@/components/WorkRow.astro';
 import ContactCta from '@/components/ContactCta.astro';
+import ArchDiagram from '@/components/ArchDiagram.astro';
 import { t, type Lang } from '@/i18n';
 import { getProjects } from '@/lib/content';
 
@@ -23,27 +24,27 @@ const related = (await getProjects(lang, 'openSource')).filter((p) => p.data.rep
   <PageHero lang={lang} label={e.label} heading={e.heading} lead={e.lead} />
 
   <Section label={e.casesLabel}>
-    <ul>
+    <ul class="register">
       {cases.map((project, i) => <WorkRow project={project} lang={lang} index={i + 1} />)}
     </ul>
+    <div class="drawing"><ArchDiagram lang={lang} /></div>
   </Section>
 
-  <Section label={e.focusLabel}>
+  <Section label={e.focusLabel} band>
     <dl class="focus">
       {
         e.focus.map((item) => (
-          <div class="reveal">
+          <div>
             <dt>{item.title}</dt>
-            <dd class="muted">{item.text}</dd>
+            <dd>{item.text}</dd>
           </div>
         ))
       }
     </dl>
   </Section>
 
-  <Section label={e.relatedLabel}>
-    <p class="lead reveal">{e.relatedText}</p>
-    <ul class="related">
+  <Section label={e.relatedLabel} title={e.relatedText}>
+    <ul class="related register">
       {related.map((project, i) => <WorkRow project={project} lang={lang} index={i + 1} />)}
     </ul>
   </Section>
@@ -52,33 +53,53 @@ const related = (await getProjects(lang, 'openSource')).filter((p) => p.data.rep
 </Base>
 
 <style>
+  .drawing {
+    margin-top: var(--space-2xl);
+  }
+
   .focus {
     display: grid;
-    gap: 2.5rem var(--col-gap);
+    grid-template-columns: minmax(0, 1fr);
+    border-top: var(--rule-heavy) solid var(--color-rule);
   }
 
   .focus > div {
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--border-strong);
+    display: grid;
+    gap: var(--space-sm);
+    align-content: start;
+    padding-block: var(--space-lg);
+    border-bottom: var(--rule-hair) solid var(--color-rule-2);
   }
 
   dt {
-    font-size: var(--text-xl);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--text-title);
+    letter-spacing: var(--tracking-display);
   }
 
   dd {
-    margin-top: 0.75rem;
+    color: var(--color-ink-2);
   }
 
-  @media (min-width: 44rem) {
+  @media (min-width: 60rem) {
     .focus {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
-  }
 
-  .related {
-    margin-top: 2.5rem;
+    .focus > div {
+      padding: var(--space-lg);
+      border-bottom: 0;
+      border-left: var(--rule-hair) solid var(--color-rule-2);
+    }
+
+    .focus > div:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .focus > div:last-child {
+      padding-right: 0;
+    }
   }
 </style>

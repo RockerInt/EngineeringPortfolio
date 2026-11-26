@@ -1,0 +1,36 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "site",
+  "shape": "Map / Diagram",
+  "theme": "blueprint",
+  "genre": "modern-minimal",
+  "axes": "mid/geometric-sans/neutral",
+  "hero": "Banner",
+  "nav": "slab",
+  "footer": "statement",
+  "imagery": "screenshots 3 (the owner captures, natural), portrait as cyanotype",
+  "photos": [],
+  "entry": "statement head across the sheet",
+  "fingerprint": "drenched/banner/slab/statement/map/register",
+  "sections": [
+   "Hero",
+   "Map",
+   "Rows",
+   "Showcase",
+   "Split",
+   "Index",
+   "Rows",
+   "Band",
+   "Footer"
+  ],
+  "signature": "the DSR.Architecture layer drawing on the grid sheet",
+  "waived": [
+   "8",
+   "49b"
+  ],
+  "prompt": "Portfolio of a software engineer and digital solutions architect; job: hire",
+  "date": "2026-11-26"
+ }
+]

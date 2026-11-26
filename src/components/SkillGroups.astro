@@ -8,11 +8,11 @@ interface Props {
 const { skills } = t(Astro.props.lang);
 ---
 
-<dl class="groups">
+<dl class="groups register">
   {
     skills.map((group) => (
-      <div class="reveal">
-        <dt class="mono">{group.label}</dt>
+      <div>
+        <dt>{group.label}</dt>
         <dd>
           <ul>{group.items.map((item) => <li>{item}</li>)}</ul>
         </dd>
@@ -22,35 +22,37 @@ const { skills } = t(Astro.props.lang);
 </dl>
 
 <style>
-  .groups {
-    border-top: 1px solid var(--border-strong);
-  }
-
   .groups > div {
     display: grid;
-    gap: 0.5rem 2rem;
-    padding-block: 1.1rem;
-    border-bottom: 1px solid var(--border);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xs) var(--gap-columns);
+    padding-block: var(--space-md);
     align-items: baseline;
+  }
+
+  dt {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--text-title);
+    letter-spacing: var(--tracking-display);
   }
 
   ul {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.2rem 0;
+    gap: var(--space-2xs) var(--space-xs);
     font-size: var(--text-lg);
-    letter-spacing: -0.01em;
+    color: var(--color-ink-2);
   }
 
   li:not(:last-child)::after {
-    content: '/';
-    margin-inline: 0.7rem;
-    color: var(--border-strong);
+    content: ',';
   }
 
-  @media (min-width: 40rem) {
+  @media (min-width: 48rem) {
     .groups > div {
-      grid-template-columns: 11rem minmax(0, 1fr);
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      padding-block: var(--space-lg);
     }
   }
 </style>

@@ -15,14 +15,14 @@ const groups = Object.entries(Object.groupBy(modules, (m) => m.group));
 <div class="map">
   {
     groups.map(([group, items = []]) => (
-      <section class:list={['layer', 'reveal', { planned: items.every((m) => m.planned) }]}>
-        <h3 class="mono">{group}</h3>
+      <section class:list={['layer', { planned: items.every((m) => m.planned) }]}>
+        <h3>{group}</h3>
         <ul>
           {items.map((m) => (
             <li>
-              <p class="name">{m.name}</p>
-              <p class="muted">{m.description}</p>
-              {m.planned && <p class="mono flag">{d.planned} — {d.plannedNote}</p>}
+              <p class="num name">{m.name}</p>
+              <p class="text">{m.description}</p>
+              {m.planned && <p class="label flag">{d.planned}: {d.plannedNote}</p>}
             </li>
           ))}
         </ul>
@@ -32,55 +32,43 @@ const groups = Object.entries(Object.groupBy(modules, (m) => m.group));
 </div>
 
 <style>
+  /* A drawing register: one sheet per layer, package names in mono because they are code. */
   .layer {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 1rem 2rem;
-    padding-block: 1.5rem;
-    border-top: 1px solid var(--border-strong);
+    gap: var(--space-sm) var(--gap-columns);
+    padding-block: var(--space-lg);
+    border-top: var(--rule-hair) solid var(--color-rule);
   }
 
-  .planned {
+  .layer.planned {
     border-top-style: dashed;
   }
 
-  h3 {
-    color: var(--accent);
+  li {
+    padding-block: var(--space-sm);
   }
 
-  .planned h3 {
-    color: var(--warm);
-  }
-
-  ul {
-    display: grid;
-    gap: 1.1rem;
+  li + li {
+    border-top: var(--rule-hair) solid var(--color-rule-2);
   }
 
   .name {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--text);
     overflow-wrap: anywhere;
   }
 
-  .muted {
-    margin-top: 0.3rem;
-    font-size: var(--text-sm);
-    line-height: 1.55;
-    max-width: 62ch;
+  .text {
+    margin-top: var(--space-2xs);
+    color: var(--color-ink-2);
   }
 
   .flag {
-    margin-top: 0.5rem;
-    text-transform: none;
-    letter-spacing: 0;
-    color: var(--warm);
+    margin-top: var(--space-2xs);
   }
 
   @media (min-width: 48rem) {
     .layer {
-      grid-template-columns: 8.5rem minmax(0, 1fr);
+      grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
     }
   }
 </style>

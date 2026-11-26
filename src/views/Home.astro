@@ -1,5 +1,4 @@
 ---
-import ArrowRight from '@lucide/astro/icons/arrow-right';
 import Base from '@/layouts/Base.astro';
 import Section from '@/components/Section.astro';
 import WorkRow from '@/components/WorkRow.astro';
@@ -26,38 +25,30 @@ const engineering = (await getProjects(lang)).filter((p) => p.data.featured && p
 // The framework leads the engineering chapter with its diagram; the rest follow as rows.
 const lead = engineering.find((p) => slugOf(p.id) === 'dsr-architecture');
 const rows = engineering.filter((p) => p !== lead);
-const [digitalLead, ...digitalRest] = await getProjects(lang, 'digital');
+const digital = await getProjects(lang, 'digital');
 const A = d.areas.engineering;
 const B = d.areas.digital;
 ---
 
 <Base lang={lang} page="home" title={h.title} description={h.description}>
   <section class="hero">
-    <div class="container">
-      <h1 class="id rise">
-        <span class="name">{SITE.name}</span>
-        <span class="mono role">{d.role}</span>
-      </h1>
-
-      <p class="statement">
-        <span class="line rise" style="--i:1"><sup class="mono" aria-hidden="true">A</sup>{d.statement[0]}</span>
-        <span class="line second rise" style="--i:2"><sup class="mono" aria-hidden="true">B</sup>{d.statement[1]}</span>
-      </p>
-
-      <div class="foot">
-        <div class="pitch rise" style="--i:3">
-          <p class="lead">{d.valueProp}</p>
-          <div class="btn-row">
-            <a class="btn btn-primary" href="#work">{h.cta.work}<ArrowRight aria-hidden="true" /></a>
-            <a class="link" href={href(lang, 'resume')}>{h.cta.resume}</a>
-            <a class="link" href={href(lang, 'contact')}>{h.cta.contact}</a>
-          </div>
+    <div class="container grid">
+      <h1>{d.statement[0]}<br />{d.statement[1]}</h1>
+      <div class="pitch">
+        <p class="lead">{d.valueProp}</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#work">{h.cta.work}</a>
+          <a class="btn" href={href(lang, 'resume')}>{h.cta.resume}</a>
+          <a class="link" href={href(lang, 'contact')}>{h.cta.contact}</a>
         </div>
-        <dl class="spec rise" style="--i:4" aria-label={h.spec.label}>
+      </div>
+      <div class="block">
+        <p class="who"><span class="name">{SITE.name}</span><span>{d.role}</span></p>
+        <dl class="spec" aria-label={h.spec.label}>
           {
             h.spec.rows.map(([term, value]) => (
               <div>
-                <dt class="mono">{term}</dt>
+                <dt>{term}</dt>
                 <dd>{value}</dd>
               </div>
             ))
@@ -67,349 +58,276 @@ const B = d.areas.digital;
     </div>
   </section>
 
-  <Section label={h.intro.label}>
-    <div slot="rail" class="intro-portrait reveal"><Portrait lang={lang} sizes="(min-width: 60rem) 16rem, 11rem" /></div>
-    <p class="intro-lead reveal">{h.intro.lead}</p>
-    <div class="intro-body">
-      {h.intro.body.map((p) => <p class="muted reveal">{p}</p>)}
-    </div>
-    <p class="reveal more"><a class="link" href={href(lang, 'about')}>{h.intro.link}<ArrowRight aria-hidden="true" /></a></p>
-  </Section>
-
-  <section class="section" id="work">
+  <section class="section band" id="work">
     <div class="container">
-      <header class="section-grid">
-        <p class="section-label mono">{h.work.label}</p>
-        <div>
-          <h2 class="section-title reveal">{h.work.title}</h2>
-          <p class="muted work-note reveal">{h.areasNote}</p>
-        </div>
+      <header class="head">
+        <h2>{h.work.label}</h2>
+        <p class="lead">{h.work.title} {h.areasNote}</p>
       </header>
 
       <div class="chapter">
-        <header class="chapter-head reveal">
-          <p class="mono letter" aria-hidden="true">A</p>
+        <header class="chapter-head">
           <div>
             <h3>{A.title}</h3>
-            <p class="muted">{A.text}</p>
+            <p>{A.text}</p>
           </div>
-          <p class="all"><a class="link" href={href(lang, 'engineering')}>{A.cta}<ArrowRight aria-hidden="true" /></a></p>
+          <a class="link" href={href(lang, 'engineering')}>{A.cta}</a>
         </header>
 
         {
           lead && (
             <article class="flagship">
-              <ArchDiagram lang={lang} />
-              <div class="lead-text reveal">
-                <p class="mono">01 — {lead.data.category}</p>
-                <h4><a href={projectHref(lang, lead)}>{lead.data.title}</a></h4>
-                <p class="muted">{lead.data.summary}</p>
-                <p><Status project={lead} lang={lang} /></p>
-                <p class="mono stack">{lead.data.stack.slice(0, 5).join(' · ')}</p>
-                <p class="links">
-                  <a class="link" href={projectHref(lang, lead)} aria-label={`${d.common.caseStudy}: ${lead.data.title}`}>
-                    {d.common.caseStudy}<ArrowRight aria-hidden="true" />
-                  </a>
-                  {lead.data.repo && <ExtLink href={lead.data.repo} lang={lang} class="link">{d.common.repository}</ExtLink>}
-                </p>
+              <div class="lead-text">
+                <div>
+                  <h4><a href={projectHref(lang, lead)}>{lead.data.title}</a></h4>
+                  <p class="summary">{lead.data.summary}</p>
+                  <p class="links">
+                    <a class="link" href={projectHref(lang, lead)} aria-label={`${d.common.caseStudy}: ${lead.data.title}`}>
+                      {d.common.caseStudy}
+                    </a>
+                    {lead.data.repo && <ExtLink href={lead.data.repo} lang={lang} class="link">{d.common.repository}</ExtLink>}
+                  </p>
+                </div>
+                <dl class="spec">
+                  <div>
+                    <dt>{d.common.type}</dt>
+                    <dd>{lead.data.category}</dd>
+                  </div>
+                  <div>
+                    <dt>{d.common.status}</dt>
+                    <dd><Status project={lead} lang={lang} /></dd>
+                  </div>
+                  <div>
+                    <dt>{d.common.stack}</dt>
+                    <dd>{lead.data.stack.slice(0, 5).join(', ')}</dd>
+                  </div>
+                </dl>
               </div>
+              <ArchDiagram lang={lang} />
             </article>
           )
         }
-        <ul class="rows">
+        <ul class="rows register">
           {rows.map((project, i) => <WorkRow project={project} lang={lang} index={i + 2} level={4} />)}
         </ul>
       </div>
+    </div>
+  </section>
 
-      <div class="chapter digital">
-        <header class="chapter-head reveal">
-          <p class="mono letter" aria-hidden="true">B</p>
-          <div>
-            <h3>{B.title}</h3>
-            <p class="muted">{B.text}</p>
-          </div>
-          <p class="all"><a class="link" href={href(lang, 'digital')}>{B.cta}<ArrowRight aria-hidden="true" /></a></p>
-        </header>
-
-        <div>{digitalLead && <WorkFeature project={digitalLead} lang={lang} wide level={4} />}</div>
-        <div class="pair">
-          {digitalRest.map((project) => <WorkFeature project={project} lang={lang} level={4} />)}
+  <section class="section">
+    <div class="container chapter">
+      <header class="chapter-head">
+        <div>
+          <h3>{B.title}</h3>
+          <p>{B.text}</p>
         </div>
+        <a class="link" href={href(lang, 'digital')}>{B.cta}</a>
+      </header>
+
+      <div class="set">
+        {digital.map((project) => <WorkFeature project={project} lang={lang} level={4} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section band">
+    <div class="container profile">
+      <Portrait lang={lang} sizes="(min-width: 60rem) 28vw, 70vw" />
+      <div>
+        <h2>{h.intro.label}</h2>
+        <p class="lead">{h.intro.lead}</p>
+        {h.intro.body.map((p) => <p class="body">{p}</p>)}
+        <p class="more"><a class="link" href={href(lang, 'about')}>{h.intro.link}</a></p>
       </div>
     </div>
   </section>
 
   <Section label={h.experience.label} title={h.experience.title}>
     <Timeline lang={lang} compact />
-    <p class="more reveal"><a class="link" href={href(lang, 'experience')}>{h.experience.link}<ArrowRight aria-hidden="true" /></a></p>
+    <p class="more"><a class="link" href={href(lang, 'experience')}>{h.experience.link}</a></p>
   </Section>
 
   <Section label={h.expertise.label} title={h.expertise.title}>
     <SkillGroups lang={lang} />
-    <p class="muted note reveal">{h.expertise.note}</p>
+    <p class="label note">{h.expertise.note}</p>
   </Section>
 
   <ContactCta lang={lang} />
 </Base>
 
 <style>
-  /* ----- Hero ----- */
+  /* Banner: the head, one sentence and the actions, with the sheet's title block beside them. */
   .hero {
-    position: relative;
-    padding-block: clamp(3.5rem, 8vw, 7rem) clamp(4rem, 8vw, 7rem);
-    overflow: hidden;
+    padding-block: var(--space-2xl) var(--space-lg);
   }
 
-  .id {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.4rem 1.25rem;
-    font-size: var(--text-xl);
-    letter-spacing: -0.02em;
-  }
-
-  .id .role {
-    color: var(--muted);
-  }
-
-  .statement {
-    margin-top: clamp(2rem, 5vw, 3.5rem);
-    font-size: var(--text-hero);
-    line-height: 0.98;
-    letter-spacing: -0.045em;
-    font-weight: 620;
-  }
-
-  .line {
-    display: block;
-    position: relative;
-  }
-
-  .second {
-    font-weight: 300;
-    color: #b9c4d4;
-    margin-top: 0.08em;
-  }
-
-  .line sup {
-    position: absolute;
-    right: 100%;
-    top: 0.9em;
-    margin-right: 0.9rem;
-    font-size: var(--text-xs);
-    letter-spacing: 0;
-    color: var(--accent);
-  }
-
-  .second sup {
-    color: var(--warm);
-  }
-
-  /* The A/B markers live in the page margin; hide them when there is no margin to hold them. */
-  @media (max-width: 86rem) {
-    .line sup {
-      display: none;
-    }
-  }
-
-  .foot {
+  .grid {
     display: grid;
-    gap: 3rem var(--col-gap);
-    margin-top: clamp(2.5rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl) var(--space-3xl);
+    align-items: start;
   }
 
-  .pitch {
-    display: grid;
-    gap: 2rem;
-    align-content: start;
-  }
-
-  .pitch .btn-row {
-    align-items: center;
-    gap: 1rem 1.75rem;
-    font-size: var(--text-sm);
+  h1 {
+    max-width: none;
+    text-wrap: balance;
   }
 
   .pitch .lead {
-    color: var(--text);
-    max-width: 44ch;
+    color: var(--color-ink-2);
   }
 
-  @media (min-width: 60rem) {
-    .foot {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-      align-items: end;
-    }
+  .pitch .btn-row {
+    margin-top: var(--space-xl);
   }
 
-  /* ----- Intro ----- */
-  .intro-portrait {
-    max-width: 11rem;
-    margin-top: 1.5rem;
-  }
-
-  @media (min-width: 60rem) {
-    .intro-portrait {
-      max-width: 16rem;
-    }
-  }
-
-  .intro-lead {
-    font-size: var(--text-2xl);
-    line-height: 1.2;
-    letter-spacing: -0.03em;
-    font-weight: 500;
-    max-width: 24ch;
-  }
-
-  .intro-body {
+  .who {
     display: grid;
-    gap: 1.5rem var(--col-gap);
-    margin-top: clamp(2rem, 4vw, 3rem);
+    gap: var(--space-2xs);
+    max-width: none;
+    padding: var(--space-md);
+    border: var(--rule-hair) solid var(--color-rule);
+    border-bottom: 0;
+    font-size: var(--text-sm);
+    color: var(--color-ink-2);
   }
 
-  @media (min-width: 48rem) {
-    .intro-body {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+  .who .name {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--text-title);
+    letter-spacing: var(--tracking-display);
+    color: var(--color-ink);
+  }
+
+  @media (min-width: 60rem) {
+    .grid {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    }
+
+    .grid h1 {
+      grid-column: 1 / -1;
     }
   }
 
-  .more {
-    margin-top: 2.5rem;
-    font-size: var(--text-sm);
-  }
-
-  /* ----- Selected work: two chapters, each with its own composition ----- */
-  .work-note {
-    margin-top: 1.25rem;
-    max-width: 52ch;
-  }
-
-  .chapter {
-    margin-top: clamp(3.5rem, 7vw, 6rem);
-  }
-
-  .digital {
-    --accent: var(--warm);
-  }
-
+  /* Chapters */
   .chapter-head {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1rem var(--col-gap);
-    padding-block: 1.5rem clamp(2rem, 4vw, 3rem);
-    border-top: 1px solid var(--border-strong);
-  }
-
-  .letter {
-    font-size: var(--text-sm);
-    color: var(--accent);
-  }
-
-  .letter::after {
-    content: ' /';
-    color: var(--border-strong);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-md) var(--gap-columns);
+    margin-bottom: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: var(--rule-heavy) solid var(--color-rule);
   }
 
   .chapter-head h3 {
-    font-size: var(--text-2xl);
-    letter-spacing: -0.03em;
+    font-size: var(--text-head);
+    line-height: 1.1;
   }
 
-  .chapter-head .muted {
-    margin-top: 0.75rem;
-    max-width: 48ch;
-  }
-
-  .all {
-    font-size: var(--text-sm);
+  .chapter-head p {
+    margin-top: var(--space-sm);
+    color: var(--color-ink-2);
   }
 
   .flagship {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 2rem var(--col-gap);
-    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+    gap: var(--space-xl);
   }
 
   .lead-text {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 0.9rem;
-    align-content: start;
-    justify-items: start;
+    gap: var(--space-lg) var(--space-3xl);
+    align-items: end;
+  }
+
+  .lead-text .summary {
+    margin-top: var(--space-sm);
+    max-width: 52ch;
+    font-size: var(--text-lead);
+  }
+
+  .lead-text .links {
+    margin-top: var(--space-lg);
+  }
+
+  .lead-text :global(.status) {
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
   }
 
   .lead-text h4 {
-    font-size: var(--text-2xl);
-    letter-spacing: -0.03em;
+    font-size: var(--text-head);
+    line-height: 1.1;
   }
 
   .lead-text h4 a {
-    transition: color var(--fast) var(--ease);
+    text-decoration: none;
   }
 
   .lead-text h4 a:hover {
-    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
   }
 
-  .lead-text .stack {
-    text-transform: none;
-    letter-spacing: 0;
+  .summary {
+    color: var(--color-ink-2);
   }
 
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 1.5rem;
-    margin-top: 0.5rem;
-    font-size: var(--text-sm);
+  .rows {
+    margin-top: var(--space-2xl);
   }
 
-  .pair {
+  /* Three sites, one set: equal frames across the sheet. */
+  .set {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 3.5rem var(--col-gap);
-    margin-top: clamp(3.5rem, 7vw, 6rem);
-  }
-
-  @media (min-width: 52rem) {
-    .pair {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    /* Offset the second column so the two features do not read as a card grid. */
-    .pair > :global(:nth-child(even)) {
-      margin-top: 5rem;
-    }
+    gap: var(--space-2xl) var(--gap-columns);
   }
 
   @media (min-width: 60rem) {
-    .chapter-head {
-      grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr);
-      align-items: start;
-    }
-
-    .all {
-      justify-self: end;
-      padding-top: 0.6rem;
-    }
-
-    .flagship {
+    .lead-text {
       grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     }
 
-    .lead-text {
-      position: sticky;
-      top: 6rem;
-      align-self: start;
+    .set {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* Profile */
+  .profile {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl) var(--space-3xl);
+    align-items: center;
+  }
+
+  .profile .lead {
+    margin-top: var(--space-lg);
+    font-size: var(--text-2xl);
+    line-height: 1.25;
+    max-width: 28ch;
+  }
+
+  .profile .body {
+    margin-top: var(--space-md);
+    max-width: 60ch;
+    color: var(--color-ink-2);
+  }
+
+  @media (min-width: 60rem) {
+    .profile {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
     }
   }
 
   .note {
-    margin-top: 1.5rem;
-    font-size: var(--text-sm);
-    max-width: 60ch;
+    margin-top: var(--space-lg);
   }
 </style>

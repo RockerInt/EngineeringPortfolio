@@ -12,29 +12,30 @@ const target = otherLang(lang);
 const d = t(lang);
 ---
 
-<a class="lang mono" href={href(target, page, sub)} hreflang={target}>
-  <span aria-hidden="true" class="current">{lang}</span>
-  <span aria-hidden="true">/</span>
-  <span aria-hidden="true">{target}</span>
-  <span class="sr-only" lang={target}>{d.nav.switchLabel}</span>
+<a class="lang" href={href(target, page, sub)} hreflang={target} lang={target}>
+  <span aria-hidden="true">{d.nav.switchTo}</span>
+  <span class="sr-only">{d.nav.switchLabel}</span>
 </a>
 
 <style>
   .lang {
     display: inline-flex;
-    gap: 0.35rem;
-    padding: 0.5rem 0.65rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    transition: border-color var(--fast) var(--ease), color var(--fast) var(--ease);
+    align-items: center;
+    min-height: 44px;
+    padding-inline: var(--space-md);
+    border: var(--rule-hair) solid var(--color-rule);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color var(--dur-micro) var(--ease-out);
   }
 
   .lang:hover {
-    border-color: var(--text);
-    color: var(--text);
+    background: var(--color-paper);
   }
 
-  .current {
-    color: var(--text);
+  .lang:active {
+    transform: translateY(1px);
   }
 </style>

@@ -7,7 +7,7 @@ role: Diseño y desarrollo del sitio
 stack: [Next.js, Vercel]
 url: https://legados-seven.vercel.app/
 cover: ../../../assets/projects/legados.jpg
-coverAlt: Pantalla inicial del sitio de Legado's — el nombre de la marca en una serif itálica de gran tamaño sobre un fondo cálido color papel, con la frase «Toda historia merece permanecer».
+coverAlt: "Pantalla inicial del sitio de Legado's: el nombre de la marca en una serif itálica de gran tamaño sobre un fondo cálido color papel, con la frase «Toda historia merece permanecer»."
 featured: true
 order: 5
 ---
@@ -19,10 +19,10 @@ Legado's es un servicio editorial que preserva historias personales y familiares
 
 El sitio se lee como las primeras páginas de un libro, no como una página de ventas.
 
-- **Storytelling editorial** — abre con la marca sola en la página y luego con un recuerdo familiar en primera persona, antes de explicar el servicio.
-- **Presentación de marca** — una identidad con serif y tonos de papel que toma prestado del diseño de libros: márgenes amplios, tipografía itálica de gran formato y pequeños detalles tipográficos, como un número de obra.
-- **El proceso, contado como un oficio** — tres etapas (escucha, escritura, legado) explican cómo se hace un libro, desde las conversaciones grabadas hasta la edición terminada.
-- **Un único llamado a la acción** — una invitación tranquila a empezar a escribir, repetida sin presión.
+- **Storytelling editorial**: abre con la marca sola en la página y luego con un recuerdo familiar en primera persona, antes de explicar el servicio.
+- **Presentación de marca**: una identidad con serif y tonos de papel que toma prestado del diseño de libros: márgenes amplios, tipografía itálica de gran formato y pequeños detalles tipográficos, como un número de obra.
+- **El proceso, contado como un oficio**: tres etapas (escucha, escritura, legado) explican cómo se hace un libro, desde las conversaciones grabadas hasta la edición terminada.
+- **Un único llamado a la acción**: una invitación tranquila a empezar a escribir, repetida sin presión.
 
 ## Qué representa
 

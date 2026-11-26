@@ -3,7 +3,6 @@ import Base from '@/layouts/Base.astro';
 import PageHero from '@/components/PageHero.astro';
 import ExtLink from '@/components/ExtLink.astro';
 import Status from '@/components/Status.astro';
-import ArrowRight from '@lucide/astro/icons/arrow-right';
 import ContactCta from '@/components/ContactCta.astro';
 import { t, type Lang } from '@/i18n';
 import { getProjects, projectHref, slugOf } from '@/lib/content';
@@ -23,43 +22,56 @@ const repos = (await getProjects(lang)).filter((p) => p.data.repo);
 <Base lang={lang} page="openSource" title={o.title} description={o.description}>
   <PageHero lang={lang} label={o.label} heading={o.heading} lead={o.lead} />
 
-  <div class="container">
-    <ol class="repos">
-      {
-        repos.map((project, i) => (
-          <li class="repo reveal">
-            <div class="head">
-              <p class="mono idx" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
-              <p class="mono path">RockerInt/<span>{new URL(project.data.repo!).pathname.split('/')[2]}</span></p>
-            </div>
-            <div class="body">
-              <h2><a href={projectHref(lang, project)}>{project.data.title}</a></h2>
-              <p class="muted">{project.data.summary}</p>
-              <div class="why">
-                <h3 class="mono">{o.demonstrates}</h3>
-                <p>{o.notes[slugOf(project.id)]}</p>
+  <section class="section">
+    <div class="container">
+      <ol class="repos register">
+        {
+          repos.map((project, i) => (
+            <li class="repo">
+              <div class="side">
+                <p class="num idx" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+                <p class="num path">RockerInt/<span>{new URL(project.data.repo!).pathname.split('/')[2]}</span></p>
+                <dl class="spec">
+                  <div>
+                    <dt>{d.common.type}</dt>
+                    <dd>{project.data.category}</dd>
+                  </div>
+                  <div>
+                    <dt>{d.common.status}</dt>
+                    <dd><Status project={project} lang={lang} /></dd>
+                  </div>
+                  {project.data.license && (
+                    <div>
+                      <dt>{d.common.license}</dt>
+                      <dd>{project.data.license}</dd>
+                    </div>
+                  )}
+                </dl>
               </div>
-              <ul class="tags" aria-label={d.common.stack}>
-                {project.data.stack.map((s) => <li class="tag">{s}</li>)}
-              </ul>
-              <p class="links">
-                <a class="link" href={projectHref(lang, project)} aria-label={`${d.common.caseStudy}: ${project.data.title}`}>
-                  {d.common.caseStudy}<ArrowRight aria-hidden="true" />
-                </a>
-                <ExtLink href={project.data.repo!} lang={lang} class="link">{d.common.repository}</ExtLink>
-              </p>
-            </div>
-            <div class="meta">
-              <p class="mono">{project.data.category}</p>
-              <Status project={project} lang={lang} />
-              {project.data.license && <p class="mono">{d.common.license}: {project.data.license}</p>}
-            </div>
-          </li>
-        ))
-      }
-    </ol>
-    <p class="all"><ExtLink href={SITE.github} lang={lang} class="btn">{o.allRepos}</ExtLink></p>
-  </div>
+              <div class="body">
+                <h2><a href={projectHref(lang, project)}>{project.data.title}</a></h2>
+                <p class="summary">{project.data.summary}</p>
+                <div class="why">
+                  <h3>{o.demonstrates}</h3>
+                  <p>{o.notes[slugOf(project.id)]}</p>
+                </div>
+                <ul class="tags" aria-label={d.common.stack}>
+                  {project.data.stack.map((s) => <li class="tag">{s}</li>)}
+                </ul>
+                <p class="links">
+                  <a class="link" href={projectHref(lang, project)} aria-label={`${d.common.caseStudy}: ${project.data.title}`}>
+                    {d.common.caseStudy}
+                  </a>
+                  <ExtLink href={project.data.repo!} lang={lang} class="link">{d.common.repository}</ExtLink>
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="more"><ExtLink href={SITE.github} lang={lang} class="btn">{o.allRepos}</ExtLink></p>
+    </div>
+  </section>
 
   <ContactCta lang={lang} />
 </Base>
@@ -67,97 +79,77 @@ const repos = (await getProjects(lang)).filter((p) => p.data.repo);
 <style>
   .repo {
     display: grid;
-    gap: 1.25rem var(--col-gap);
-    padding-block: clamp(2.5rem, 5vw, 4rem);
-    border-top: 1px solid var(--border);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg) var(--gap-columns);
+    padding-block: var(--space-2xl);
   }
 
   .repo:first-child {
-    border-top-color: var(--border-strong);
+    padding-top: var(--space-lg);
   }
 
-  .head {
-    display: flex;
-    gap: 1rem;
-    align-items: baseline;
-  }
-
-  .idx {
-    color: var(--accent);
-  }
-
-  .path {
-    text-transform: none;
-    letter-spacing: 0;
-  }
-
-  .path span {
-    color: var(--text);
-  }
-
-  h2 {
-    font-size: var(--text-2xl);
-  }
-
-  h2 a {
-    transition: color var(--fast) var(--ease);
-  }
-
-  h2 a:hover {
-    color: var(--accent);
-  }
-
-  h2 + p {
-    margin-top: 0.75rem;
-    max-width: 56ch;
-  }
-
-  .why {
-    margin-top: 1.75rem;
-    padding-left: 1.25rem;
-    border-left: 2px solid var(--accent);
-    max-width: 56ch;
-  }
-
-  .why p {
-    margin-top: 0.5rem;
-  }
-
-  .tags {
-    margin-top: 1.75rem;
-  }
-
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 1.5rem;
-    margin-top: 1.75rem;
-    font-size: var(--text-sm);
-  }
-
-  .meta {
+  .side {
     display: grid;
-    gap: 0.5rem;
+    gap: var(--space-sm);
     align-content: start;
   }
 
-  .all {
-    padding-block: 1rem var(--space-section);
+  .idx {
+    font-size: var(--text-xl);
+  }
+
+  .path {
+    color: var(--color-ink-2);
+    overflow-wrap: anywhere;
+  }
+
+  .body {
+    display: grid;
+    gap: var(--space-md);
+    align-content: start;
+  }
+
+  h2 {
+    max-width: none;
+    overflow-wrap: break-word;
+    min-width: 0;
+    text-wrap: balance;
+  }
+
+  h2 a {
+    text-decoration: none;
+  }
+
+  h2 a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+
+  .summary {
+    font-size: var(--text-lead);
+    color: var(--color-ink-2);
+  }
+
+  .why {
+    padding-top: var(--space-md);
+    border-top: var(--rule-hair) solid var(--color-rule-2);
+  }
+
+  .why h3 {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--color-muted);
+  }
+
+  .why p {
+    margin-top: var(--space-2xs);
   }
 
   @media (min-width: 60rem) {
     .repo {
-      grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr);
-    }
-
-    .head {
-      flex-direction: column;
-      gap: 0.5rem;
-      padding-top: 0.7rem;
-    }
-
-    .meta {
-      padding-top: 0.7rem;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
     }
   }
 </style>

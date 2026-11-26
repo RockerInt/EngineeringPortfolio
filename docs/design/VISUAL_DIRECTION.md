@@ -1,5 +1,7 @@
 # Dirección visual
 
+> Reemplazada por el rediseño con Hallmark (tema Blueprint). El sistema vigente está en `design.md`. Este documento describe el estado de la rama `design/visual-refinement`.
+
 **Editorial Engineering.** El sitio se compone como una publicación técnica: tipografía como instrumento principal, filetes como estructura, y el trabajo mostrado con material auténtico. Deriva de `docs/context/03_DESIGN_SYSTEM.md` y de la investigación en `DESIGN_REFERENCES.md`.
 
 ## Principios

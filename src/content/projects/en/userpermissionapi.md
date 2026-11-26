@@ -23,12 +23,12 @@ UserPermissionApi is a REST API for requesting, modifying and querying user perm
 
 ## What it demonstrates
 
-- **Clean Architecture in a single service** — Domain, Application, Infrastructure and Api projects with inward dependencies.
-- **CQRS with MediatR** — write and read operations as separate commands and queries.
-- **Event publishing** — operations are published to Kafka through Confluent's client.
-- **Search and logging infrastructure** — Elasticsearch integration and structured logging with Serilog.
-- **Reproducible environment** — the API and its dependencies run through Docker Compose.
-- **Tests at two levels** — a unit test project and an integration test project.
+- **Clean Architecture in a single service**: Domain, Application, Infrastructure and Api projects with inward dependencies.
+- **CQRS with MediatR**: write and read operations as separate commands and queries.
+- **Event publishing**: operations are published to Kafka through Confluent's client.
+- **Search and logging infrastructure**: Elasticsearch integration and structured logging with Serilog.
+- **Reproducible environment**: the API and its dependencies run through Docker Compose.
+- **Tests at two levels**: a unit test project and an integration test project.
 
 It also uses the [DSR.Architecture](/engineering/dsr-architecture/) packages for its base types, repositories and unit of work.
 

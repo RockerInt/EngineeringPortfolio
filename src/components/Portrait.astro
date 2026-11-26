@@ -16,38 +16,24 @@ const d = t(lang);
 ---
 
 <figure class="portrait">
-  <Picture
-    src={portrait}
-    alt={d.portraitAlt}
-    formats={['avif', 'webp']}
-    fallbackFormat="jpg"
-    widths={[240, 400, 640, 960]}
-    sizes={sizes}
-    loading={eager ? 'eager' : 'lazy'}
-    fetchpriority={eager ? 'high' : undefined}
-  />
-  <figcaption class="mono"><span>{SITE.name}</span><span>{d.location}</span></figcaption>
+  <div class="fig cyan">
+    <Picture
+      src={portrait}
+      alt={d.portraitAlt}
+      formats={['avif', 'webp']}
+      fallbackFormat="jpg"
+      widths={[240, 400, 640, 960]}
+      sizes={sizes}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : undefined}
+    />
+  </div>
+  <figcaption class="label">{SITE.name}, {d.location}</figcaption>
 </figure>
 
 <style>
-  /* The source is square; a 4:5 crop anchored to the top keeps the face and crossed arms. */
   .portrait :global(img) {
-    width: 100%;
     aspect-ratio: 4 / 5;
     object-fit: cover;
-    object-position: 50% 0;
-    background: var(--surface);
-  }
-
-  figcaption {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 0.25rem 1rem;
-    padding-top: 0.7rem;
-  }
-
-  figcaption span:first-child {
-    color: var(--text);
   }
 </style>

@@ -1,7 +1,6 @@
 ---
 import { Picture } from 'astro:assets';
 import { render } from 'astro:content';
-import ArrowRight from '@lucide/astro/icons/arrow-right';
 import Base from '@/layouts/Base.astro';
 import PageHero from '@/components/PageHero.astro';
 import ExtLink from '@/components/ExtLink.astro';
@@ -25,7 +24,7 @@ const { Content } = await render(project);
 
 const siblings = await getProjects(lang, data.section);
 const next = siblings[(siblings.findIndex((p) => p.id === project.id) + 1) % siblings.length];
-const status = [data.kind && c.kind[data.kind], data.stage && c.stage[data.stage]].filter(Boolean).join(' · ');
+const status = [data.kind && c.kind[data.kind], data.stage && c.stage[data.stage]].filter(Boolean).join(', ');
 const host = data.url ? new URL(data.url).host : undefined;
 ---
 
@@ -36,146 +35,201 @@ const host = data.url ? new URL(data.url).host : undefined;
   title={`${data.title} — ${d.nav[data.section]} — ${SITE.name}`}
   description={data.summary}
 >
-  <div style={data.section === 'digital' ? '--accent: var(--warm)' : undefined}>
-    <PageHero lang={lang} label={data.title} heading={data.title} lead={data.summary} parent={data.section} />
+  <PageHero lang={lang} label={data.title} heading={data.title} lead={data.summary} parent={data.section} />
 
-    {
-      data.cover && (
-        <div class="container">
-          <figure class="frame cover rise" style="--i:3">
-            {host && <p class="frame-bar mono">{host}</p>}
+  {
+    data.cover && (
+      <div class="container opener">
+        <figure>
+          <div class="fig cover">
             <Picture
               src={data.cover}
               alt={data.coverAlt ?? ''}
               formats={['avif', 'webp']}
-            fallbackFormat="jpg"
+              fallbackFormat="jpg"
               widths={[640, 1024, 1600, 2200]}
-              sizes="(min-width: 78rem) 72rem, 94vw"
+              sizes="(min-width: 90rem) 82rem, 94vw"
               loading="eager"
               fetchpriority="high"
             />
-          </figure>
-        </div>
-      )
-    }
-
-    {slugOf(project.id) === 'dsr-architecture' && <div class="container figure"><ArchDiagram lang={lang} /></div>}
-
-    <div class="container layout">
-      <aside class="meta">
-        <dl class="spec">
-          <div>
-            <dt class="mono">{c.type}</dt>
-            <dd>{data.category}</dd>
           </div>
-          {
-            data.role && (
-              <div>
-                <dt class="mono">{c.role}</dt>
-                <dd>{data.role}</dd>
-              </div>
-            )
-          }
-          {
-            status && (
-              <div>
-                <dt class="mono">{c.status}</dt>
-                <dd>{status}</dd>
-              </div>
-            )
-          }
-          {
-            data.license && (
-              <div>
-                <dt class="mono">{c.license}</dt>
-                <dd>{data.license}</dd>
-              </div>
-            )
-          }
-        </dl>
+          {host && <figcaption class="num">{host}</figcaption>}
+        </figure>
+      </div>
+    )
+  }
+
+  {slugOf(project.id) === 'dsr-architecture' && <div class="container opener"><ArchDiagram lang={lang} /></div>}
+
+  <div class="container layout">
+    <aside class="meta">
+      <dl class="spec">
+        <div>
+          <dt>{c.type}</dt>
+          <dd>{data.category}</dd>
+        </div>
+        {
+          data.role && (
+            <div>
+              <dt>{c.role}</dt>
+              <dd>{data.role}</dd>
+            </div>
+          )
+        }
+        {
+          status && (
+            <div>
+              <dt>{c.status}</dt>
+              <dd>{status}</dd>
+            </div>
+          )
+        }
+        {
+          data.license && (
+            <div>
+              <dt>{c.license}</dt>
+              <dd>{data.license}</dd>
+            </div>
+          )
+        }
         {
           data.stack.length > 0 && (
             <div>
-              <p class="mono">{c.stack}</p>
-              <ul class="tags">
-                {data.stack.map((s) => <li class="tag">{s}</li>)}
-              </ul>
+              <dt>{c.stack}</dt>
+              <dd>
+                <ul class="tags">
+                  {data.stack.map((s) => <li class="tag">{s}</li>)}
+                </ul>
+              </dd>
             </div>
           )
         }
-        {
-          (data.url || data.repo) && (
-            <div class="btn-row">
-              {data.url && <ExtLink href={data.url} lang={lang} class="btn btn-primary">{c.visitSite}</ExtLink>}
-              {data.repo && <ExtLink href={data.repo} lang={lang} class="btn btn-primary">{c.repository}</ExtLink>}
-            </div>
-          )
-        }
-      </aside>
+      </dl>
+      {
+        (data.url || data.repo) && (
+          <div class="btn-row">
+            {data.url && <ExtLink href={data.url} lang={lang} class="btn btn-primary">{c.visitSite}</ExtLink>}
+            {data.repo && <ExtLink href={data.repo} lang={lang} class="btn btn-primary">{c.repository}</ExtLink>}
+          </div>
+        )
+      }
+    </aside>
 
-      <div class="content">
-        <div class="prose">
-          <Content />
-        </div>
-        {
-          data.modules.length > 0 && (
-            <section class="modules">
-              <h2>{c.components}</h2>
-              <ModuleMap modules={data.modules} lang={lang} />
-            </section>
-          )
-        }
+    <div class="content">
+      <div class="prose">
+        <Content />
       </div>
+      {
+        data.modules.length > 0 && (
+          <section class="modules">
+            <h2>{c.components}</h2>
+            <ModuleMap modules={data.modules} lang={lang} />
+          </section>
+        )
+      }
     </div>
-
-    {
-      next && next.id !== project.id && (
-        <nav class="next" aria-label={c.next}>
-          <a class="container" href={projectHref(lang, next)}>
-            <span class="mono">{c.next}</span>
-            <span class="title">{next.data.title}</span>
-            <span class="muted">{next.data.category}</span>
-            <ArrowRight aria-hidden="true" />
-          </a>
-        </nav>
-      )
-    }
-    <p class="container back">
-      <a class="link" href={href(lang, data.section)}>{c.backTo} {d.nav[data.section]}</a>
-    </p>
   </div>
+
+  {
+    next && next.id !== project.id && (
+      <nav class="next" aria-label={c.next}>
+        <a class="container" href={projectHref(lang, next)}>
+          <span class="label">{c.next}</span>
+          <span class="title">{next.data.title}</span>
+          <span class="kind">{next.data.category}</span>
+        </a>
+      </nav>
+    )
+  }
+  <p class="container back">
+    <a class="link" href={href(lang, data.section)}>{c.backTo} {d.nav[data.section]}</a>
+  </p>
 
   <ContactCta lang={lang} />
 </Base>
 
 <style>
-  .cover {
-    margin-bottom: clamp(3rem, 6vw, 5rem);
+  .opener {
+    padding-top: var(--space-3xl);
   }
 
-  .figure {
-    margin-bottom: clamp(3rem, 6vw, 5rem);
+  /* The opening capture is a band from the top of the site, not the whole first screen. */
+  @media (min-width: 60rem) {
+    .cover :global(img) {
+      aspect-ratio: 21 / 9;
+      object-fit: cover;
+      object-position: top;
+    }
   }
 
-  .figure > :global(*) {
-    max-width: 60rem;
+  .opener figcaption {
+    margin-top: var(--space-sm);
+    color: var(--color-muted);
   }
 
   .layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 3rem var(--col-gap);
-    padding-bottom: var(--space-section);
+    gap: var(--space-2xl) var(--gap-columns);
+    padding-block: var(--section-gap-s);
   }
 
   .meta {
     display: grid;
-    gap: 2rem;
+    gap: var(--space-lg);
     align-content: start;
   }
 
   .meta .tags {
-    margin-top: 0.9rem;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  .modules {
+    margin-top: var(--space-3xl);
+  }
+
+  .modules h2 {
+    margin-bottom: var(--space-lg);
+    text-wrap: balance;
+  }
+
+  .next {
+    border-block: var(--rule-heavy) solid var(--color-rule);
+  }
+
+  .next a {
+    display: grid;
+    gap: var(--space-2xs);
+    padding-block: var(--space-xl);
+    text-decoration: none;
+    transition: background-color var(--dur-short) var(--ease-out);
+  }
+
+  .next a:hover {
+    background: var(--color-paper-3);
+  }
+
+  .next a:active {
+    background: var(--color-paper-2);
+  }
+
+  .next .title {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--text-section);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.05;
+    text-transform: uppercase;
+    overflow-wrap: break-word;
+  }
+
+  .next .kind {
+    color: var(--color-ink-2);
+  }
+
+  .back {
+    padding-block: var(--space-xl) var(--section-gap-s);
   }
 
   @media (min-width: 60rem) {
@@ -185,73 +239,7 @@ const host = data.url ? new URL(data.url).host : undefined;
 
     .meta {
       position: sticky;
-      top: 6rem;
-      align-self: start;
+      top: var(--space-4xl);
     }
-  }
-
-  .modules {
-    margin-top: clamp(3rem, 6vw, 5rem);
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-  }
-
-  .modules h2 {
-    font-size: var(--text-xl);
-    margin-bottom: 2rem;
-  }
-
-  .next {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    transition: background-color var(--fast) var(--ease);
-  }
-
-  .next:hover {
-    background: var(--surface);
-  }
-
-  .next a {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.5rem;
-    padding-block: clamp(2rem, 5vw, 3.5rem);
-    /* Leave room for the arrow, which sits inside the gutter. */
-    padding-right: calc(var(--gutter) + 3.5rem);
-  }
-
-  .next .title {
-    font-size: var(--text-3xl);
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 1.05;
-    overflow-wrap: anywhere;
-    transition: color var(--fast) var(--ease);
-  }
-
-  .next:hover .title {
-    color: var(--accent);
-  }
-
-  .next :global(svg) {
-    position: absolute;
-    right: var(--gutter);
-    top: 50%;
-    width: 2rem;
-    height: 2rem;
-    margin-top: -1rem;
-    color: var(--muted);
-    transition: transform var(--fast) var(--ease), color var(--fast) var(--ease);
-  }
-
-  .next:hover :global(svg) {
-    transform: translateX(6px);
-    color: var(--accent);
-  }
-
-  .back {
-    padding-block: 2rem;
-    font-size: var(--text-sm);
   }
 </style>

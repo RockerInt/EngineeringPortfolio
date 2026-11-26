@@ -1,5 +1,4 @@
 ---
-import ArrowRight from '@lucide/astro/icons/arrow-right';
 import Status from './Status.astro';
 import type { Lang } from '@/i18n';
 import { projectHref, type Project } from '@/lib/content';
@@ -18,117 +17,81 @@ const Heading = `h${level}` as const;
 const { title, summary, category, stack } = project.data;
 ---
 
-<li class="reveal">
+<li>
   <a class="row" href={projectHref(lang, project)}>
-    <span class="mono idx" aria-hidden="true">{String(index).padStart(2, '0')}</span>
+    <span class="num idx" aria-hidden="true">{String(index).padStart(2, '0')}</span>
     <div class="body">
       <Heading class="title">{title}</Heading>
       <p>{note ?? summary}</p>
-      <p class="mono stack">{stack.slice(0, 5).join(' · ')}</p>
     </div>
     <div class="meta">
-      <span class="mono">{category}</span>
+      <span class="label">{category}</span>
       <Status project={project} lang={lang} />
+      <span class="stack">{stack.slice(0, 5).join(', ')}</span>
     </div>
-    <ArrowRight class="arrow" aria-hidden="true" />
   </a>
 </li>
 
 <style>
   li {
-    border-bottom: 1px solid var(--border);
+    border-bottom: var(--rule-hair) solid var(--color-rule-2);
   }
 
-  li:first-child {
-    border-top: 1px solid var(--border-strong);
-  }
-
+  /* A register row: the whole line links, and darkens one step on hover. */
   .row {
-    position: relative;
-    isolation: isolate;
     display: grid;
-    grid-template-columns: 2.5rem minmax(0, 1fr) 1.5rem;
-    gap: 0.75rem 1.25rem;
-    padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-md) var(--gap-columns);
+    padding: var(--space-lg) var(--space-md);
+    text-decoration: none;
+    transition: background-color var(--dur-short) var(--ease-out);
   }
 
-  /* Hover wash that bleeds past the text column without shifting layout. */
-  .row::before {
-    content: '';
-    position: absolute;
-    inset: 0 -1rem;
-    background: var(--surface);
-    opacity: 0;
-    transition: opacity var(--fast) var(--ease);
-    z-index: -1;
+  .row:hover {
+    background: var(--color-paper-3);
   }
 
-  .row:hover::before,
-  .row:focus-visible::before {
-    opacity: 1;
+  .row:active {
+    background: var(--color-paper-2);
   }
 
   .idx {
-    padding-top: 0.55rem;
+    font-size: var(--text-xl);
   }
 
+  /* The title carries the link's underline, cleared on hover like every link. */
   .title {
-    font-size: var(--text-xl);
-    transition: color var(--fast) var(--ease);
+    font-size: var(--text-head);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
   }
 
   .row:hover .title {
-    color: var(--accent);
+    text-decoration-color: transparent;
   }
 
   .body p {
-    margin-top: 0.6rem;
-    color: var(--muted);
-    max-width: 52ch;
-  }
-
-  .body .stack {
-    max-width: none;
-    margin-top: 1rem;
-    text-transform: none;
-    letter-spacing: 0;
+    margin-top: var(--space-sm);
+    max-width: 58ch;
+    color: var(--color-ink-2);
   }
 
   .meta {
-    grid-column: 2;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 1.25rem;
+    display: grid;
+    gap: var(--space-2xs);
+    align-content: start;
+    font-size: var(--text-sm);
   }
 
-  .row :global(.arrow) {
-    grid-column: 3;
-    grid-row: 1;
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-top: 0.45rem;
-    color: var(--muted);
-    transition: transform var(--fast) var(--ease), color var(--fast) var(--ease);
+  .stack {
+    color: var(--color-ink-2);
   }
 
-  .row:hover :global(.arrow) {
-    transform: translateX(4px);
-    color: var(--accent);
-  }
-
-  @media (min-width: 52rem) {
+  @media (min-width: 60rem) {
     .row {
-      grid-template-columns: 3rem minmax(0, 7fr) minmax(0, 3fr) 1.5rem;
-    }
-
-    .meta {
-      grid-column: 3;
-      flex-direction: column;
-      padding-top: 0.55rem;
-    }
-
-    .row :global(.arrow) {
-      grid-column: 4;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 7fr) minmax(0, 4fr);
+      padding-block: var(--space-xl);
     }
   }
 </style>

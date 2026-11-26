@@ -21,25 +21,11 @@ Evitar:
 - Barras de porcentaje para representar habilidades.
 - Métricas inventadas o contadores decorativos.
 
-## Paleta inicial
+## Sistema vigente
 
-| Token | Valor |
-|---|---|
-| Background | `#090B10` |
-| Surface | `#111722` |
-| Border | `#202938` |
-| Text primary | `#E8EDF5` |
-| Text secondary | `#929EAF` |
-| Accent | `#65A8FF` |
+Desde el rediseño con Hallmark (2026-11-26) el sistema visual está fijado en `design.md`, en la raíz del repositorio, y sus valores viven en `src/styles/tokens.css`. Tema Blueprint: hoja azul de Prusia, línea blanca como única señal, Chakra Petch para encabezados, IBM Plex Sans para texto e IBM Plex Mono solo para periodos, índices, hosts y código.
 
-La paleta es una dirección inicial, no una restricción que impida ajustes razonados tras revisar contraste y legibilidad.
-
-## Tipografía
-
-- Inter: contenido, navegación y encabezados.
-- JetBrains Mono: etiquetas técnicas, metadatos, stack y fragmentos de código.
-
-Establecer escala tipográfica consistente y fluida con `clamp()` cuando sea apropiado. Evitar encabezados enormes que desplacen el contenido útil.
+La paleta oscura inicial (`#090B10`, acento `#65A8FF`) e Inter + JetBrains Mono quedaron reemplazadas; siguen disponibles en la rama `design/visual-refinement`.
 
 ## Layout
 
@@ -97,4 +83,4 @@ Establecer escala tipográfica consistente y fluida con `clamp()` cuando sea apr
 
 ## Tema
 
-Empezar con dark theme como identidad principal. Un tema claro es opcional y no debe retrasar el lanzamiento si no añade valor.
+Un solo tema: la hoja azul. La impresión (PDF de la hoja de vida) usa la variante clara del mismo tema.
