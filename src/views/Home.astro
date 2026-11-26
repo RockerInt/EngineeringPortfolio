@@ -38,8 +38,11 @@ const areas = [
 <Base lang={lang} page="home" title={h.title} description={h.description}>
   <section class="hero night">
     <div class="container grid">
-      <h1><strong>{first}</strong><br />{second.slice(0, cut)}<br />{second.slice(cut + 1)}</h1>
-      <div class="pitch">
+      <h1>
+        <strong class="line rise">{first}</strong>
+        <span class="line rise" style="--i:1">{second.slice(0, cut)}<br />{second.slice(cut + 1)}</span>
+      </h1>
+      <div class="pitch rise" style="--i:2">
         <p class="lead">{d.valueProp}</p>
         <div class="btn-row">
           <a class="btn btn-primary" href="#work">{h.cta.work}</a>
@@ -47,7 +50,7 @@ const areas = [
           <a class="link" href={href(lang, 'contact')}>{h.cta.contact}</a>
         </div>
       </div>
-      <div class="block">
+      <div class="block rise" style="--i:3">
         <p class="who"><span class="name">{SITE.name}</span><span>{d.role}</span></p>
         <dl class="spec" aria-label={h.spec.label}>
           {
@@ -195,11 +198,17 @@ const areas = [
     line-height: 1;
     text-wrap: initial;
     font-weight: var(--hero-light, 400);
+    color: var(--color-ink-2);
   }
 
-  /* As on the published site: the first sentence carries the weight, the second stays light. */
+  /* As on the published site: the first sentence carries the weight, the second stays lighter and a step dimmer. */
+  h1 .line {
+    display: block;
+  }
+
   h1 strong {
     font-weight: var(--hero-strong, 600);
+    color: var(--color-ink);
   }
 
   .pitch .lead {

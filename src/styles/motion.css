@@ -1,0 +1,62 @@
+/* Motion, carried over from the published site: the opening screen rises in order on load,
+   and the page's blocks fade up as they scroll in. CSS only, so every element is visible
+   without scripting, where scroll timelines are unsupported, with reduced motion and in print. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise,
+  .page-hero .text > *,
+  .page-hero .aside {
+    animation: rise 700ms var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  .page-hero .text > :nth-child(2) {
+    --i: 1;
+  }
+
+  .page-hero .text > :nth-child(n + 3),
+  .page-hero .aside {
+    --i: 2;
+  }
+
+  @supports (animation-timeline: view()) {
+    .section .head,
+    .chapter-head,
+    .area,
+    .flagship,
+    .register > li,
+    .groups > div,
+    .feature,
+    .layer,
+    .profile > *,
+    .cta .inner > *,
+    .repo,
+    .more {
+      /* Longhands: the minifier folds a shorthand plus view() into one invalid declaration. */
+      animation-name: reveal;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+
+@media print {
+  * {
+    animation: none !important;
+  }
+}
