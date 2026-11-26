@@ -21,6 +21,9 @@ interface Props {
 const { lang } = Astro.props;
 const d = t(lang);
 const h = d.home;
+// The second sentence breaks before its last word, as on the published site: "Building digital / experiences."
+const [first, second] = d.statement;
+const cut = second.lastIndexOf(' ');
 const engineering = (await getProjects(lang)).filter((p) => p.data.featured && p.data.section !== 'digital');
 // The framework leads the engineering chapter with its diagram; the rest follow as rows.
 const lead = engineering.find((p) => slugOf(p.id) === 'dsr-architecture');
@@ -35,7 +38,7 @@ const areas = [
 <Base lang={lang} page="home" title={h.title} description={h.description}>
   <section class="hero night">
     <div class="container grid">
-      <h1>{d.statement[0]}<br />{d.statement[1]}</h1>
+      <h1>{first}<br />{second.slice(0, cut)}<br />{second.slice(cut + 1)}</h1>
       <div class="pitch">
         <p class="lead">{d.valueProp}</p>
         <div class="btn-row">
@@ -168,27 +171,29 @@ const areas = [
 </Base>
 
 <style>
-  /* The hero fills the first screen under the bar: the statement at the top, the pitch and the
-     title block resting on its foot. */
+  /* The hero fills the first screen under the bar; the statement, the pitch and the title block
+     sit together as one group, centred in it. */
   .hero {
     display: grid;
     min-height: calc(100svh - var(--header-h));
-    padding-block: var(--space-3xl) var(--space-2xl);
+    padding-block: clamp(var(--space-xl), 7svh, var(--space-2xl));
   }
 
   .grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-xl) var(--space-3xl);
-    align-content: space-between;
-    align-items: end;
+    gap: clamp(var(--space-xl), 6svh, var(--space-2xl)) var(--space-3xl);
+    align-content: center;
+    align-items: start;
   }
 
-  /* The statement grows with the screen so it carries the space the full-height hero gives it. */
+  /* The statement grows with the screen and sets its own three lines. */
   h1 {
     max-width: none;
-    font-size: clamp(var(--text-display-s), 6.5vw, 6.25rem);
-    text-wrap: balance;
+    /* Width sets the size, the screen's height caps it so the group fits the first screen. */
+    font-size: clamp(var(--text-display-s), min(6.8vw, 10.5svh), 6.5rem);
+    line-height: 1;
+    text-wrap: initial;
   }
 
   .pitch .lead {
