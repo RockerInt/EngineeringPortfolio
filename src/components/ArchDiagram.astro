@@ -70,7 +70,7 @@ const g = t(Astro.props.lang).diagram;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-lg);
     padding: var(--space-xl);
-    border: var(--rule-hair) solid var(--color-rule);
+    border: var(--rule-hair) solid var(--color-sheet-rule, var(--color-rule));
   }
 
   /* Each layer is a keyline; nesting is the dependency rule. */
@@ -79,6 +79,7 @@ const g = t(Astro.props.lang).diagram;
     gap: var(--space-sm);
     padding: var(--space-lg);
     border: var(--rule-hair) solid var(--color-rule);
+    border-radius: var(--radius-layer, 0);
     background: var(--color-paper-2);
   }
 
@@ -89,8 +90,8 @@ const g = t(Astro.props.lang).diagram;
 
   .ring.core {
     border-width: var(--rule-heavy);
-    border-color: var(--color-ink-2);
-    background: var(--color-paper-3);
+    border-color: var(--color-accent);
+    background: var(--color-paper);
   }
 
   .ring.planned {
@@ -145,19 +146,18 @@ const g = t(Astro.props.lang).diagram;
 
   .items li {
     padding: var(--space-2xs) var(--space-sm);
-    border: var(--rule-hair) solid var(--color-rule-2);
+    border: var(--rule-hair) solid var(--color-rule);
+    border-radius: var(--radius-pill);
+    background: var(--color-paper);
     font-size: var(--text-sm);
     font-weight: 500;
     white-space: nowrap;
   }
 
   /* The pipeline is an ordered run: cells joined on one line. */
-  .flow {
-    gap: 0;
-  }
-
-  .flow li + li {
-    margin-left: calc(-1 * var(--rule-hair));
+  /* The pipeline: an ordered run of pills, each feeding the next. */
+  .flow li {
+    border-color: color-mix(in oklab, var(--color-accent) 35%, var(--color-rule));
   }
 
   .lines {

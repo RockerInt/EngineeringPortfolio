@@ -14,7 +14,7 @@ const { lang, page, sub } = Astro.props;
 const d = t(lang);
 ---
 
-<footer class="site-footer">
+<footer class="site-footer night">
   <div class="container">
     <p class="statement">{d.statement[0]}<br />{d.statement[1]}</p>
 
@@ -46,7 +46,6 @@ const d = t(lang);
 
 <style>
   .site-footer {
-    background: var(--color-paper-3);
     border-top: var(--rule-heavy) solid var(--color-rule);
     padding-block: var(--space-3xl) var(--space-xl);
     font-size: var(--text-sm);

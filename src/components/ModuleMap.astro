@@ -20,7 +20,7 @@ const groups = Object.entries(Object.groupBy(modules, (m) => m.group));
         <ul>
           {items.map((m) => (
             <li>
-              <p class="num name">{m.name}</p>
+              <p class="code name">{m.name}</p>
               <p class="text">{m.description}</p>
               {m.planned && <p class="label flag">{d.planned}: {d.plannedNote}</p>}
             </li>

@@ -1,7 +1,7 @@
-/* Hallmark · shape: Map / Diagram · genre: modern-minimal · theme: Rim (by request) · redesign: full
- * hero: Banner · nav: edge-aligned · footer: statement · imagery: screenshots 3 (the owner's captures, natural), portrait natural · signature: the DSR.Architecture layers as measured wells, the planned packages in the second signal · rim: night
- * axes: dark/grotesk-sans/warm · posture: committed · contrast: pass · fold: pass · job: hire · v2.0.0 */
-/* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V4 · weakest: S, the theme was written for imagery from orbit; it speaks here through hairlines, mono periods and one orange signal, with no borrowed photographs */
+/* Hallmark · shape: Map / Diagram · genre: atmospheric · theme: Ribbon (by request) · redesign: full
+ * hero: Banner · nav: edge-aligned · footer: statement · imagery: screenshots 3 (the owner's captures, natural), portrait muted · signature: the DSR.Architecture layers as a machined panel, the hour drawn as teal light behind the home hero and the footer · ribbon: dawn
+ * axes: light/grotesk-sans/chromatic-teal · posture: committed · contrast: pass · fold: pass · job: hire · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S3 R4 V5 · weakest: S, the theme's instrument is a sleep mixer; here the machined panel holds the architecture drawing instead of faders, and no control pretends to work */
 /* Hallmark · waive 8 · the page order is the owner's content sequence · a redesign keeps the portfolio's sections and recomposes each one */
 /* Hallmark · waive 49b · project names and one profile address, two lines at most at 320px · Audiovisual Portfolio and the LinkedIn address are real names that cannot shorten */
 /* Hallmark · dismissed 77 · the inner pages hold one register each (a timeline, a repository list, three channels); the count is the owner's content, not a landing strip */
@@ -136,8 +136,13 @@ a {
   color: var(--color-muted);
 }
 
-.num {
+.code {
   font-family: var(--font-outlier);
+  font-size: var(--text-sm);
+}
+
+.num {
+  font-family: var(--font-num, var(--font-outlier));
   font-weight: 500;
   font-size: var(--text-sm);
   font-variant-numeric: tabular-nums;
@@ -157,11 +162,12 @@ a {
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
-  min-height: 48px;
+  min-height: var(--control-h, 48px);
   padding: var(--space-sm) var(--space-lg);
   border: var(--rule-hair) solid var(--color-rule);
-  border-radius: var(--radius-card);
-  background: transparent;
+  border-radius: var(--radius-pill);
+  background: var(--btn-bg, transparent);
+  box-shadow: var(--btn-shadow, none);
   color: var(--color-ink);
   font-weight: 500;
   line-height: 1.2;
@@ -279,9 +285,11 @@ a {
   font-size: var(--text-sm);
 }
 
-/* ---------- Figures: a hard frame with corner ticks ---------- */
+/* ---------- Figures: rounded, unbordered ---------- */
 .fig {
   position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-figure);
   background: var(--color-paper-2);
   outline: var(--rule-hair) solid color-mix(in oklab, var(--color-ink) 8%, transparent);
   outline-offset: -1px;
@@ -291,47 +299,73 @@ a {
   width: 100%;
 }
 
-/* Two 12px corner ticks set just outside the frame. */
-.ticks {
-  position: relative;
-}
-
-.ticks::before,
-.ticks::after {
-  content: '';
-  position: absolute;
-  z-index: var(--z-raised);
-  width: 12px;
-  height: 12px;
-  border: 0 solid var(--color-muted);
-  pointer-events: none;
-}
-
-.ticks::before {
-  top: calc(-1 * var(--space-xs));
-  left: calc(-1 * var(--space-xs));
-  border-width: 1px 0 0 1px;
-}
-
-.ticks::after {
-  right: calc(-1 * var(--space-xs));
-  bottom: calc(-1 * var(--space-xs));
-  border-width: 0 1px 1px 0;
-}
-
 .fig + figcaption,
 figcaption.label {
   margin-top: var(--space-sm);
 }
 
-/* Photographs: natural, a little drier. */
+/* Photographs: the night held still, muted toward sepia. */
 .photo img {
-  filter: saturate(0.8) contrast(1.1);
+  filter: saturate(0.65) contrast(0.97) sepia(0.14);
 }
 
-/* A well: the drawing's ground, one step lighter than the page. */
+/* A machined panel, lit from above: the drawing sits in it. */
 .sheet {
-  background: var(--color-paper-2);
+  border-radius: var(--radius-card);
+  background: linear-gradient(var(--color-paper-2), var(--color-paper-3));
+  box-shadow: var(--edge-light), var(--shadow-panel);
+}
+
+/* ---------- The night: the hour drawn as light (home hero, footer) ---------- */
+.night {
+  --color-paper: var(--color-band);
+  --color-paper-2: var(--night-paper-2);
+  --color-paper-3: var(--night-paper-3);
+  --color-ink: var(--color-band-ink);
+  --color-ink-2: var(--night-ink-2);
+  --color-muted: var(--night-muted);
+  --color-rule: var(--night-rule);
+  --color-rule-2: var(--night-rule-2);
+  --color-accent: var(--color-accent-soft);
+  --color-accent-ink: var(--night-accent-ink);
+  --color-focus: var(--color-band-ink);
+  --color-link-rule: var(--night-link-rule);
+  --edge-light: var(--night-edge-light);
+  --shadow-part: var(--night-shadow-part);
+  /* Composite roles resolve where they are declared, so the night restates them. */
+  --btn-bg: linear-gradient(var(--night-paper-2), var(--night-paper-3));
+  --btn-shadow: var(--night-edge-light), var(--night-shadow-part);
+  --color-current: var(--color-accent-soft);
+  position: relative;
+  isolation: isolate;
+  color: var(--color-ink);
+  background: linear-gradient(180deg, var(--night-sky) 0%, var(--color-band) 62%, var(--night-land) 100%);
+}
+
+/* Fine generated grain over the night only. */
+.night::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px;
+  mix-blend-mode: soft-light;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* The horizon: one long soft line of light where the night meets the page. */
+.night::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--night-horizon) 30%, var(--night-horizon) 70%, transparent);
+  pointer-events: none;
 }
 
 /* ---------- Register rows ---------- */
@@ -346,7 +380,7 @@ figcaption.label {
 
 /* ---------- Prose (markdown case studies) ---------- */
 .prose {
-  max-width: 68ch;
+  max-width: min(68ch, 36em);
   line-height: 1.65;
 }
 

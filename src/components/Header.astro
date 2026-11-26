@@ -73,7 +73,7 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
     position: sticky;
     top: 0;
     z-index: var(--z-sticky-nav);
-    background: var(--color-paper-3);
+    background: var(--color-bar, var(--color-paper-3));
     border-bottom: var(--rule-heavy) solid var(--color-rule);
   }
 
@@ -142,6 +142,7 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
     height: 48px;
     background: none;
     border: var(--rule-hair) solid var(--color-rule);
+    border-radius: var(--radius-pill);
     color: var(--color-ink);
     cursor: pointer;
   }
@@ -185,7 +186,7 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
       max-height: calc(100dvh - 72px);
       overflow-y: auto;
       padding: var(--space-xs) var(--gutter) var(--space-lg);
-      background: var(--color-paper-3);
+      background: var(--color-bar, var(--color-paper-3));
       border-bottom: var(--rule-heavy) solid var(--color-rule);
     }
 
