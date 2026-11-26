@@ -5,7 +5,7 @@ The locked system. Every Hallmark run reads this first and pages share it. Chang
 ## System
 - Genre: atmospheric
 - Shape of the first page: Map / Diagram (the DSR.Architecture layers carry the home page)
-- Theme: Ribbon, two-in-the-morning colourway (the night drawn as a blue-black sky with one amber horizon behind the home hero and the footer)
+- Theme: Ribbon, two-in-the-morning colourway (the night drawn as a black sky with one amber horizon behind the home hero and the footer)
 - Axes: dark/grotesk-sans/warm · posture: committed
 - Chrome: nav edge-aligned bar · footer statement on the night · hero Banner on every route
 
@@ -13,11 +13,11 @@ The locked system. Every Hallmark run reads this first and pages share it. Chang
 `src/styles/tokens.css` is the source of truth. The roles:
 ```css
 :root {
-  --color-paper: oklch(13.2% 0.022 258);  --color-paper-2: oklch(16.4% 0.024 258);  --color-paper-3: oklch(10.5% 0.02 258);
-  --color-ink: oklch(93.5% 0.012 85);  --color-ink-2: oklch(84% 0.014 85);  --color-muted: oklch(72% 0.02 255);
-  --color-rule: oklch(27% 0.024 258);  --color-rule-2: oklch(20.5% 0.022 258);
+  --color-paper: oklch(12% 0 0);  --color-paper-2: oklch(15.5% 0 0);  --color-paper-3: oklch(9.5% 0 0);
+  --color-ink: oklch(93.5% 0.012 85);  --color-ink-2: oklch(84% 0.014 85);  --color-muted: oklch(72% 0.006 85);
+  --color-rule: oklch(27% 0 0);  --color-rule-2: oklch(20% 0 0);
   --color-accent: oklch(82% 0.095 68);  --color-accent-ink: oklch(20% 0.03 62);  --color-focus: oklch(85% 0.1 68);
-  --color-band: oklch(10% 0.024 258);
+  --color-band: oklch(9% 0 0);
   --font-display: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;  --font-body: "Figtree", ui-sans-serif, system-ui, sans-serif;
   --font-outlier: "JetBrains Mono", ui-monospace, monospace;
   --radius-card: 20px;  --radius-part: 6px;  --radius-pill: 999px;  --rule-hair: 1px;
