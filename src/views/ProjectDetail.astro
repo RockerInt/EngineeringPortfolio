@@ -41,7 +41,7 @@ const host = data.url ? new URL(data.url).host : undefined;
     data.cover && (
       <div class="container opener">
         <figure>
-          <div class="fig cover">
+          <div class="fig ticks cover">
             <Picture
               src={data.cover}
               alt={data.coverAlt ?? ''}
@@ -220,7 +220,7 @@ const host = data.url ? new URL(data.url).host : undefined;
     font-size: var(--text-section);
     letter-spacing: var(--tracking-display);
     line-height: 1.05;
-    text-transform: uppercase;
+    text-transform: var(--head-case, none);
     overflow-wrap: break-word;
   }
 

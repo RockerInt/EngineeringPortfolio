@@ -23,9 +23,9 @@ Evitar:
 
 ## Sistema vigente
 
-Desde el rediseño con Hallmark (2026-11-26) el sistema visual está fijado en `design.md`, en la raíz del repositorio, y sus valores viven en `src/styles/tokens.css`. Tema Blueprint: hoja azul de Prusia, línea blanca como única señal, Chakra Petch para encabezados, IBM Plex Sans para texto e IBM Plex Mono solo para periodos, índices, hosts y código.
+Desde el rediseño con Hallmark (2026-11-26) el sistema visual está fijado en `design.md`, en la raíz del repositorio, y sus valores viven en `src/styles/tokens.css`. Tema Rim (variante night): negro cálido, tinta blanca cálida, Switzer para encabezados y texto, Geist Mono solo para periodos, índices, hosts y código; naranja para la acción y el estado actual, azul cielo para lo planeado.
 
-La paleta oscura inicial (`#090B10`, acento `#65A8FF`) e Inter + JetBrains Mono quedaron reemplazadas; siguen disponibles en la rama `design/visual-refinement`.
+La paleta oscura inicial (`#090B10`, acento `#65A8FF`) e Inter + JetBrains Mono quedaron reemplazadas; siguen disponibles en la rama `design/visual-refinement`. Las otras opciones de tema están en `design/hallmark-redesign` (Blueprint) y `design/hallmark-ribbon` (Ribbon).
 
 ## Layout
 
@@ -83,4 +83,4 @@ La paleta oscura inicial (`#090B10`, acento `#65A8FF`) e Inter + JetBrains Mono 
 
 ## Tema
 
-Un solo tema: la hoja azul. La impresión (PDF de la hoja de vida) usa la variante clara del mismo tema.
+Un solo tema oscuro. La impresión (PDF de la hoja de vida) usa la variante clara del mismo tema.

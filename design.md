@@ -4,43 +4,43 @@ The locked system. Every Hallmark run reads this first and pages share it. Chang
 
 ## System
 - Genre: modern-minimal
-- Shape of the first page: Map / Diagram (the DSR.Architecture layer drawing carries the home page)
-- Theme: Blueprint, cyanotype sheet
-- Axes: mid/geometric-sans/neutral · posture: drenched
-- Chrome: nav slab · footer statement · hero Banner on every route
+- Shape of the first page: Map / Diagram (the DSR.Architecture layers carry the home page)
+- Theme: Rim, night colourway
+- Axes: dark/grotesk-sans/warm · posture: committed
+- Chrome: nav edge-aligned bar · footer statement · hero Banner on every route
 
 ## Tokens
 `src/styles/tokens.css` is the source of truth. The roles:
 ```css
 :root {
-  --color-paper: oklch(35% 0.105 256);  --color-paper-2: oklch(31% 0.10 257);  --color-paper-3: oklch(26.5% 0.095 258);
-  --color-ink: oklch(97% 0.012 240);  --color-ink-2: oklch(90% 0.025 242);  --color-muted: oklch(80% 0.045 244);
-  --color-rule: oklch(93% 0.02 240 / 0.85);  --color-rule-2: oklch(93% 0.02 240 / 0.32);
-  --color-accent: oklch(97% 0.012 240);  --color-accent-ink: oklch(33% 0.105 256);  --color-focus: oklch(97% 0.012 240);
-  --font-display: "Chakra Petch", ui-sans-serif, sans-serif;  --font-body: "IBM Plex Sans", ui-sans-serif, sans-serif;
-  --font-outlier: "IBM Plex Mono", ui-monospace, monospace;
-  --radius-card: 0;  --radius-pill: 0;  --rule-hair: 1px;  --rule-heavy: 2px;  --shadow-card: none;
+  --color-paper: oklch(9% 0.008 75);  --color-paper-2: oklch(12.5% 0.009 75);  --color-paper-3: oklch(6.5% 0.007 75);
+  --color-ink: oklch(94% 0.010 80);  --color-ink-2: oklch(84% 0.011 80);  --color-muted: oklch(68% 0.012 80);  --color-muted-2: oklch(50% 0.010 80);
+  --color-rule: oklch(25% 0.010 78);  --color-rule-2: oklch(16% 0.009 78);
+  --color-accent: oklch(72% 0.17 45);  --color-accent-ink: oklch(10% 0.02 45);  --color-accent-2: oklch(74% 0.12 250);  --color-focus: oklch(78% 0.15 45);
+  --font-display: "Switzer", ui-sans-serif, system-ui, sans-serif;  --font-body: var(--font-display);  --font-outlier: "Geist Mono", ui-monospace, monospace;
+  --radius-card: 0;  --radius-pill: 0;  --rule-hair: 1px;  --rule-heavy: 1px;  --shadow-card: none;
+  --head-case: none;  --color-current: var(--color-accent);  --color-planned: var(--color-accent-2);
 }
 ```
-The spacing scale, the type scale, the easings and the durations are the scaffold's and live in `tokens.css`. Print (the résumé PDFs) swaps the same roles to the theme's whiteprint sheet.
+The spacing scale, the type scale, the easings and the durations are the scaffold's and live in `tokens.css`. Print (the résumé PDFs) swaps the same roles to white paper.
 
 ## Type
-- Chakra Petch 600 for every head; h1 and h2 uppercase, h3 and h4 sentence case.
-- IBM Plex Sans 400 for prose, 500 for labels and controls. Labels are sentence case, untracked.
-- IBM Plex Mono 500 only for periods, index numbers, hosts, package names and code.
+- Switzer 500 for every head, sentence case, tight tracking; Switzer 400 for prose; labels Switzer 500 a step smaller, muted.
+- Geist Mono 400 only for periods, years, index numbers, hosts, package names and code.
 
 ## Surfaces
-- Lines only: 1px keylines, a 2px line to open a register, a second keyline 5px inside a figure. No radius, no shadow, no filled card.
-- The drafting grid appears only under the architecture drawing.
-- Client-site captures stay in natural colour inside the double keyline; the portrait is printed as a cyanotype.
+- Hairlines divide; nothing is round; depth by lightness only (paper-2 lifts a well, paper-3 sinks one).
+- Figures carry a 1px inset ring and two 12px corner ticks outside the frame.
+- Orange marks the action and the current state (the current post, the current nav item); sky blue marks what is planned.
+- Client-site captures in natural colour; the portrait slightly desaturated.
 
 ## Controls
-- Primary: ink fill, sheet-coloured text · square · 48px
-- Secondary: 1px ink outline · same radius and height
-- Links: ink with a 1px underline that clears on hover
+- Primary: orange fill, near-black text · square · 48px
+- Secondary: 1px rule outline · same radius and height
+- Links: ink with a muted underline that turns ink on hover
 
 ## Motion
-- Character: still. No reveal; hover darkens a linked row one step; under reduced motion everything ends at once.
+- Character: still. A state changes over the short duration; nothing reveals, pulses or loops.
 
 ## Exports
 `src/styles/tokens.css` in this project. Tailwind, DTCG or shadcn blocks are added here on request.

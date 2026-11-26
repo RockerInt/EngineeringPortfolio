@@ -68,7 +68,7 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
 </script>
 
 <style>
-  /* A slab: one heavy bar, a step darker than the sheet. */
+  /* One bar a step darker than the page, a hairline under it. */
   .site-header {
     position: sticky;
     top: 0;
@@ -90,7 +90,7 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
     font-weight: var(--display-weight);
     font-size: var(--text-lg);
     letter-spacing: var(--tracking-display);
-    text-transform: uppercase;
+    text-transform: var(--head-case, none);
     text-decoration: none;
     white-space: nowrap;
   }
@@ -132,7 +132,7 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
   /* Current section: the line itself, drawn heavier at the bar's foot. */
   .nav li a[aria-current] {
     color: var(--color-ink);
-    box-shadow: inset 0 -4px 0 0 var(--color-ink);
+    box-shadow: inset 0 -2px 0 0 var(--color-current, var(--color-ink));
   }
 
   .toggle {
@@ -206,7 +206,7 @@ const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering'
     }
 
     .nav li a[aria-current] {
-      box-shadow: inset 4px 0 0 0 var(--color-ink);
+      box-shadow: inset 2px 0 0 0 var(--color-current, var(--color-ink));
       padding-left: var(--space-md);
     }
 

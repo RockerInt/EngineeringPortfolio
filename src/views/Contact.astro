@@ -108,6 +108,25 @@ const isExternal = (url: string) => url.startsWith('http');
     font-size: var(--text-lead);
   }
 
+  /* Three reasons, one row across the page, parted by hairlines. */
+  @media (min-width: 60rem) {
+    .reasons {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .reasons li {
+      padding: var(--space-lg);
+      border-bottom: 0;
+      border-left: var(--rule-hair) solid var(--color-rule-2);
+    }
+
+    .reasons li:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
+
   .place {
     margin-top: var(--space-lg);
   }

@@ -1,8 +1,7 @@
-/* Hallmark · shape: Map / Diagram · genre: modern-minimal · theme: Blueprint (deal 1/3, seed portfolio-software-engineer-digital-f59c·af73a825·2026-11-26·r0) · redesign: full
- * hero: Banner · nav: slab · footer: statement · imagery: screenshots 3 (the owner's captures, natural), portrait as cyanotype · signature: the DSR.Architecture layer drawing on the grid sheet · blueprint: cyanotype
- * axes: mid/geometric-sans/neutral · posture: drenched · contrast: pass · fold: pass · draw: b2344f · job: hire · v2.0.0 */
-/* Hallmark · pre-emit critique: P4 H4 E4 S5 R4 V4 · weakest: H, long case-study prose runs under one head; the case opens on its drawing or its capture and the register sheet carries the facts */
-/* Hallmark · hero-review: in-thread, sloplint hero stage · finish-review: subagent · 8 findings · 8 resolved · gap: the diagram idea lives on three routes, the rest are registers */
+/* Hallmark · shape: Map / Diagram · genre: modern-minimal · theme: Rim (by request) · redesign: full
+ * hero: Banner · nav: edge-aligned · footer: statement · imagery: screenshots 3 (the owner's captures, natural), portrait natural · signature: the DSR.Architecture layers as measured wells, the planned packages in the second signal · rim: night
+ * axes: dark/grotesk-sans/warm · posture: committed · contrast: pass · fold: pass · job: hire · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V4 · weakest: S, the theme was written for imagery from orbit; it speaks here through hairlines, mono periods and one orange signal, with no borrowed photographs */
 /* Hallmark · waive 8 · the page order is the owner's content sequence · a redesign keeps the portfolio's sections and recomposes each one */
 /* Hallmark · waive 49b · project names and one profile address, two lines at most at 320px · Audiovisual Portfolio and the LinkedIn address are real names that cannot shorten */
 /* Hallmark · dismissed 77 · the inner pages hold one register each (a timeline, a repository list, three channels); the count is the owner's content, not a landing strip */
@@ -13,8 +12,12 @@
 /* ---------- Base additions ---------- */
 h1,
 h2 {
-  text-transform: uppercase;
+  text-transform: var(--head-case, none);
   line-height: 1.02;
+}
+
+h2 {
+  letter-spacing: var(--tracking-section, var(--tracking-display));
 }
 
 h4 {
@@ -184,13 +187,13 @@ a {
 }
 
 .btn-primary {
-  background: var(--color-ink);
-  border-color: var(--color-ink);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
   color: var(--color-accent-ink);
 }
 
 .btn-primary:hover {
-  background: var(--color-ink-2);
+  background: color-mix(in oklab, var(--color-accent) 82%, var(--color-ink));
 }
 
 .btn[aria-disabled='true'] {
@@ -211,12 +214,13 @@ a {
   gap: var(--space-2xs);
   font-weight: 500;
   text-decoration: underline;
+  text-decoration-color: var(--color-link-rule, currentColor);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
 }
 
 .link:hover {
-  text-decoration-color: transparent;
+  text-decoration-color: var(--color-ink);
 }
 
 .link:active {
@@ -275,24 +279,44 @@ a {
   font-size: var(--text-sm);
 }
 
-/* ---------- Figures: the double keyline ---------- */
+/* ---------- Figures: a hard frame with corner ticks ---------- */
 .fig {
   position: relative;
-  border: var(--rule-hair) solid var(--color-rule);
-  background: var(--color-paper-3);
-}
-
-.fig::after {
-  content: '';
-  position: absolute;
-  inset: 5px;
-  z-index: 2;
-  border: var(--rule-hair) solid var(--color-rule-2);
-  pointer-events: none;
+  background: var(--color-paper-2);
+  outline: var(--rule-hair) solid color-mix(in oklab, var(--color-ink) 8%, transparent);
+  outline-offset: -1px;
 }
 
 .fig img {
   width: 100%;
+}
+
+/* Two 12px corner ticks set just outside the frame. */
+.ticks {
+  position: relative;
+}
+
+.ticks::before,
+.ticks::after {
+  content: '';
+  position: absolute;
+  z-index: var(--z-raised);
+  width: 12px;
+  height: 12px;
+  border: 0 solid var(--color-muted);
+  pointer-events: none;
+}
+
+.ticks::before {
+  top: calc(-1 * var(--space-xs));
+  left: calc(-1 * var(--space-xs));
+  border-width: 1px 0 0 1px;
+}
+
+.ticks::after {
+  right: calc(-1 * var(--space-xs));
+  bottom: calc(-1 * var(--space-xs));
+  border-width: 0 1px 1px 0;
 }
 
 .fig + figcaption,
@@ -300,41 +324,14 @@ figcaption.label {
   margin-top: var(--space-sm);
 }
 
-/* The portrait is printed as a cyanotype: the sheet's blue in the shadows, its white in the light. */
-.cyan {
-  isolation: isolate;
-  background: var(--color-ink);
+/* Photographs: natural, a little drier. */
+.photo img {
+  filter: saturate(0.8) contrast(1.1);
 }
 
-.cyan img {
-  filter: grayscale(1) contrast(1.3) brightness(0.9);
-  mix-blend-mode: multiply;
-}
-
-.cyan::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: var(--color-paper-3);
-  mix-blend-mode: lighten;
-  pointer-events: none;
-}
-
-/* The drafting grid, only under a drawing. */
+/* A well: the drawing's ground, one step lighter than the page. */
 .sheet {
-  background-color: var(--color-paper-2);
-  background-image:
-    linear-gradient(var(--color-grid-2) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-grid-2) 1px, transparent 1px),
-    linear-gradient(var(--color-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
-  background-size:
-    120px 120px,
-    120px 120px,
-    24px 24px,
-    24px 24px;
-  background-position: var(--sheet-inset) var(--sheet-inset);
+  background: var(--color-paper-2);
 }
 
 /* ---------- Register rows ---------- */

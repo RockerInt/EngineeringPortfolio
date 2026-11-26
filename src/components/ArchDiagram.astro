@@ -11,7 +11,7 @@ const g = t(Astro.props.lang).diagram;
 ---
 
 <figure class="arch diagram" aria-label={g.label}>
-  <div class="sheet">
+  <div class="sheet ticks">
     <div class="ring">
       <div class="ring-head">
         <p class="name">{g.infrastructure.name}</p>
@@ -89,12 +89,20 @@ const g = t(Astro.props.lang).diagram;
 
   .ring.core {
     border-width: var(--rule-heavy);
+    border-color: var(--color-ink-2);
     background: var(--color-paper-3);
   }
 
   .ring.planned {
     border-style: dashed;
+    border-color: var(--color-planned, var(--color-rule));
     background: none;
+  }
+
+  .planned .name,
+  .planned .items li {
+    color: var(--color-planned, inherit);
+    border-color: var(--color-planned, var(--color-rule-2));
   }
 
   .ring-head {
