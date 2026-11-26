@@ -6,7 +6,7 @@ summary: My personal website for audiovisual production, cinematography, editing
 kind: personal-project
 role: Design, development and content
 stack: [Astro]
-url: https://video.jjimenez.net/
+url: https://visuals.jjimenez.net/
 cover: ../../../assets/projects/audiovisual-portfolio.jpg
 coverAlt: "Hero of the audiovisual portfolio: “Jonathan Jiménez” in large display type over a dark photograph of a camera operator filming a live music performance."
 order: 7

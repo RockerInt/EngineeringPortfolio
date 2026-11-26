@@ -161,7 +161,7 @@ Mostrar solo proyectos seleccionados, no los 30 repositorios públicos.
 
 ### Audiovisual Portfolio
 
-- URL: https://video.jjimenez.net/
+- URL: https://visuals.jjimenez.net/
 - Sitio personal de producción audiovisual, cinematografía, edición y color grading.
 - Contenido: REINO 2026, Live Worship Album, Basileia CEM media/production, transmisiones y trabajos audiovisuales.
 - Categoría: Audiovisual Portfolio / Personal Brand Website.

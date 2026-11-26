@@ -6,7 +6,7 @@ summary: Mi sitio personal de producción audiovisual, cinematografía, edición
 kind: personal-project
 role: Diseño, desarrollo y contenido
 stack: [Astro]
-url: https://video.jjimenez.net/
+url: https://visuals.jjimenez.net/
 cover: ../../../assets/projects/audiovisual-portfolio.jpg
 coverAlt: "Hero del portafolio audiovisual: «Jonathan Jiménez» en tipografía de gran formato sobre una fotografía oscura de un operador de cámara grabando una presentación musical en vivo."
 order: 7
