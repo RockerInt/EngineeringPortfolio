@@ -38,7 +38,7 @@ const areas = [
 <Base lang={lang} page="home" title={h.title} description={h.description}>
   <section class="hero night">
     <div class="container grid">
-      <h1>{first}<br />{second.slice(0, cut)}<br />{second.slice(cut + 1)}</h1>
+      <h1><strong>{first}</strong><br />{second.slice(0, cut)}<br />{second.slice(cut + 1)}</h1>
       <div class="pitch">
         <p class="lead">{d.valueProp}</p>
         <div class="btn-row">
@@ -194,6 +194,12 @@ const areas = [
     font-size: clamp(var(--text-display-s), min(6.8vw, 10.5svh), 6.5rem);
     line-height: 1;
     text-wrap: initial;
+    font-weight: var(--hero-light, 400);
+  }
+
+  /* As on the published site: the first sentence carries the weight, the second stays light. */
+  h1 strong {
+    font-weight: var(--hero-strong, 600);
   }
 
   .pitch .lead {
