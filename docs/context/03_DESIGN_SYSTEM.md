@@ -23,7 +23,7 @@ Evitar:
 
 ## Sistema vigente
 
-Desde el rediseño con Hallmark (2026-11-26) el sistema visual está fijado en `design.md`, en la raíz del repositorio, y sus valores viven en `src/styles/tokens.css`. Tema Ribbon (variante dawn): papel blanco cálido, Instrument Sans para encabezados y Figtree para texto, acento verde azulado; la portada y el pie sobre una banda nocturna verde azulada con grano generado; el diagrama de arquitectura en un panel mecanizado.
+Desde el rediseño con Hallmark (2026-11-26) el sistema visual está fijado en `design.md`, en la raíz del repositorio, y sus valores viven en `src/styles/tokens.css`. Tema Ribbon (variante two-in-the-morning): papel negro azulado, tinta blanca cálida, Instrument Sans para encabezados y Figtree para texto, ámbar como única señal; la portada y el pie sobre un cielo nocturno con grano generado y una línea de horizonte ámbar; el diagrama de arquitectura en un panel mecanizado.
 
 La paleta oscura inicial (`#090B10`, acento `#65A8FF`) e Inter + JetBrains Mono quedaron reemplazadas; siguen disponibles en la rama `design/visual-refinement`. Las otras opciones de tema están en `design/hallmark-redesign` (Blueprint) y `design/hallmark-rim` (Rim).
 
@@ -83,4 +83,4 @@ La paleta oscura inicial (`#090B10`, acento `#65A8FF`) e Inter + JetBrains Mono 
 
 ## Tema
 
-Un solo tema claro, con la banda nocturna como acento. La impresión (PDF de la hoja de vida) usa la variante clara del mismo tema.
+Un solo tema oscuro. La impresión (PDF de la hoja de vida) usa papel blanco. La impresión (PDF de la hoja de vida) usa la variante clara del mismo tema.
