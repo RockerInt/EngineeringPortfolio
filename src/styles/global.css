@@ -1,10 +1,11 @@
 /* Hallmark · shape: Map / Diagram · genre: atmospheric · theme: Ribbon (by request) · redesign: full
- * hero: Banner · nav: edge-aligned · footer: statement · imagery: screenshots 3 (the owner's captures, natural), portrait muted · signature: the DSR.Architecture layers as a machined panel, the hour drawn as teal light behind the home hero and the footer · ribbon: dawn
+ * hero: Ledge (/), Banner (inner pages) · nav: edge-aligned · footer: statement · imagery: screenshots 3 (the owner's captures, natural), portrait muted · signature: the DSR.Architecture layers as a machined panel, the hour drawn as teal light behind the home hero and the footer · ribbon: dawn
  * axes: light/grotesk-sans/chromatic-teal · posture: committed · contrast: pass · fold: pass · job: hire · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H4 E4 S3 R4 V5 · weakest: S, the theme's instrument is a sleep mixer; here the machined panel holds the architecture drawing instead of faders, and no control pretends to work */
 /* Hallmark · waive 8 · the page order is the owner's content sequence · a redesign keeps the portfolio's sections and recomposes each one */
 /* Hallmark · waive 49b · project names and one profile address, two lines at most at 320px · Audiovisual Portfolio and the LinkedIn address are real names that cannot shorten */
 /* Hallmark · dismissed 77 · the inner pages hold one register each (a timeline, a repository list, three channels); the count is the owner's content, not a landing strip */
+/* Hallmark · dropped {href(lang, 'engineering')}, {href(lang, 'digital')} · not lost: both links still render on the home page, from the restored Two lines of work list */
 /* Hallmark · dropped eyebrow labels over section heads · 54 names them; each plain label is now the heading and the old title its lead line */
 @import url('./tokens.css');
 @import url('./base.css');

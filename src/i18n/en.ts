@@ -134,6 +134,8 @@ export const en = {
       ],
       link: 'More about me',
     },
+    areasLabel: 'Two lines of work',
+    areasTitle: 'One practice, two expressions.',
     areasNote: 'Both come from the same capability: designing, building and delivering digital solutions.',
     work: {
       label: 'Selected work',

@@ -132,6 +132,8 @@ export const es: Dict = {
       ],
       link: 'Más sobre mí',
     },
+    areasLabel: 'Dos líneas de trabajo',
+    areasTitle: 'Una práctica, dos expresiones.',
     areasNote: 'Ambas nacen de la misma capacidad: diseñar, construir y entregar soluciones digitales.',
     work: {
       label: 'Trabajo seleccionado',

@@ -28,6 +28,7 @@
 
 /* Roles the components read; each theme sets its own. */
 :root {
+  --header-h: 73px;
   --text-head: clamp(1.5625rem, 2vw + 1rem, 2.441rem);
   --rule-heavy: 1px;
   --head-case: none;

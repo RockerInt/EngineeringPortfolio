@@ -26,8 +26,10 @@ const engineering = (await getProjects(lang)).filter((p) => p.data.featured && p
 const lead = engineering.find((p) => slugOf(p.id) === 'dsr-architecture');
 const rows = engineering.filter((p) => p !== lead);
 const digital = await getProjects(lang, 'digital');
-const A = d.areas.engineering;
-const B = d.areas.digital;
+const areas = [
+  { link: href(lang, 'engineering'), ...d.areas.engineering },
+  { link: href(lang, 'digital'), ...d.areas.digital },
+] as const;
 ---
 
 <Base lang={lang} page="home" title={h.title} description={h.description}>
@@ -58,20 +60,34 @@ const B = d.areas.digital;
     </div>
   </section>
 
+  <Section label={h.areasLabel} title={h.areasTitle}>
+    <div class="areas">
+      {
+        areas.map((area) => (
+          <article class="area">
+            <h3>{area.title}</h3>
+            <p class="text">{area.text}</p>
+            <ul class="register">
+              {area.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <p><a class="link" href={area.link}>{area.cta}</a></p>
+          </article>
+        ))
+      }
+    </div>
+    <p class="label note">{h.areasNote}</p>
+  </Section>
+
   <section class="section band" id="work">
     <div class="container">
       <header class="head">
         <h2>{h.work.label}</h2>
-        <p class="lead">{h.work.title} {h.areasNote}</p>
+        <p class="lead">{h.work.title}</p>
       </header>
 
       <div class="chapter">
         <header class="chapter-head">
-          <div>
-            <h3>{A.title}</h3>
-            <p>{A.text}</p>
-          </div>
-          <a class="link" href={href(lang, 'engineering')}>{A.cta}</a>
+          <h3>{h.work.engineering}</h3>
         </header>
 
         {
@@ -117,11 +133,7 @@ const B = d.areas.digital;
   <section class="section">
     <div class="container chapter">
       <header class="chapter-head">
-        <div>
-          <h3>{B.title}</h3>
-          <p>{B.text}</p>
-        </div>
-        <a class="link" href={href(lang, 'digital')}>{B.cta}</a>
+        <h3>{h.work.digital}</h3>
       </header>
 
       <div class="set">
@@ -156,20 +168,26 @@ const B = d.areas.digital;
 </Base>
 
 <style>
-  /* Banner: the head, one sentence and the actions, with the sheet's title block beside them. */
+  /* The hero fills the first screen under the bar: the statement at the top, the pitch and the
+     title block resting on its foot. */
   .hero {
-    padding-block: var(--space-3xl) var(--space-xl);
+    display: grid;
+    min-height: calc(100svh - var(--header-h));
+    padding-block: var(--space-3xl) var(--space-2xl);
   }
 
   .grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-xl) var(--space-3xl);
-    align-items: start;
+    align-content: space-between;
+    align-items: end;
   }
 
+  /* The statement grows with the screen so it carries the space the full-height hero gives it. */
   h1 {
     max-width: none;
+    font-size: clamp(var(--text-display-s), 6.5vw, 6.25rem);
     text-wrap: balance;
   }
 
@@ -210,6 +228,53 @@ const B = d.areas.digital;
     }
   }
 
+  /* Two lines of work: two columns parted by a hairline. */
+  .areas {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2xl) var(--gap-columns);
+  }
+
+  .area {
+    display: grid;
+    gap: var(--space-md);
+    align-content: start;
+  }
+
+  .area h3 {
+    font-size: var(--text-head);
+    line-height: 1.1;
+  }
+
+  .area .text {
+    max-width: 48ch;
+    color: var(--color-ink-2);
+  }
+
+  .area li {
+    padding-block: var(--space-sm);
+  }
+
+  .areas + .note {
+    margin-top: var(--space-xl);
+  }
+
+  @media (min-width: 60rem) {
+    .areas {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 0;
+    }
+
+    .area:first-child {
+      padding-right: var(--space-2xl);
+    }
+
+    .area + .area {
+      padding-left: var(--space-2xl);
+      border-left: var(--rule-hair) solid var(--color-rule);
+    }
+  }
+
   /* Chapters */
   .chapter-head {
     display: flex;
@@ -225,11 +290,6 @@ const B = d.areas.digital;
   .chapter-head h3 {
     font-size: var(--text-head);
     line-height: 1.1;
-  }
-
-  .chapter-head p {
-    margin-top: var(--space-sm);
-    color: var(--color-ink-2);
   }
 
   .flagship {
