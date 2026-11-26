@@ -1,0 +1,75 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import '@/styles/global.css';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { LANGS, href, t, type Lang, type PageKey } from '@/i18n';
+import { SITE } from '@/lib/site';
+
+interface Props {
+  lang: Lang;
+  /** Omit for pages without a translated counterpart (404). */
+  page?: PageKey;
+  /** Project slug for detail pages under a section. */
+  sub?: string;
+  title: string;
+  description?: string;
+}
+
+const { lang, page, sub, title, description } = Astro.props;
+const d = t(lang);
+const abs = (path: string) => new URL(path, Astro.site).href;
+const canonical = page ? abs(href(lang, page, sub)) : undefined;
+// Never index the 404 page or Cloudflare builds of non-production branches.
+const branch = process.env.WORKERS_CI_BRANCH;
+const noindex = !page || (branch !== undefined && branch !== 'main');
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.name,
+  jobTitle: d.role,
+  url: abs(href(lang, 'home')),
+  email: SITE.email,
+  address: { '@type': 'PostalAddress', addressLocality: 'Bogotá', addressCountry: 'CO' },
+  knowsLanguage: ['es', 'en'],
+  sameAs: [SITE.github, SITE.linkedin],
+};
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    {page && LANGS.map((l) => <link rel="alternate" hreflang={l} href={abs(href(l, page, sub))} />)}
+    {page && <link rel="alternate" hreflang="x-default" href={abs(href('en', page, sub))} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#090b10" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'es_CO'} />
+    <meta property="og:image" content={abs('/og.png')} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(person)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{d.nav.skip}</a>
+    <Header lang={lang} page={page} sub={sub} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer lang={lang} page={page} sub={sub} />
+  </body>
+</html>

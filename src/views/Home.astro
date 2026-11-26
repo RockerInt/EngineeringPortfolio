@@ -1,0 +1,364 @@
+---
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import Base from '@/layouts/Base.astro';
+import Section from '@/components/Section.astro';
+import WorkRow from '@/components/WorkRow.astro';
+import WorkFeature from '@/components/WorkFeature.astro';
+import Timeline from '@/components/Timeline.astro';
+import SkillGroups from '@/components/SkillGroups.astro';
+import ContactCta from '@/components/ContactCta.astro';
+import Portrait from '@/components/Portrait.astro';
+import { href, t, type Lang } from '@/i18n';
+import { getProjects } from '@/lib/content';
+import { SITE } from '@/lib/site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang);
+const h = d.home;
+const featured = (await getProjects(lang)).filter((p) => p.data.featured);
+const engineeringWork = featured.filter((p) => p.data.section !== 'digital');
+const digitalWork = featured.filter((p) => p.data.section === 'digital');
+const areas = [
+  { key: 'engineering', letter: 'A', tone: 'var(--accent)', ...d.areas.engineering },
+  { key: 'digital', letter: 'B', tone: 'var(--warm)', ...d.areas.digital },
+] as const;
+---
+
+<Base lang={lang} page="home" title={h.title} description={h.description}>
+  <section class="hero">
+    <div class="container">
+      <h1 class="id rise">
+        <span class="name">{SITE.name}</span>
+        <span class="mono role">{d.role}</span>
+      </h1>
+
+      <p class="statement">
+        <span class="line rise" style="--i:1"><sup class="mono" aria-hidden="true">A</sup>{d.statement[0]}</span>
+        <span class="line second rise" style="--i:2"><sup class="mono" aria-hidden="true">B</sup>{d.statement[1]}</span>
+      </p>
+
+      <div class="foot">
+        <div class="pitch rise" style="--i:3">
+          <p class="lead">{d.valueProp}</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="#work">{h.cta.work}<ArrowRight aria-hidden="true" /></a>
+            <a class="btn" href={href(lang, 'resume')}>{h.cta.resume}</a>
+            <a class="btn" href={href(lang, 'contact')}>{h.cta.contact}</a>
+          </div>
+        </div>
+        <dl class="spec rise" style="--i:4" aria-label={h.spec.label}>
+          {
+            h.spec.rows.map(([term, value]) => (
+              <div>
+                <dt class="mono">{term}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <Section label={h.intro.label}>
+    <div slot="rail" class="intro-portrait reveal"><Portrait lang={lang} sizes="(min-width: 60rem) 16rem, 11rem" /></div>
+    <p class="intro-lead reveal">{h.intro.lead}</p>
+    <div class="intro-body">
+      {h.intro.body.map((p) => <p class="muted reveal">{p}</p>)}
+    </div>
+    <p class="reveal more"><a class="link" href={href(lang, 'about')}>{h.intro.link}<ArrowRight aria-hidden="true" /></a></p>
+  </Section>
+
+  <Section label={h.areasLabel} title={h.areasTitle}>
+    <div class="areas">
+      {
+        areas.map((area) => (
+          <article class="area reveal" style={`--tone:${area.tone}`}>
+            <p class="letter" aria-hidden="true">{area.letter}</p>
+            <h3>{area.title}</h3>
+            <p class="muted">{area.text}</p>
+            <ul>
+              {area.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <p><a class="link" href={href(lang, area.key)}>{area.cta}<ArrowRight aria-hidden="true" /></a></p>
+          </article>
+        ))
+      }
+    </div>
+    <p class="areas-note mono reveal">{h.areasNote}</p>
+  </Section>
+
+  <Section label={h.work.label} title={h.work.title} id="work">
+    <p class="mono group">{h.work.engineering}</p>
+    <ul>
+      {engineeringWork.map((project, i) => <WorkRow project={project} lang={lang} index={i + 1} />)}
+    </ul>
+    <p class="mono group digital">{h.work.digital}</p>
+    <div class="pair">
+      {digitalWork.map((project) => <WorkFeature project={project} lang={lang} />)}
+    </div>
+  </Section>
+
+  <Section label={h.experience.label} title={h.experience.title}>
+    <Timeline lang={lang} compact />
+    <p class="more reveal"><a class="link" href={href(lang, 'experience')}>{h.experience.link}<ArrowRight aria-hidden="true" /></a></p>
+  </Section>
+
+  <Section label={h.expertise.label} title={h.expertise.title}>
+    <SkillGroups lang={lang} />
+    <p class="muted note reveal">{h.expertise.note}</p>
+  </Section>
+
+  <ContactCta lang={lang} />
+</Base>
+
+<style>
+  /* ----- Hero ----- */
+  .hero {
+    position: relative;
+    padding-block: clamp(3.5rem, 8vw, 7rem) clamp(4rem, 8vw, 7rem);
+    overflow: hidden;
+  }
+
+  /* Blueprint grid, fading out from the top-right corner. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 4.5rem 4.5rem;
+    background-position: center top;
+    mask-image: radial-gradient(ellipse 75% 85% at 85% 0%, #000, transparent 72%);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .hero .container {
+    position: relative;
+  }
+
+  .id {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 1.25rem;
+    font-size: var(--text-lg);
+    letter-spacing: -0.015em;
+  }
+
+  .id .role {
+    color: var(--muted);
+  }
+
+  .statement {
+    margin-top: clamp(2rem, 5vw, 3.5rem);
+    font-size: var(--text-hero);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    font-weight: 620;
+  }
+
+  .line {
+    display: block;
+    position: relative;
+  }
+
+  .second {
+    font-weight: 300;
+    color: #b9c4d4;
+    margin-top: 0.08em;
+  }
+
+  .line sup {
+    position: absolute;
+    right: 100%;
+    top: 0.9em;
+    margin-right: 0.9rem;
+    font-size: var(--text-xs);
+    letter-spacing: 0;
+    color: var(--accent);
+  }
+
+  .second sup {
+    color: var(--warm);
+  }
+
+  /* The A/B markers live in the page margin; hide them when there is no margin to hold them. */
+  @media (max-width: 86rem) {
+    .line sup {
+      display: none;
+    }
+  }
+
+  .foot {
+    display: grid;
+    gap: 3rem var(--col-gap);
+    margin-top: clamp(3rem, 7vw, 5.5rem);
+  }
+
+  .pitch {
+    display: grid;
+    gap: 2rem;
+    align-content: start;
+  }
+
+  .pitch .lead {
+    color: var(--text);
+    max-width: 44ch;
+  }
+
+  @media (min-width: 60rem) {
+    .foot {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: end;
+    }
+  }
+
+  /* ----- Intro ----- */
+  .intro-portrait {
+    max-width: 11rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 60rem) {
+    .intro-portrait {
+      max-width: 16rem;
+    }
+  }
+
+  .intro-lead {
+    font-size: var(--text-2xl);
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+    max-width: 24ch;
+  }
+
+  .intro-body {
+    display: grid;
+    gap: 1.5rem var(--col-gap);
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  @media (min-width: 48rem) {
+    .intro-body {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .more {
+    margin-top: 2.5rem;
+    font-size: var(--text-sm);
+  }
+
+  /* ----- Areas diptych ----- */
+  .areas {
+    display: grid;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .area {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    padding: clamp(1.5rem, 3.5vw, 2.75rem);
+    border-top: 2px solid var(--tone);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--tone) 5%, transparent), transparent 45%);
+  }
+
+  .area + .area {
+    border-left: 0;
+  }
+
+  .letter {
+    font-family: var(--font-mono);
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    line-height: 1;
+    font-weight: 300;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--tone);
+  }
+
+  .area h3 {
+    font-size: var(--text-xl);
+    margin-top: 0.5rem;
+  }
+
+  .area ul {
+    margin-block: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .area li {
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--border);
+    font-size: var(--text-sm);
+  }
+
+  .area .link {
+    font-size: var(--text-sm);
+  }
+
+  .area .link:hover {
+    color: var(--tone);
+    border-color: var(--tone);
+  }
+
+  @media (min-width: 52rem) {
+    .areas {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .area + .area {
+      border-left: 1px solid var(--border);
+    }
+  }
+
+  .areas-note {
+    margin-top: 1.5rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: var(--text-sm);
+  }
+
+  /* ----- Selected work ----- */
+  .group {
+    margin-bottom: 1rem;
+  }
+
+  .group.digital {
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+    margin-bottom: 1.75rem;
+  }
+
+  .pair {
+    display: grid;
+    gap: 3.5rem var(--col-gap);
+  }
+
+  @media (min-width: 52rem) {
+    .pair {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* Offset the second column so the two features do not read as a card grid. */
+    .pair > :global(:nth-child(even)) {
+      margin-top: 5rem;
+    }
+  }
+
+  .note {
+    margin-top: 1.5rem;
+    font-size: var(--text-sm);
+    max-width: 60ch;
+  }
+</style>

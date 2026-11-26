@@ -1,0 +1,49 @@
+---
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import Base from '@/layouts/Base.astro';
+import { href, t } from '@/i18n';
+
+// A static 404 cannot know the visitor's language, so it shows both.
+const en = t('en').notFound;
+const es = t('es').notFound;
+---
+
+<Base lang="en" title={en.title}>
+  <section class="container nf">
+    <p class="code" aria-hidden="true">{en.code}</p>
+    <h1>{en.heading}</h1>
+    <p class="lead">{en.text}</p>
+    <p class="lead" lang="es">{es.heading} {es.text}</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href={href('en', 'home')}>{en.home}<ArrowRight aria-hidden="true" /></a>
+      <a class="btn" href={href('es', 'home')} lang="es" hreflang="es">{es.home}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    padding-block: clamp(5rem, 14vw, 11rem);
+  }
+
+  .code {
+    font-family: var(--font-mono);
+    font-size: clamp(5rem, 18vw, 12rem);
+    line-height: 0.9;
+    font-weight: 300;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border-strong);
+  }
+
+  h1 {
+    font-size: var(--text-3xl);
+    letter-spacing: -0.035em;
+  }
+
+  .btn-row {
+    margin-top: 1.5rem;
+  }
+</style>

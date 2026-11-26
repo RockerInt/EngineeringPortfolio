@@ -1,0 +1,40 @@
+---
+import { href, otherLang, t, type Lang, type PageKey } from '@/i18n';
+
+interface Props {
+  lang: Lang;
+  page?: PageKey;
+  sub?: string;
+}
+
+const { lang, page = 'home', sub } = Astro.props;
+const target = otherLang(lang);
+const d = t(lang);
+---
+
+<a class="lang mono" href={href(target, page, sub)} hreflang={target}>
+  <span aria-hidden="true" class="current">{lang}</span>
+  <span aria-hidden="true">/</span>
+  <span aria-hidden="true">{target}</span>
+  <span class="sr-only" lang={target}>{d.nav.switchLabel}</span>
+</a>
+
+<style>
+  .lang {
+    display: inline-flex;
+    gap: 0.35rem;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color var(--fast) var(--ease), color var(--fast) var(--ease);
+  }
+
+  .lang:hover {
+    border-color: var(--text);
+    color: var(--text);
+  }
+
+  .current {
+    color: var(--text);
+  }
+</style>

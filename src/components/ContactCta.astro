@@ -1,0 +1,65 @@
+---
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import ExtLink from './ExtLink.astro';
+import { href, t, type Lang } from '@/i18n';
+import { SITE } from '@/lib/site';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+}
+
+const { lang } = Astro.props;
+const d = t(lang);
+const title = Astro.props.title ?? d.cta.title;
+---
+
+<section class="cta">
+  <div class="container inner">
+    <p class="mono reveal">{d.cta.label}</p>
+    <h2 class="reveal">{title}</h2>
+    <p class="lead reveal">{d.cta.text}</p>
+    <div class="btn-row reveal">
+      <a class="btn btn-primary" href={href(lang, 'contact')}>{d.cta.primary}<ArrowRight aria-hidden="true" /></a>
+      <a class="btn" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      <ExtLink href={SITE.linkedin} lang={lang} class="btn">LinkedIn</ExtLink>
+      <ExtLink href={SITE.github} lang={lang} class="btn">GitHub</ExtLink>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    border-top: 1px solid var(--border);
+    padding-block: var(--space-section);
+    overflow: hidden;
+  }
+
+  /* A single, quiet light source: the only gradient on the site besides the hero. */
+  .cta::before {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 70%;
+    background: radial-gradient(ellipse 60% 100% at 20% 100%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 70%);
+    pointer-events: none;
+  }
+
+  .inner {
+    position: relative;
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+  }
+
+  h2 {
+    font-size: var(--text-3xl);
+    letter-spacing: -0.035em;
+    max-width: 18ch;
+  }
+
+  .btn-row {
+    margin-top: 1rem;
+  }
+</style>

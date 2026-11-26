@@ -1,0 +1,121 @@
+---
+import { Picture } from 'astro:assets';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import ExtLink from './ExtLink.astro';
+import { t, type Lang } from '@/i18n';
+import { projectHref, type Project } from '@/lib/content';
+
+interface Props {
+  project: Project;
+  lang: Lang;
+  /** Larger layout with image and text side by side. */
+  wide?: boolean;
+  eager?: boolean;
+}
+
+const { project, lang, wide = false, eager = false } = Astro.props;
+const { title, summary, category, url, cover, coverAlt, role } = project.data;
+const d = t(lang).common;
+const detail = projectHref(lang, project);
+const host = url ? new URL(url).host : undefined;
+// Wide features sit directly under the page <h1>; compact ones live inside a titled section.
+const Heading = wide ? 'h2' : 'h3';
+---
+
+<article class:list={['feature', 'reveal', { wide }]}>
+  {
+    cover && (
+      <a href={detail} class="shot" tabindex="-1" aria-hidden="true">
+        <div class="frame">
+          {host && <p class="frame-bar mono">{host}</p>}
+          <Picture
+            src={cover}
+            alt=""
+            formats={['avif', 'webp']}
+            fallbackFormat="jpg"
+            widths={[480, 800, 1200, 1600]}
+            sizes={wide ? '(min-width: 60rem) 56vw, 100vw' : '(min-width: 60rem) 36vw, 100vw'}
+            loading={eager ? 'eager' : 'lazy'}
+            fetchpriority={eager ? 'high' : undefined}
+          />
+        </div>
+      </a>
+    )
+  }
+  <div class="text">
+    <p class="mono">{category}</p>
+    <Heading class="title"><a href={detail}>{title}</a></Heading>
+    <p class="muted">{summary}</p>
+    {role && wide && <p class="mono role">{d.role} — {role}</p>}
+    <p class="links">
+      <a class="link" href={detail} aria-label={`${d.caseStudy}: ${title}`}>{d.caseStudy}<ArrowRight aria-hidden="true" /></a>
+      {url && <ExtLink href={url} lang={lang} class="link">{d.visitSite}</ExtLink>}
+    </p>
+    {cover && coverAlt && <p class="sr-only">{coverAlt}</p>}
+  </div>
+</article>
+
+<style>
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-content: start;
+  }
+
+  .shot {
+    display: block;
+  }
+
+  .text {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+    justify-items: start;
+  }
+
+  .title {
+    font-size: var(--text-xl);
+  }
+
+  .title a {
+    transition: color var(--fast) var(--ease);
+  }
+
+  .title a:hover {
+    color: var(--warm);
+  }
+
+  .muted {
+    max-width: 46ch;
+  }
+
+  .role {
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-top: 0.5rem;
+    font-size: var(--text-sm);
+  }
+
+  @media (min-width: 60rem) {
+    .wide {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+      gap: var(--col-gap);
+      align-items: center;
+    }
+
+    .wide:nth-child(even) .shot {
+      order: 2;
+    }
+
+    .wide .title {
+      font-size: var(--text-2xl);
+    }
+  }
+</style>

@@ -1,0 +1,35 @@
+---
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import { t, type Lang } from '@/i18n';
+
+interface Props {
+  href: string;
+  lang: Lang;
+  class?: string;
+}
+
+const { href, lang, class: className } = Astro.props;
+---
+
+<a href={href} class={className} target="_blank" rel="noopener noreferrer">
+  <slot /><ArrowUpRight aria-hidden="true" /><span class="sr-only">{t(lang).common.externalHint}</span>
+</a>
+
+<style>
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  a :global(svg) {
+    width: 1em;
+    height: 1em;
+    flex: none;
+    transition: transform var(--fast) var(--ease);
+  }
+
+  a:hover :global(svg) {
+    transform: translate(2px, -2px);
+  }
+</style>

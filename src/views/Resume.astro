@@ -1,0 +1,107 @@
+---
+import Download from '@lucide/astro/icons/download';
+import Base from '@/layouts/Base.astro';
+import PageHero from '@/components/PageHero.astro';
+import Section from '@/components/Section.astro';
+import Timeline from '@/components/Timeline.astro';
+import SkillGroups from '@/components/SkillGroups.astro';
+import Background from '@/components/Background.astro';
+import { LANGS, t, type Lang } from '@/i18n';
+import { SITE, resumeFile } from '@/lib/site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang);
+const r = d.resume;
+// A download button exists only for PDFs that are really in public/resume/.
+// The current language's PDF comes first.
+const downloads = [lang, ...LANGS.filter((l) => l !== lang)].flatMap((l) => {
+  const file = resumeFile(l);
+  return file ? [{ file, label: r.download[l] }] : [];
+});
+---
+
+<Base lang={lang} page="resume" title={r.title} description={r.description}>
+  <PageHero lang={lang} label={r.label} heading={SITE.name} lead={d.role}>
+    <div class="actions rise no-print" style="--i:3">
+      {
+        downloads.length > 0 ? (
+          <div class="btn-row">
+            {downloads.map((item, i) => (
+              <a class:list={['btn', { 'btn-primary': i === 0 }]} href={item.file} download>
+                <Download aria-hidden="true" />{item.label}
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p class="muted">
+            {r.noPdf} <a class="link" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          </p>
+        )
+      }
+    </div>
+    <ul class="contacts mono rise" style="--i:4">
+      <li>{d.location}</li>
+      <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+      <li><a href={SITE.linkedin}>{SITE.linkedin.replace('https://www.', '').replace(/\/$/, '')}</a></li>
+      <li><a href={SITE.github}>{SITE.github.replace('https://', '')}</a></li>
+      <li class="print-only">{Astro.site?.host}</li>
+    </ul>
+  </PageHero>
+
+  <Section label={r.summaryLabel}>
+    <p class="summary reveal">{r.summary}</p>
+  </Section>
+
+  <Section label={r.experienceLabel}>
+    <Timeline lang={lang} level={3} />
+  </Section>
+
+  <Section label={r.skillsLabel}>
+    <SkillGroups lang={lang} />
+  </Section>
+
+  <Section label={d.about.backgroundLabel}>
+    <Background lang={lang} />
+  </Section>
+</Base>
+
+<style>
+  .actions {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+  }
+
+  .actions .muted {
+    font-size: var(--text-sm);
+  }
+
+  .summary {
+    font-size: var(--text-xl);
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+    max-width: 46ch;
+  }
+
+  .contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+    margin-top: 1.75rem;
+    text-transform: none;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .contacts a {
+    transition: color var(--fast) var(--ease);
+  }
+
+  .contacts a:hover {
+    color: var(--text);
+  }
+</style>

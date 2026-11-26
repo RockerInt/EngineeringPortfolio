@@ -1,0 +1,56 @@
+---
+import { t, type Lang } from '@/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { skills } = t(Astro.props.lang);
+---
+
+<dl class="groups">
+  {
+    skills.map((group) => (
+      <div class="reveal">
+        <dt class="mono">{group.label}</dt>
+        <dd>
+          <ul>{group.items.map((item) => <li>{item}</li>)}</ul>
+        </dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .groups {
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .groups > div {
+    display: grid;
+    gap: 0.5rem 2rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--border);
+    align-items: baseline;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0;
+    font-size: var(--text-lg);
+    letter-spacing: -0.01em;
+  }
+
+  li:not(:last-child)::after {
+    content: '/';
+    margin-inline: 0.7rem;
+    color: var(--border-strong);
+  }
+
+  @media (min-width: 40rem) {
+    .groups > div {
+      grid-template-columns: 11rem minmax(0, 1fr);
+    }
+  }
+</style>

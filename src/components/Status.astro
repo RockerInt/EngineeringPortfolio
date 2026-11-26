@@ -1,0 +1,17 @@
+---
+import { t, type Lang } from '@/i18n';
+import type { Project } from '@/lib/content';
+
+interface Props {
+  project: Project;
+  lang: Lang;
+}
+
+const { project, lang } = Astro.props;
+const { kind, stage, section } = project.data;
+const d = t(lang).common;
+// Only confirmed states are shown; an unset kind or stage renders nothing.
+const label = [kind && d.kind[kind], stage && d.stage[stage]].filter(Boolean).join(' · ');
+---
+
+{label && <span class="mono status" style={section === 'digital' ? '--tone: var(--warm)' : undefined}>{label}</span>}

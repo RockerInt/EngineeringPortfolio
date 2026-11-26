@@ -1,0 +1,105 @@
+---
+import { href, t, type Lang, type PageKey } from '@/i18n';
+
+interface Props {
+  lang: Lang;
+  label: string;
+  heading: string;
+  lead?: string;
+  /** Parent section, rendered as a breadcrumb on detail pages. */
+  parent?: PageKey;
+}
+
+const { lang, label, heading, lead, parent } = Astro.props;
+const d = t(lang);
+const hasAside = Astro.slots.has('aside');
+---
+
+<header class="page-hero">
+  <div class:list={['container', { split: hasAside }]}>
+    <div>
+    {
+      parent ? (
+        <nav aria-label={d.nav.breadcrumb} class="crumbs mono rise">
+          <ol>
+            <li><a href={href(lang, 'home')}>{d.nav.home}</a></li>
+            <li><a href={href(lang, parent)}>{d.nav[parent]}</a></li>
+            <li aria-current="page">{label}</li>
+          </ol>
+        </nav>
+      ) : (
+        <p class="mono rise label">{label}</p>
+      )
+    }
+    <h1 class="rise" style="--i:1">{heading}</h1>
+    {lead && <p class="lead rise" style="--i:2">{lead}</p>}
+    <slot />
+    </div>
+    {hasAside && <div class="aside rise" style="--i:2"><slot name="aside" /></div>}
+  </div>
+</header>
+
+<style>
+  .page-hero {
+    position: relative;
+    padding-block: clamp(4rem, 9vw, 8rem) clamp(3rem, 6vw, 5rem);
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem var(--col-gap);
+  }
+
+  .aside {
+    max-width: 22rem;
+  }
+
+  @media (min-width: 56rem) {
+    .split {
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+      align-items: end;
+    }
+
+    .aside {
+      max-width: none;
+    }
+  }
+
+  .label::before {
+    content: '/ ';
+    color: var(--accent);
+  }
+
+  h1 {
+    margin-top: 1.5rem;
+    font-size: var(--text-3xl);
+    letter-spacing: -0.035em;
+    max-width: 20ch;
+  }
+
+  .lead {
+    margin-top: 1.75rem;
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    color: var(--accent);
+  }
+
+  .crumbs a {
+    transition: color var(--fast) var(--ease);
+  }
+
+  .crumbs a:hover,
+  .crumbs [aria-current] {
+    color: var(--text);
+  }
+</style>

@@ -1,0 +1,64 @@
+---
+import Base from '@/layouts/Base.astro';
+import PageHero from '@/components/PageHero.astro';
+import Section from '@/components/Section.astro';
+import WorkFeature from '@/components/WorkFeature.astro';
+import ContactCta from '@/components/ContactCta.astro';
+import { t, type Lang } from '@/i18n';
+import { getProjects } from '@/lib/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang);
+const x = d.digital;
+const projects = await getProjects(lang, 'digital');
+---
+
+<Base lang={lang} page="digital" title={x.title} description={x.description}>
+  <div class="tone">
+    <PageHero lang={lang} label={x.label} heading={x.heading} lead={x.lead} />
+
+    <div class="container list">
+      {projects.map((project, i) => <WorkFeature project={project} lang={lang} wide eager={i === 0} />)}
+    </div>
+
+    <Section label={x.capabilitiesLabel}>
+      <p class="lead reveal">{d.areas.digital.text}</p>
+      <ul class="caps">
+        {d.areas.digital.items.map((item) => <li class="reveal">{item}</li>)}
+      </ul>
+    </Section>
+  </div>
+
+  <ContactCta lang={lang} title={x.cta} />
+</Base>
+
+<style>
+  /* This section speaks in the warm tone reserved for the digital-experiences line. */
+  .tone {
+    --accent: var(--warm);
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(4rem, 9vw, 8rem);
+    padding-bottom: var(--space-section);
+  }
+
+  .caps {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .caps li {
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+</style>

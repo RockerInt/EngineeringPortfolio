@@ -1,0 +1,74 @@
+---
+import { t, type Lang } from '@/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { education, languages } = t(Astro.props.lang);
+---
+
+<div class="background">
+  <section class="reveal">
+    <h3 class="mono">{education.title}</h3>
+    <ul>
+      {
+        education.items.map((item) => (
+          <li>
+            <p class="school">{item.school}</p>
+            <p class="muted">{item.detail}</p>
+            <p class="mono">{item.period}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+  <section class="reveal">
+    <h3 class="mono">{languages.title}</h3>
+    <ul>
+      {
+        languages.items.map((item) => (
+          <li>
+            <p class="school">{item.name}</p>
+            <p class="muted">{item.level}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</div>
+
+<style>
+  .background {
+    display: grid;
+    gap: 3rem var(--col-gap);
+  }
+
+  h3 {
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border-strong);
+  }
+
+  li {
+    display: grid;
+    gap: 0.25rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .school {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  li .mono {
+    margin-top: 0.35rem;
+  }
+
+  @media (min-width: 48rem) {
+    .background {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    }
+  }
+</style>

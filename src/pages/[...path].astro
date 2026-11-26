@@ -1,0 +1,49 @@
+---
+import Home from '@/views/Home.astro';
+import About from '@/views/About.astro';
+import Experience from '@/views/Experience.astro';
+import Engineering from '@/views/Engineering.astro';
+import Digital from '@/views/Digital.astro';
+import OpenSource from '@/views/OpenSource.astro';
+import Resume from '@/views/Resume.astro';
+import Contact from '@/views/Contact.astro';
+import ProjectDetail from '@/views/ProjectDetail.astro';
+import { LANGS, PAGES, href, type Lang, type PageKey } from '@/i18n';
+import { getProjects, projectHref, type Project } from '@/lib/content';
+
+type Props = { lang: Lang; page: PageKey; project?: undefined } | { lang: Lang; page?: undefined; project: Project };
+
+/** Every route in both languages is generated from the PAGES table and the projects collection. */
+export async function getStaticPaths() {
+  // getStaticPaths runs in isolation, so its helpers must live inside it.
+  // "/about/" -> "about"; the home page of the default language maps to `undefined`.
+  const toParam = (url: string) => url.replace(/^\/|\/$/g, '') || undefined;
+  const pageKeys = Object.keys(PAGES) as PageKey[];
+  const perLang = await Promise.all(
+    LANGS.map(async (lang) => [
+      ...pageKeys.map((page) => ({ params: { path: toParam(href(lang, page)) }, props: { lang, page } })),
+      ...(await getProjects(lang)).map((project) => ({
+        params: { path: toParam(projectHref(lang, project)) },
+        props: { lang, project },
+      })),
+    ]),
+  );
+  return perLang.flat();
+}
+
+const VIEWS = {
+  home: Home,
+  about: About,
+  experience: Experience,
+  engineering: Engineering,
+  digital: Digital,
+  openSource: OpenSource,
+  resume: Resume,
+  contact: Contact,
+} satisfies Record<PageKey, unknown>;
+
+const props = Astro.props as Props;
+const View = props.page ? VIEWS[props.page] : undefined;
+---
+
+{props.project ? <ProjectDetail lang={props.lang} project={props.project} /> : View && <View lang={props.lang} />}

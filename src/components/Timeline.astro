@@ -1,0 +1,190 @@
+---
+import { render } from 'astro:content';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import ExtLink from './ExtLink.astro';
+import { href, t, type Lang } from '@/i18n';
+import { getJobs } from '@/lib/content';
+
+interface Props {
+  lang: Lang;
+  /** Compact rows (home, résumé) versus full entries with projects and stack. */
+  compact?: boolean;
+  /** Heading level for each organization in the full layout. */
+  level?: 2 | 3;
+}
+
+const { lang, compact = false, level = 2 } = Astro.props;
+const Org = `h${level}` as const;
+const d = t(lang);
+const jobs = await Promise.all((await getJobs(lang)).map(async (job) => ({ job, Content: (await render(job)).Content })));
+---
+
+{
+  compact ? (
+    <ol class="rows">
+      {jobs.map(({ job }) => (
+        <li class="reveal">
+          <p class="mono when">{job.data.period}</p>
+          <div>
+            <p class="org">{job.data.org}</p>
+            <p class="muted">{job.data.role}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <ol class="entries">
+      {jobs.map(({ job, Content }) => (
+        <li class="entry reveal">
+          <div class="when">
+            {job.data.period && <p class="mono period">{job.data.period}</p>}
+            {job.data.location && <p class="mono">{job.data.location}</p>}
+          </div>
+          <article>
+            <Org class="org-title">{job.data.org}</Org>
+            <p class="role">{job.data.role}</p>
+            <div class="summary muted"><Content /></div>
+            {job.data.projects.length > 0 && (
+              <dl class="projects" aria-label={d.experience.projects}>
+                {job.data.projects.map((p) => (
+                  <div>
+                    <dt>{p.name}</dt>
+                    <dd class="muted">{p.description}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            <ul class="tags" aria-label={d.common.stack}>
+              {job.data.stack.map((s) => <li class="tag">{s}</li>)}
+            </ul>
+            {(job.data.caseStudy || job.data.url) && (
+              <p class="case">
+                {job.data.caseStudy && (
+                  <a class="link" href={href(lang, 'engineering', job.data.caseStudy)}>
+                    {d.experience.relatedCase}<ArrowRight aria-hidden="true" />
+                  </a>
+                )}
+                {job.data.url && (
+                  <ExtLink href={job.data.url} lang={lang} class="link">{new URL(job.data.url).host}</ExtLink>
+                )}
+              </p>
+            )}
+          </article>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+<style>
+  /* Compact rows */
+  .rows li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem 2rem;
+    padding-block: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .rows li:first-child {
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .org {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .rows .when {
+    padding-top: 0.4rem;
+  }
+
+  @media (min-width: 40rem) {
+    .rows li {
+      grid-template-columns: 11rem minmax(0, 1fr);
+    }
+  }
+
+  /* Full entries */
+  .entry {
+    display: grid;
+    gap: 1rem var(--col-gap);
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--border);
+  }
+
+  .entry:first-child {
+    border-top-color: var(--border-strong);
+  }
+
+  .entry .when {
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+  }
+
+  .period {
+    color: var(--text);
+  }
+
+  .org-title {
+    font-size: var(--text-2xl);
+  }
+
+  .role {
+    margin-top: 0.6rem;
+    font-size: var(--text-lg);
+    color: var(--accent);
+  }
+
+  .summary {
+    margin-top: 1.25rem;
+    max-width: 60ch;
+  }
+
+  .projects {
+    margin-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .projects > div {
+    display: grid;
+    gap: 0.25rem 1.5rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .projects dt {
+    font-weight: 600;
+  }
+
+  .tags {
+    margin-top: 1.75rem;
+  }
+
+  .case {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.75rem;
+    font-size: var(--text-sm);
+  }
+
+  @media (min-width: 60rem) {
+    .entry {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    }
+
+    .entry .when {
+      position: sticky;
+      top: 6rem;
+      align-self: start;
+      padding-top: 0.7rem;
+    }
+
+    .projects > div {
+      grid-template-columns: 11rem minmax(0, 1fr);
+    }
+  }
+</style>

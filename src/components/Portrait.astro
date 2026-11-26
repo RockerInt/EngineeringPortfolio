@@ -1,0 +1,60 @@
+---
+import { Picture } from 'astro:assets';
+import portrait from '@/assets/jonathan-jimenez.webp';
+import { t, type Lang } from '@/i18n';
+import { SITE } from '@/lib/site';
+
+interface Props {
+  lang: Lang;
+  /** CSS `sizes` for the rendered width. */
+  sizes: string;
+  eager?: boolean;
+}
+
+const { lang, sizes, eager = false } = Astro.props;
+const d = t(lang);
+---
+
+<figure class="portrait">
+  <Picture
+    src={portrait}
+    alt={d.portraitAlt}
+    formats={['avif', 'webp']}
+    fallbackFormat="jpg"
+    widths={[240, 400, 640, 960]}
+    sizes={sizes}
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : undefined}
+  />
+  <figcaption class="mono"><span>{SITE.name}</span><span>{d.location}</span></figcaption>
+</figure>
+
+<style>
+  .portrait {
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  /* The source is square; a 4:5 crop anchored to the top keeps the face and crossed arms. */
+  .portrait :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 0;
+  }
+
+  figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    padding: 0.7rem 0.9rem;
+    border-top: 1px solid var(--border);
+  }
+
+  figcaption span:first-child {
+    color: var(--text);
+  }
+</style>

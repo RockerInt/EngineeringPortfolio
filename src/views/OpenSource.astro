@@ -1,0 +1,163 @@
+---
+import Base from '@/layouts/Base.astro';
+import PageHero from '@/components/PageHero.astro';
+import ExtLink from '@/components/ExtLink.astro';
+import Status from '@/components/Status.astro';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import ContactCta from '@/components/ContactCta.astro';
+import { t, type Lang } from '@/i18n';
+import { getProjects, projectHref, slugOf } from '@/lib/content';
+import { SITE } from '@/lib/site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang);
+const o = d.openSource;
+// Curated: only projects with a public repository, each linking to its single canonical page.
+const repos = (await getProjects(lang)).filter((p) => p.data.repo);
+---
+
+<Base lang={lang} page="openSource" title={o.title} description={o.description}>
+  <PageHero lang={lang} label={o.label} heading={o.heading} lead={o.lead} />
+
+  <div class="container">
+    <ol class="repos">
+      {
+        repos.map((project, i) => (
+          <li class="repo reveal">
+            <div class="head">
+              <p class="mono idx" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+              <p class="mono path">RockerInt/<span>{new URL(project.data.repo!).pathname.split('/')[2]}</span></p>
+            </div>
+            <div class="body">
+              <h2><a href={projectHref(lang, project)}>{project.data.title}</a></h2>
+              <p class="muted">{project.data.summary}</p>
+              <div class="why">
+                <h3 class="mono">{o.demonstrates}</h3>
+                <p>{o.notes[slugOf(project.id)]}</p>
+              </div>
+              <ul class="tags" aria-label={d.common.stack}>
+                {project.data.stack.map((s) => <li class="tag">{s}</li>)}
+              </ul>
+              <p class="links">
+                <a class="link" href={projectHref(lang, project)} aria-label={`${d.common.caseStudy}: ${project.data.title}`}>
+                  {d.common.caseStudy}<ArrowRight aria-hidden="true" />
+                </a>
+                <ExtLink href={project.data.repo!} lang={lang} class="link">{d.common.repository}</ExtLink>
+              </p>
+            </div>
+            <div class="meta">
+              <p class="mono">{project.data.category}</p>
+              <Status project={project} lang={lang} />
+              {project.data.license && <p class="mono">{d.common.license}: {project.data.license}</p>}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="all"><ExtLink href={SITE.github} lang={lang} class="btn">{o.allRepos}</ExtLink></p>
+  </div>
+
+  <ContactCta lang={lang} />
+</Base>
+
+<style>
+  .repo {
+    display: grid;
+    gap: 1.25rem var(--col-gap);
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--border);
+  }
+
+  .repo:first-child {
+    border-top-color: var(--border-strong);
+  }
+
+  .head {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+  }
+
+  .idx {
+    color: var(--accent);
+  }
+
+  .path {
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .path span {
+    color: var(--text);
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+  }
+
+  h2 a {
+    transition: color var(--fast) var(--ease);
+  }
+
+  h2 a:hover {
+    color: var(--accent);
+  }
+
+  h2 + p {
+    margin-top: 0.75rem;
+    max-width: 56ch;
+  }
+
+  .why {
+    margin-top: 1.75rem;
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--accent);
+    max-width: 56ch;
+  }
+
+  .why p {
+    margin-top: 0.5rem;
+  }
+
+  .tags {
+    margin-top: 1.75rem;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.75rem;
+    font-size: var(--text-sm);
+  }
+
+  .meta {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+
+  .all {
+    padding-block: 1rem var(--space-section);
+  }
+
+  @media (min-width: 60rem) {
+    .repo {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr);
+    }
+
+    .head {
+      flex-direction: column;
+      gap: 0.5rem;
+      padding-top: 0.7rem;
+    }
+
+    .meta {
+      padding-top: 0.7rem;
+    }
+  }
+</style>

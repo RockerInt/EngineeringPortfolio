@@ -1,0 +1,147 @@
+---
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import Base from '@/layouts/Base.astro';
+import PageHero from '@/components/PageHero.astro';
+import Section from '@/components/Section.astro';
+import Background from '@/components/Background.astro';
+import Portrait from '@/components/Portrait.astro';
+import ContactCta from '@/components/ContactCta.astro';
+import { href, t, type Lang } from '@/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang);
+const a = d.about;
+---
+
+<Base lang={lang} page="about" title={a.title} description={a.description}>
+  <PageHero lang={lang} label={a.label} heading={a.heading}>
+    <Portrait slot="aside" lang={lang} sizes="(min-width: 56rem) 26vw, 22rem" eager />
+  </PageHero>
+
+  <Section label={d.home.intro.label}>
+    <div class="intro">
+      {a.intro.map((p, i) => <p class:list={[i === 0 ? 'first' : 'muted', 'reveal']}>{p}</p>)}
+    </div>
+  </Section>
+
+  <Section label={a.pathLabel} title={a.pathTitle}>
+    <ol class="path">
+      {
+        a.path.map((step) => (
+          <li class="reveal">
+            <p class="mono">{step.period}</p>
+            <div>
+              <h3>{step.title}</h3>
+              <p class="muted">{step.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="more reveal"><a class="link" href={href(lang, 'experience')}>{a.cta}<ArrowRight aria-hidden="true" /></a></p>
+  </Section>
+
+  <Section label={a.philosophyLabel} title={a.philosophyTitle}>
+    <ol class="principles">
+      {
+        a.philosophy.map((item) => (
+          <li class="reveal">
+            <h3>{item.title}</h3>
+            <p class="muted">{item.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </Section>
+
+  <Section label={a.backgroundLabel}>
+    <Background lang={lang} />
+  </Section>
+
+  <ContactCta lang={lang} />
+</Base>
+
+<style>
+  .intro {
+    display: grid;
+    gap: 1.75rem;
+    max-width: 62ch;
+  }
+
+  .first {
+    font-size: var(--text-xl);
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+  }
+
+  .intro .muted {
+    font-size: var(--text-lg);
+  }
+
+  .path li {
+    display: grid;
+    gap: 0.5rem 2rem;
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .path li:first-child {
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .path .mono {
+    padding-top: 0.45rem;
+    color: var(--accent);
+  }
+
+  h3 {
+    font-size: var(--text-xl);
+  }
+
+  h3 + p {
+    margin-top: 0.6rem;
+    max-width: 58ch;
+  }
+
+  @media (min-width: 40rem) {
+    .path li {
+      grid-template-columns: 8rem minmax(0, 1fr);
+    }
+  }
+
+  .more {
+    margin-top: 2.5rem;
+    font-size: var(--text-sm);
+  }
+
+  .principles {
+    display: grid;
+    gap: 2.5rem var(--col-gap);
+    counter-reset: principle;
+  }
+
+  .principles li {
+    counter-increment: principle;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .principles li::before {
+    content: counter(principle, decimal-leading-zero);
+    display: block;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--accent);
+  }
+
+  @media (min-width: 44rem) {
+    .principles {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
