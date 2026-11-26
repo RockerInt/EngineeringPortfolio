@@ -1,7 +1,7 @@
 ---
 import ExtLink from './ExtLink.astro';
 import LangSwitch from './LangSwitch.astro';
-import { NAV, href, t, type Lang, type PageKey } from '@/i18n';
+import { FOOTER_NAV, href, t, type Lang, type PageKey } from '@/i18n';
 import { SITE } from '@/lib/site';
 
 interface Props {
@@ -14,99 +14,118 @@ const { lang, page, sub } = Astro.props;
 const d = t(lang);
 ---
 
-<footer class="site-footer">
-  <div class="container grid">
-    <div class="id">
-      <p class="name">{SITE.name}</p>
-      <p class="muted">{d.role}</p>
-      <p class="statement mono">{d.statement.join(' ')}</p>
-    </div>
+<footer class="site-footer night">
+  <div class="container">
+    <p class="statement">{d.statement[0]}<br />{d.statement[1]}</p>
 
-    <nav aria-label={d.footer.sections}>
-      <p class="mono head">{d.footer.sections}</p>
-      <ul class="cols">
-        {NAV.map((key) => <li><a href={href(lang, key)}>{d.nav[key]}</a></li>)}
-      </ul>
-    </nav>
-
-    <div>
-      <p class="mono head">{d.footer.elsewhere}</p>
-      <ul>
+    <div class="cols">
+      <p class="id">
+        <span class="name">{SITE.name}</span>
+        <span>{d.role}</span>
+        <span>{d.location}</span>
+      </p>
+      <nav aria-label={d.footer.sections}>
+        <ul>
+          {FOOTER_NAV.map((key) => <li><a href={href(lang, key)}>{d.nav[key]}</a></li>)}
+        </ul>
+      </nav>
+      <ul aria-label={d.footer.elsewhere}>
         <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
         <li><ExtLink href={SITE.github} lang={lang}>GitHub</ExtLink></li>
         <li><ExtLink href={SITE.linkedin} lang={lang}>LinkedIn</ExtLink></li>
       </ul>
     </div>
-  </div>
 
-  <div class="container base">
-    <p class="muted">© {new Date().getFullYear()} {SITE.name} · {d.location}</p>
-    <p class="muted note">{d.footer.note}</p>
-    <LangSwitch lang={lang} page={page} sub={sub} />
+    <div class="base">
+      <p>© {new Date().getFullYear()} {SITE.name}</p>
+      <p>{d.footer.note}</p>
+      <LangSwitch lang={lang} page={page} sub={sub} />
+    </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    border-top: 1px solid var(--border);
-    padding-block: clamp(3rem, 6vw, 5rem) 2rem;
+    border-top: var(--rule-heavy) solid var(--color-rule);
+    padding-block: var(--space-3xl) var(--space-xl);
     font-size: var(--text-sm);
   }
 
-  .grid {
-    display: grid;
-    gap: 2.5rem var(--col-gap);
+  /* The closing statement, set at the section size. */
+  .statement {
+    max-width: none;
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--text-head);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.05;
+    text-transform: var(--head-case, none);
+    overflow-wrap: break-word;
   }
 
-  @media (min-width: 48rem) {
-    .grid {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
-    }
+  .cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl) var(--gap-columns);
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-lg);
+    border-top: var(--rule-hair) solid var(--color-rule);
+  }
+
+  .id {
+    display: grid;
+    gap: var(--space-2xs);
+    align-content: start;
+    max-width: none;
+    color: var(--color-ink-2);
   }
 
   .name {
-    font-size: var(--text-lg);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-  }
-
-  .statement {
-    margin-top: 1.25rem;
-  }
-
-  .head {
-    margin-bottom: 0.9rem;
+    font-weight: 500;
+    color: var(--color-ink);
   }
 
   ul {
     display: grid;
-    gap: 0.55rem;
+    gap: var(--space-2xs);
+    align-content: start;
   }
 
-  .cols {
+  nav ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--gap-columns);
   }
 
-  li a {
-    color: var(--muted);
-    transition: color var(--fast) var(--ease);
+  li :global(a) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    text-decoration: none;
+    white-space: nowrap;
   }
 
-  li a:hover {
-    color: var(--text);
+  li :global(a:hover) {
+    text-decoration: underline;
   }
 
   .base {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.75rem 2rem;
-    margin-top: clamp(2.5rem, 5vw, 4rem);
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
+    gap: var(--space-sm) var(--space-lg);
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-lg);
+    border-top: var(--rule-hair) solid var(--color-rule-2);
+    color: var(--color-muted);
   }
 
-  .note {
+  .base p:nth-child(2) {
     margin-right: auto;
+  }
+
+  @media (min-width: 48rem) {
+    .cols {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
+    }
   }
 </style>

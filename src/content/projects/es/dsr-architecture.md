@@ -38,11 +38,11 @@ El objetivo es que la estructura correcta sea la más fácil: código de dominio
 
 ## Principios arquitectónicos
 
-- **Separación de responsabilidades** — Dominio, Aplicación e Infraestructura son paquetes separados, con dependencias que apuntan hacia adentro.
-- **Ignorancia de la persistencia** — el dominio describe *qué* consultar mediante specifications; la infraestructura decide *cómo*.
-- **Resultados explícitos** — las operaciones devuelven un `Result` en lugar de depender de excepciones para fallos esperados.
-- **Preocupaciones transversales en el pipeline** — validación, autorización, transacciones y logging viven en behaviors, no en cada caso de uso.
-- **Paquetes pequeños** — cada responsabilidad se distribuye por separado para que una aplicación referencie solo lo que usa.
+- **Separación de responsabilidades**: Dominio, Aplicación e Infraestructura son paquetes separados, con dependencias que apuntan hacia adentro.
+- **Ignorancia de la persistencia**: el dominio describe *qué* consultar mediante specifications; la infraestructura decide *cómo*.
+- **Resultados explícitos**: las operaciones devuelven un `Result` en lugar de depender de excepciones para fallos esperados.
+- **Preocupaciones transversales en el pipeline**: validación, autorización, transacciones y logging viven en behaviors, no en cada caso de uso.
+- **Paquetes pequeños**: cada responsabilidad se distribuye por separado para que una aplicación referencie solo lo que usa.
 
 ## Diseño
 

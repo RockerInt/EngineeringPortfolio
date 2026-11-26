@@ -26,7 +26,7 @@ const downloads = [lang, ...LANGS.filter((l) => l !== lang)].flatMap((l) => {
 
 <Base lang={lang} page="resume" title={r.title} description={r.description}>
   <PageHero lang={lang} label={r.label} heading={SITE.name} lead={d.role}>
-    <div class="actions rise no-print" style="--i:3">
+    <div class="actions no-print">
       {
         downloads.length > 0 ? (
           <div class="btn-row">
@@ -37,30 +37,30 @@ const downloads = [lang, ...LANGS.filter((l) => l !== lang)].flatMap((l) => {
             ))}
           </div>
         ) : (
-          <p class="muted">
+          <p>
             {r.noPdf} <a class="link" href={`mailto:${SITE.email}`}>{SITE.email}</a>
           </p>
         )
       }
     </div>
-    <ul class="contacts mono rise" style="--i:4">
+    <ul class="contacts">
       <li>{d.location}</li>
       <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
       <li><a href={SITE.linkedin}>{SITE.linkedin.replace('https://www.', '').replace(/\/$/, '')}</a></li>
       <li><a href={SITE.github}>{SITE.github.replace('https://', '')}</a></li>
       <li class="print-only">{Astro.site?.host}</li>
     </ul>
+    <div slot="aside" class="sum">
+      <h2>{r.summaryLabel}</h2>
+      <p class="summary">{r.summary}</p>
+    </div>
   </PageHero>
-
-  <Section label={r.summaryLabel}>
-    <p class="summary reveal">{r.summary}</p>
-  </Section>
 
   <Section label={r.experienceLabel}>
     <Timeline lang={lang} level={3} />
   </Section>
 
-  <Section label={r.skillsLabel}>
+  <Section label={r.skillsLabel} band>
     <SkillGroups lang={lang} />
   </Section>
 
@@ -71,37 +71,56 @@ const downloads = [lang, ...LANGS.filter((l) => l !== lang)].flatMap((l) => {
 
 <style>
   .actions {
-    display: grid;
-    gap: 1.25rem;
-    margin-top: 2.5rem;
-  }
-
-  .actions .muted {
-    font-size: var(--text-sm);
-  }
-
-  .summary {
-    font-size: var(--text-xl);
-    line-height: 1.45;
-    letter-spacing: -0.02em;
-    max-width: 46ch;
+    margin-top: var(--space-xl);
   }
 
   .contacts {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem 1.5rem;
-    margin-top: 1.75rem;
-    text-transform: none;
-    letter-spacing: 0;
-    overflow-wrap: anywhere;
+    gap: var(--space-2xs) var(--space-lg);
+    margin-top: var(--space-lg);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-ink-2);
   }
 
   .contacts a {
-    transition: color var(--fast) var(--ease);
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    overflow-wrap: anywhere;
   }
 
   .contacts a:hover {
-    color: var(--text);
+    text-decoration-color: transparent;
+  }
+
+  /* The summary sits in the sheet's title block, beside the name. */
+  .sum {
+    padding: var(--space-lg);
+    border: var(--rule-hair) solid var(--color-rule);
+  }
+
+  .sum h2 {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.5;
+    text-transform: none;
+    color: var(--color-muted);
+    text-wrap: balance;
+  }
+
+  .summary {
+    margin-top: var(--space-xs);
+    color: var(--color-ink-2);
+  }
+
+  @media print {
+    .sum {
+      padding: 0;
+      border: 0;
+    }
   }
 </style>

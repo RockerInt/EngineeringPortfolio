@@ -1,0 +1,190 @@
+---
+import { t, type Lang } from '@/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+// Conceptual drawing of DSR.Architecture. Every label maps to a package or type that exists in the
+// public repository; planned packages are drawn outside the layers, dashed.
+const g = t(Astro.props.lang).diagram;
+---
+
+<figure class="arch diagram" aria-label={g.label}>
+  <div class="sheet ticks">
+    <div class="ring">
+      <div class="ring-head">
+        <p class="name">{g.infrastructure.name}</p>
+        <p class="dep">{g.dependsOn} {g.application.name}</p>
+      </div>
+      <p class="hint">{g.infrastructure.text}</p>
+      <ul class="items">{g.infrastructure.items.map((item) => <li>{item}</li>)}</ul>
+
+      <div class="ring">
+        <div class="ring-head">
+          <p class="name">{g.application.name}</p>
+          <p class="dep">{g.dependsOn} {g.domain.name}</p>
+        </div>
+        <p class="hint">{g.application.text}</p>
+        <dl class="lines">
+          <div>
+            <dt>{g.application.pipeline}</dt>
+            <dd><ol class="items flow">{g.application.items.map((item) => <li>{item}</li>)}</ol></dd>
+          </div>
+          <div>
+            <dt>{g.application.contracts}</dt>
+            <dd><ul class="items">{g.application.contractItems.map((item) => <li>{item}</li>)}</ul></dd>
+          </div>
+        </dl>
+
+        <div class="ring core">
+          <div class="ring-head">
+            <p class="name">{g.domain.name}</p>
+            <p class="dep">{g.dependsOn} {g.nothing}</p>
+          </div>
+          <p class="hint">{g.domain.text}</p>
+          <ul class="items">{g.domain.items.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="ring planned">
+      <div class="ring-head">
+        <p class="name">{g.planned.name}</p>
+        <p class="dep">{g.planned.text}</p>
+      </div>
+      <ul class="items">{g.planned.items.map((item) => <li>{item}</li>)}</ul>
+    </div>
+  </div>
+
+  <figcaption class="label">{g.caption} {g.note}</figcaption>
+</figure>
+
+<style>
+  .arch {
+    min-width: 0;
+  }
+
+  .sheet {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg);
+    padding: var(--space-xl);
+    border: var(--rule-hair) solid var(--color-sheet-rule, var(--color-rule));
+  }
+
+  /* Each layer is a keyline; nesting is the dependency rule. */
+  .ring {
+    display: grid;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    border: var(--rule-hair) solid var(--color-rule);
+    border-radius: var(--radius-layer, 0);
+    background: var(--color-paper-2);
+  }
+
+  .ring .ring {
+    margin-top: var(--space-sm);
+    background: var(--color-paper);
+  }
+
+  .ring.core {
+    border-width: var(--rule-heavy);
+    border-color: var(--color-accent);
+    background: var(--color-paper);
+  }
+
+  .ring.planned {
+    border-style: dashed;
+    border-color: var(--color-planned, var(--color-rule));
+    background: none;
+  }
+
+  .planned .name,
+  .planned .items li {
+    color: var(--color-planned, inherit);
+    border-color: var(--color-planned, var(--color-rule-2));
+  }
+
+  .ring-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2xs) var(--space-lg);
+  }
+
+  .name {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--text-title);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.2;
+  }
+
+  .dep,
+  .hint,
+  dt {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .dep,
+  dt {
+    font-weight: 500;
+  }
+
+  .hint {
+    max-width: 60ch;
+  }
+
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .items li {
+    padding: var(--space-2xs) var(--space-sm);
+    border: var(--rule-hair) solid var(--color-rule);
+    border-radius: var(--radius-pill);
+    background: var(--color-paper);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* The pipeline is an ordered run: cells joined on one line. */
+  /* The pipeline: an ordered run of pills, each feeding the next. */
+  .flow li {
+    border-color: color-mix(in oklab, var(--color-accent) 35%, var(--color-rule));
+  }
+
+  .lines {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .lines > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2xs) var(--space-md);
+    align-items: baseline;
+  }
+
+  @media (min-width: 48rem) {
+    .lines > div {
+      grid-template-columns: 6rem minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .sheet {
+      padding: var(--space-md);
+    }
+
+    .ring {
+      padding: var(--space-md);
+    }
+  }
+</style>

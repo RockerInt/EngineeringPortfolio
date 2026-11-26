@@ -38,11 +38,11 @@ The goal is to make the right structure the easy one: domain code that knows not
 
 ## Architectural principles
 
-- **Separation of concerns** — Domain, Application and Infrastructure are separate packages with dependencies pointing inward.
-- **Persistence ignorance** — the domain describes *what* to query through specifications; infrastructure decides *how*.
-- **Explicit outcomes** — operations return a `Result` instead of relying on exceptions for expected failures.
-- **Cross-cutting concerns in the pipeline** — validation, authorization, transactions and logging live in behaviors, not in each use case.
-- **Small packages** — each concern ships separately so an application references only what it uses.
+- **Separation of concerns**: Domain, Application and Infrastructure are separate packages with dependencies pointing inward.
+- **Persistence ignorance**: the domain describes *what* to query through specifications; infrastructure decides *how*.
+- **Explicit outcomes**: operations return a `Result` instead of relying on exceptions for expected failures.
+- **Cross-cutting concerns in the pipeline**: validation, authorization, transactions and logging live in behaviors, not in each use case.
+- **Small packages**: each concern ships separately so an application references only what it uses.
 
 ## Design
 

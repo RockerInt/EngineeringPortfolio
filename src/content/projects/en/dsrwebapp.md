@@ -2,7 +2,7 @@
 title: DsrWebApp
 section: openSource
 category: Point-of-sale web application
-summary: A POS application — ASP.NET Core 9 API and Angular 20 SPA — built on the DSR.Architecture packages.
+summary: A POS application, ASP.NET Core 9 API and Angular 20 SPA, built on the DSR.Architecture packages.
 kind: open-source
 role: Author
 stack: [ASP.NET Core 9, Angular 20, MediatR, EF Core, SQLite, Docker]

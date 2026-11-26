@@ -7,7 +7,7 @@ export const en = {
   role: 'Software Engineer & Digital Solutions Architect',
   statement: ['Engineering systems.', 'Building digital experiences.'],
   valueProp:
-    'I architect, engineer and build digital products — from scalable software platforms and distributed systems to high-quality web experiences.',
+    'I architect, engineer and build digital products, from scalable software platforms and distributed systems to high-quality web experiences.',
   location: 'Bogotá, Colombia',
   portraitAlt: 'Black-and-white portrait of Jonathan Jiménez smiling with his arms crossed, wearing a white shirt, dark vest and tie.',
 
@@ -89,7 +89,7 @@ export const en = {
       text: 'Backend platforms designed around the domain and built to stay maintainable as they grow.',
       items: [
         'Backend engineering with .NET',
-        'Software architecture · DDD · Clean Architecture',
+        'Software architecture, DDD, Clean Architecture',
         'Event-driven systems and microservices',
         'Data persistence and systems integration',
         'Technical leadership and engineering decisions',
@@ -119,10 +119,10 @@ export const en = {
       label: 'Profile sheet',
       rows: [
         ['Based in', 'Bogotá, Colombia'],
-        ['Core', 'Backend · .NET · Software architecture'],
-        ['Systems', 'Distributed · Event-driven · Microservices'],
+        ['Core', 'Backend, .NET, Software architecture'],
+        ['Systems', 'Distributed, Event-driven, Microservices'],
         ['Also', 'Websites and digital experiences'],
-        ['Languages', 'Spanish (native) · English (intermediate)'],
+        ['Languages', 'Spanish (native), English (intermediate)'],
       ],
     },
     intro: {
@@ -147,7 +147,7 @@ export const en = {
     expertise: {
       label: 'Technical expertise',
       title: 'Tools I have worked with, grouped by concern.',
-      note: 'Listed as technologies used across professional and personal projects — not as a ranking of proficiency.',
+      note: 'Listed as technologies used across professional and personal projects, not as a ranking of proficiency.',
     },
   },
 
@@ -159,7 +159,7 @@ export const en = {
     heading: 'I build software systems, and the digital experiences people meet them through.',
     intro: [
       'I am a software engineer based in Bogotá, Colombia, with more than a decade of experience building software for private companies and public entities.',
-      'My background is full-stack, but my focus today is backend engineering, software architecture and distributed systems — mostly in the .NET ecosystem. I also design and build websites and digital experiences, which keeps me close to the part of a product people actually see.',
+      'My background is full-stack, but my focus today is backend engineering, software architecture and distributed systems, mostly in the .NET ecosystem. I also design and build websites and digital experiences, which keeps me close to the part of a product people actually see.',
     ],
     pathLabel: 'Trajectory',
     pathTitle: 'From full-stack delivery to systems design.',
@@ -202,7 +202,7 @@ export const en = {
       },
       {
         title: 'Honest about state',
-        text: 'I separate what is built from what is planned — in code, in documentation and in this portfolio.',
+        text: 'I separate what is built from what is planned: in code, in documentation and in this portfolio.',
       },
     ],
     backgroundLabel: 'Background',
@@ -227,7 +227,7 @@ export const en = {
       'Engineering case studies: professional platform work at Alwon and DSR.Architecture, a personal .NET architecture framework in development.',
     label: 'Engineering',
     heading: 'Software engineering and architecture.',
-    lead: 'Backend, architecture and distributed systems — shown through professional work I can disclose and a personal framework where the design decisions are public.',
+    lead: 'Backend, architecture and distributed systems, shown through professional work I can disclose and a personal framework where the design decisions are public.',
     casesLabel: 'Case studies',
     relatedLabel: 'Built on DSR.Architecture',
     relatedText: 'Two public repositories apply the framework to concrete applications. They live under Open Source.',
@@ -301,6 +301,32 @@ export const en = {
     ],
   },
 
+  diagram: {
+    label: 'Architecture diagram of DSR.Architecture: three nested layers with dependencies pointing inward.',
+    caption: 'Fig. 1. Package layers of DSR.Architecture. Each layer depends only on the ones inside it.',
+    note: 'Conceptual diagram, drawn from the structure of the public repository.',
+    dependsOn: 'depends on',
+    nothing: 'nothing',
+    infrastructure: {
+      name: 'Infrastructure',
+      text: 'Implements the contracts for a specific store.',
+      items: ['EF Core', 'MongoDB', 'SQL Server', 'SQLite', 'HTTP provider'],
+    },
+    application: {
+      name: 'Application',
+      text: 'Commands and queries pass through a pipeline of behaviors before reaching their use case.',
+      pipeline: 'Pipeline',
+      items: ['Validation', 'Authorization', 'Transaction', 'Idempotency', 'Logging', 'Metrics', 'Exceptions'],
+      contracts: 'Contracts',
+      contractItems: ['Read repository', 'Write repository', 'Unit of work'],
+    },
+    domain: {
+      name: 'Domain',
+      text: 'Knows nothing about infrastructure.',
+      items: ['Aggregates', 'Entities', 'Value objects', 'Domain events', 'Result', 'Specifications'],
+    },
+    planned: { name: 'Planned', text: 'Not in the repository yet.', items: ['Outbox', 'Event Sourcing'] },
+  },
   cta: {
     label: 'Contact',
     title: 'Have a system to design or an experience to build?',

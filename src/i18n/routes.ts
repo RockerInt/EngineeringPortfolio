@@ -17,7 +17,9 @@ export type PageKey = keyof typeof PAGES;
 /** Sections that own project detail pages. */
 export type SectionKey = 'engineering' | 'digital' | 'openSource';
 
-export const NAV: PageKey[] = ['about', 'experience', 'engineering', 'digital', 'openSource', 'resume', 'contact'];
+/** Header navigation. Open Source lives under Engineering there; the footer lists every page. */
+export const NAV: PageKey[] = ['about', 'experience', 'engineering', 'digital', 'resume', 'contact'];
+export const FOOTER_NAV: PageKey[] = ['about', 'experience', 'engineering', 'digital', 'openSource', 'resume', 'contact'];
 
 export function href(lang: Lang, page: PageKey, sub?: string): string {
   const path = [PAGES[page][lang], sub].filter(Boolean).join('/');

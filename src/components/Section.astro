@@ -1,24 +1,23 @@
 ---
 interface Props {
+  /** The section's plain name: it is the heading. */
   label: string;
+  /** One line under the heading. */
   title?: string;
   id?: string;
+  /** A register sheet: one step darker. */
+  band?: boolean;
 }
 
-const { label, title, id } = Astro.props;
-// Every section needs a heading: without a title, the rail label takes that role.
-const Label = title ? 'p' : 'h2';
+const { label, title, id, band = false } = Astro.props;
 ---
 
-<section class="section" id={id}>
-  <div class="container section-grid">
-    <div class="section-rail">
-      <Label class="section-label mono">{label}</Label>
-      <slot name="rail" />
-    </div>
-    <div>
-      {title && <h2 class="section-title reveal">{title}</h2>}
-      <slot />
-    </div>
+<section class:list={['section', { band }]} id={id}>
+  <div class="container">
+    <header class="head">
+      <h2>{label}</h2>
+      {title && <p class="lead">{title}</p>}
+    </header>
+    <slot />
   </div>
 </section>

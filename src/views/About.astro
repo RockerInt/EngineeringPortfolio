@@ -1,5 +1,4 @@
 ---
-import ArrowRight from '@lucide/astro/icons/arrow-right';
 import Base from '@/layouts/Base.astro';
 import PageHero from '@/components/PageHero.astro';
 import Section from '@/components/Section.astro';
@@ -19,39 +18,37 @@ const a = d.about;
 
 <Base lang={lang} page="about" title={a.title} description={a.description}>
   <PageHero lang={lang} label={a.label} heading={a.heading}>
-    <Portrait slot="aside" lang={lang} sizes="(min-width: 56rem) 26vw, 22rem" eager />
+    <Portrait slot="aside" lang={lang} sizes="(min-width: 60rem) 26vw, 20rem" eager />
   </PageHero>
 
   <Section label={d.home.intro.label}>
     <div class="intro">
-      {a.intro.map((p, i) => <p class:list={[i === 0 ? 'first' : 'muted', 'reveal']}>{p}</p>)}
+      {a.intro.map((p, i) => <p class:list={{ first: i === 0 }}>{p}</p>)}
     </div>
   </Section>
 
-  <Section label={a.pathLabel} title={a.pathTitle}>
-    <ol class="path">
+  <Section label={a.pathLabel} title={a.pathTitle} band>
+    <ol class="path register">
       {
         a.path.map((step) => (
-          <li class="reveal">
-            <p class="mono">{step.period}</p>
-            <div>
-              <h3>{step.title}</h3>
-              <p class="muted">{step.text}</p>
-            </div>
+          <li>
+            <p class="num">{step.period}</p>
+            <h3>{step.title}</h3>
+            <p class="text">{step.text}</p>
           </li>
         ))
       }
     </ol>
-    <p class="more reveal"><a class="link" href={href(lang, 'experience')}>{a.cta}<ArrowRight aria-hidden="true" /></a></p>
+    <p class="more"><a class="link" href={href(lang, 'experience')}>{a.cta}</a></p>
   </Section>
 
   <Section label={a.philosophyLabel} title={a.philosophyTitle}>
     <ol class="principles">
       {
         a.philosophy.map((item) => (
-          <li class="reveal">
+          <li>
             <h3>{item.title}</h3>
-            <p class="muted">{item.text}</p>
+            <p class="text">{item.text}</p>
           </li>
         ))
       }
@@ -68,80 +65,77 @@ const a = d.about;
 <style>
   .intro {
     display: grid;
-    gap: 1.75rem;
-    max-width: 62ch;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg) var(--gap-columns);
   }
 
-  .first {
-    font-size: var(--text-xl);
-    line-height: 1.4;
-    letter-spacing: -0.02em;
+  .intro p {
+    max-width: none;
+    font-size: var(--text-lead);
+    color: var(--color-ink-2);
   }
 
-  .intro .muted {
-    font-size: var(--text-lg);
+  /* The opening sentence is the section: a statement across the sheet. */
+  .intro .first {
+    font-size: var(--text-section);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+
+  .intro p + p {
+    max-width: 60ch;
   }
 
   .path li {
     display: grid;
-    gap: 0.5rem 2rem;
-    padding-block: 1.75rem;
-    border-bottom: 1px solid var(--border);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xs) var(--gap-columns);
+    padding-block: var(--space-lg);
+    align-items: baseline;
   }
 
-  .path li:first-child {
-    border-top: 1px solid var(--border-strong);
+  .text {
+    color: var(--color-ink-2);
   }
 
-  .path .mono {
-    padding-top: 0.45rem;
-    color: var(--accent);
-  }
-
-  h3 {
-    font-size: var(--text-xl);
-  }
-
-  h3 + p {
-    margin-top: 0.6rem;
-    max-width: 58ch;
-  }
-
-  @media (min-width: 40rem) {
-    .path li {
-      grid-template-columns: 8rem minmax(0, 1fr);
-    }
-  }
-
-  .more {
-    margin-top: 2.5rem;
-    font-size: var(--text-sm);
-  }
-
+  /* Four principles on one line of the sheet, parted by keylines. */
   .principles {
     display: grid;
-    gap: 2.5rem var(--col-gap);
-    counter-reset: principle;
+    grid-template-columns: minmax(0, 1fr);
+    border-top: var(--rule-heavy) solid var(--color-rule);
   }
 
   .principles li {
-    counter-increment: principle;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--border-strong);
+    display: grid;
+    gap: var(--space-sm);
+    align-content: start;
+    padding-block: var(--space-lg);
+    border-bottom: var(--rule-hair) solid var(--color-rule-2);
   }
 
-  .principles li::before {
-    content: counter(principle, decimal-leading-zero);
-    display: block;
-    margin-bottom: 1.5rem;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--accent);
-  }
+  @media (min-width: 60rem) {
+    .path li {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 4fr) minmax(0, 6fr);
+    }
 
-  @media (min-width: 44rem) {
     .principles {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .principles li {
+      padding: var(--space-lg);
+      border-bottom: 0;
+      border-left: var(--rule-hair) solid var(--color-rule-2);
+    }
+
+    .principles li:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .principles li:last-child {
+      padding-right: 0;
     }
   }
 </style>

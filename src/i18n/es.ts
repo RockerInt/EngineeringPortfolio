@@ -87,7 +87,7 @@ export const es: Dict = {
       text: 'Plataformas backend diseñadas alrededor del dominio y construidas para seguir siendo mantenibles a medida que crecen.',
       items: [
         'Ingeniería backend con .NET',
-        'Arquitectura de software · DDD · Clean Architecture',
+        'Arquitectura de software, DDD, Clean Architecture',
         'Sistemas orientados a eventos y microservicios',
         'Persistencia de datos e integración de sistemas',
         'Liderazgo técnico y decisiones de ingeniería',
@@ -117,10 +117,10 @@ export const es: Dict = {
       label: 'Ficha de perfil',
       rows: [
         ['Ubicación', 'Bogotá, Colombia'],
-        ['Núcleo', 'Backend · .NET · Arquitectura de software'],
-        ['Sistemas', 'Distribuidos · Orientados a eventos · Microservicios'],
+        ['Núcleo', 'Backend, .NET, Arquitectura de software'],
+        ['Sistemas', 'Distribuidos, Orientados a eventos, Microservicios'],
         ['Además', 'Sitios web y experiencias digitales'],
-        ['Idiomas', 'Español (nativo) · Inglés (intermedio)'],
+        ['Idiomas', 'Español (nativo), Inglés (intermedio)'],
       ],
     },
     intro: {
@@ -299,6 +299,32 @@ export const es: Dict = {
     ],
   },
 
+  diagram: {
+    label: 'Diagrama de arquitectura de DSR.Architecture: tres capas anidadas con dependencias que apuntan hacia adentro.',
+    caption: 'Fig. 1. Capas de paquetes de DSR.Architecture. Cada capa depende solo de las que contiene.',
+    note: 'Diagrama conceptual, elaborado a partir de la estructura del repositorio público.',
+    dependsOn: 'depende de',
+    nothing: 'nada',
+    infrastructure: {
+      name: 'Infraestructura',
+      text: 'Implementa los contratos para un almacenamiento específico.',
+      items: ['EF Core', 'MongoDB', 'SQL Server', 'SQLite', 'Proveedor HTTP'],
+    },
+    application: {
+      name: 'Aplicación',
+      text: 'Comandos y consultas pasan por un pipeline de behaviors antes de llegar a su caso de uso.',
+      pipeline: 'Pipeline',
+      items: ['Validación', 'Autorización', 'Transacción', 'Idempotencia', 'Logging', 'Métricas', 'Excepciones'],
+      contracts: 'Contratos',
+      contractItems: ['Repositorio de lectura', 'Repositorio de escritura', 'Unidad de trabajo'],
+    },
+    domain: {
+      name: 'Dominio',
+      text: 'No conoce la infraestructura.',
+      items: ['Agregados', 'Entidades', 'Objetos de valor', 'Eventos de dominio', 'Result', 'Especificaciones'],
+    },
+    planned: { name: 'Planeado', text: 'Aún no está en el repositorio.', items: ['Outbox', 'Event Sourcing'] },
+  },
   cta: {
     label: 'Contacto',
     title: '¿Un sistema por diseñar o una experiencia por construir?',

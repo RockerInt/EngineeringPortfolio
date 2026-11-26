@@ -21,105 +21,131 @@ const isExternal = (url: string) => url.startsWith('http');
 <Base lang={lang} page="contact" title={c.title} description={c.description}>
   <PageHero lang={lang} label={c.label} heading={c.heading} lead={c.lead} />
 
-  <div class="container">
-    <ul class="channels">
-      {
-        c.channels.map((channel, i) => (
-          <li class="rise" style={`--i:${i + 3}`}>
-            <a href={urls[i]} target={isExternal(urls[i]!) ? '_blank' : undefined} rel={isExternal(urls[i]!) ? 'noopener noreferrer' : undefined}>
-              <span class="mono">{channel.handle}</span>
-              <span class="name">{channel.name}</span>
-              <span class="muted">{channel.text}</span>
-              <ArrowUpRight aria-hidden="true" />
-              {isExternal(urls[i]!) && <span class="sr-only">{d.common.externalHint}</span>}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
+  <section class="section">
+    <div class="container">
+      <ul class="channels register">
+        {
+          c.channels.map((channel, i) => (
+            <li>
+              <a href={urls[i]} target={isExternal(urls[i]!) ? '_blank' : undefined} rel={isExternal(urls[i]!) ? 'noopener noreferrer' : undefined}>
+                <span class="name">{channel.name}</span>
+                <span class="handle">{channel.handle}</span>
+                <span class="text">{channel.text}</span>
+                {isExternal(urls[i]!) && <ArrowUpRight aria-hidden="true" />}
+                {isExternal(urls[i]!) && <span class="sr-only">{d.common.externalHint}</span>}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
 
-  <Section label={c.forLabel}>
-    <ul class="reasons">
-      {c.for.map((item) => <li class="reveal">{item}</li>)}
+  <Section label={c.forLabel} band>
+    <ul class="reasons register">
+      {c.for.map((item) => <li>{item}</li>)}
     </ul>
-    <p class="mono place reveal">{d.location}</p>
+    <p class="label place">{d.location}</p>
   </Section>
 </Base>
 
 <style>
-  .channels {
-    display: grid;
-    gap: 1rem;
-    padding-bottom: var(--space-section);
-  }
-
   .channels a {
-    position: relative;
     display: grid;
-    gap: 0.5rem;
-    padding: clamp(1.5rem, 4vw, 2.5rem);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
-    transition: border-color var(--fast) var(--ease);
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-2xs) var(--gap-columns);
+    align-items: baseline;
+    padding: var(--space-md);
+    text-decoration: none;
+    transition: background-color var(--dur-short) var(--ease-out);
   }
 
   .channels a:hover {
-    border-color: var(--accent);
+    background: var(--color-paper-3);
   }
 
-  .mono {
-    text-transform: none;
-    letter-spacing: 0;
+  .channels a:active {
+    background: var(--color-paper-2);
   }
 
   .name {
-    margin-top: 1.5rem;
-    font-size: var(--text-3xl);
-    font-weight: 600;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-muted);
+  }
+
+  .handle {
+    grid-column: 1;
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--text-2xl);
+    letter-spacing: var(--tracking-display);
     overflow-wrap: anywhere;
-    letter-spacing: -0.035em;
-    line-height: 1;
+  }
+
+  /* On a phone the address must stay on one line: it is the thing to copy. */
+  @media (max-width: 40rem) {
+    .handle {
+      font-size: var(--text-md);
+    }
+  }
+
+  .text {
+    grid-column: 1;
+    color: var(--color-ink-2);
   }
 
   .channels :global(svg) {
-    position: absolute;
-    top: clamp(1.5rem, 4vw, 2.5rem);
-    right: clamp(1.5rem, 4vw, 2.5rem);
-    width: 1.5rem;
-    height: 1.5rem;
-    color: var(--muted);
-    transition: transform var(--fast) var(--ease), color var(--fast) var(--ease);
-  }
-
-  .channels a:hover :global(svg) {
-    transform: translate(3px, -3px);
-    color: var(--accent);
-  }
-
-  @media (min-width: 48rem) {
-    .channels {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    /* Email is the primary channel: it spans the full row. */
-    .channels li:first-child {
-      grid-column: 1 / -1;
-    }
-  }
-
-  .reasons {
-    border-top: 1px solid var(--border-strong);
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: center;
+    width: 24px;
+    height: 24px;
   }
 
   .reasons li {
-    padding-block: 1.1rem;
-    border-bottom: 1px solid var(--border);
-    font-size: var(--text-lg);
+    padding-block: var(--space-lg);
+    font-size: var(--text-lead);
+  }
+
+  /* Three reasons, one row across the page, parted by hairlines. */
+  @media (min-width: 60rem) {
+    .reasons {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .reasons li {
+      padding: var(--space-lg);
+      border-bottom: 0;
+      border-left: var(--rule-hair) solid var(--color-rule-2);
+    }
+
+    .reasons li:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
   }
 
   .place {
-    margin-top: 2rem;
+    margin-top: var(--space-lg);
+  }
+
+  @media (min-width: 60rem) {
+    .channels a {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 6fr) minmax(0, 3fr) minmax(0, 1fr);
+      padding-block: var(--space-lg);
+    }
+
+    .handle,
+    .text {
+      grid-column: auto;
+    }
+
+    .channels :global(svg) {
+      grid-column: 4;
+      grid-row: auto;
+      justify-self: end;
+    }
   }
 </style>

@@ -8,10 +8,10 @@ interface Props {
 }
 
 const { project, lang } = Astro.props;
-const { kind, stage, section } = project.data;
+const { kind, stage } = project.data;
 const d = t(lang).common;
 // Only confirmed states are shown; an unset kind or stage renders nothing.
-const label = [kind && d.kind[kind], stage && d.stage[stage]].filter(Boolean).join(' · ');
+const label = [kind && d.kind[kind], stage && d.stage[stage]].filter(Boolean).join(', ');
 ---
 
-{label && <span class="mono status" style={section === 'digital' ? '--tone: var(--warm)' : undefined}>{label}</span>}
+{label && <span class="label status">{label}</span>}

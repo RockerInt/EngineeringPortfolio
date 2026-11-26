@@ -15,14 +15,14 @@ const groups = Object.entries(Object.groupBy(modules, (m) => m.group));
 <div class="map">
   {
     groups.map(([group, items = []]) => (
-      <section class:list={['layer', 'reveal', { planned: items.every((m) => m.planned) }]}>
-        <h3 class="mono">{group}</h3>
+      <section class:list={['layer', { planned: items.every((m) => m.planned) }]}>
+        <h3>{group}</h3>
         <ul>
           {items.map((m) => (
             <li>
-              <p class="name">{m.name}</p>
-              <p class="muted">{m.description}</p>
-              {m.planned && <p class="mono flag">{d.planned} — {d.plannedNote}</p>}
+              <p class="code name">{m.name}</p>
+              <p class="text">{m.description}</p>
+              {m.planned && <p class="label flag">{d.planned}: {d.plannedNote}</p>}
             </li>
           ))}
         </ul>
@@ -32,60 +32,43 @@ const groups = Object.entries(Object.groupBy(modules, (m) => m.group));
 </div>
 
 <style>
-  .map {
-    display: grid;
-    gap: 0.75rem;
-  }
-
+  /* A drawing register: one sheet per layer, package names in mono because they are code. */
   .layer {
     display: grid;
-    gap: 1rem 2rem;
-    padding: 1.25rem;
-    border: 1px solid var(--border);
-    border-left: 2px solid var(--accent);
-    border-radius: var(--radius);
-    background: var(--surface);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-sm) var(--gap-columns);
+    padding-block: var(--space-lg);
+    border-top: var(--rule-hair) solid var(--color-rule);
   }
 
-  .planned {
-    background: none;
-    border-style: dashed;
-    border-left-color: var(--border-strong);
+  .layer.planned {
+    border-top-style: dashed;
   }
 
-  h3 {
-    color: var(--text);
+  li {
+    padding-block: var(--space-sm);
   }
 
-  ul {
-    display: grid;
-    gap: 1.1rem;
+  li + li {
+    border-top: var(--rule-hair) solid var(--color-rule-2);
   }
 
   .name {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--text);
     overflow-wrap: anywhere;
   }
 
-  .muted {
-    margin-top: 0.3rem;
-    font-size: var(--text-sm);
-    line-height: 1.55;
+  .text {
+    margin-top: var(--space-2xs);
+    color: var(--color-ink-2);
   }
 
   .flag {
-    margin-top: 0.5rem;
-    text-transform: none;
-    letter-spacing: 0;
-    color: var(--warm);
+    margin-top: var(--space-2xs);
   }
 
   @media (min-width: 48rem) {
     .layer {
-      grid-template-columns: 8.5rem minmax(0, 1fr);
-      padding: 1.5rem 1.75rem;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
     }
   }
 </style>

@@ -1,6 +1,5 @@
 ---
 import { render } from 'astro:content';
-import ArrowRight from '@lucide/astro/icons/arrow-right';
 import ExtLink from './ExtLink.astro';
 import { href, t, type Lang } from '@/i18n';
 import { getJobs } from '@/lib/content';
@@ -16,40 +15,40 @@ interface Props {
 const { lang, compact = false, level = 2 } = Astro.props;
 const Org = `h${level}` as const;
 const d = t(lang);
+// The open-ended period is the current role; it gets the single accent dot.
+const isCurrent = (period?: string) => /Present/.test(period ?? '');
 const jobs = await Promise.all((await getJobs(lang)).map(async (job) => ({ job, Content: (await render(job)).Content })));
 ---
 
 {
   compact ? (
-    <ol class="rows">
+    <ol class="rows register">
       {jobs.map(({ job }) => (
-        <li class="reveal">
-          <p class="mono when">{job.data.period}</p>
-          <div>
-            <p class="org">{job.data.org}</p>
-            <p class="muted">{job.data.role}</p>
-          </div>
+        <li class:list={{ now: isCurrent(job.data.period) }}>
+          <p class="num when">{job.data.period}</p>
+          <p class="org">{job.data.org}</p>
+          <p class="role">{job.data.role}</p>
         </li>
       ))}
     </ol>
   ) : (
-    <ol class="entries">
+    <ol class="entries register">
       {jobs.map(({ job, Content }) => (
-        <li class="entry reveal">
+        <li class="entry">
           <div class="when">
-            {job.data.period && <p class="mono period">{job.data.period}</p>}
-            {job.data.location && <p class="mono">{job.data.location}</p>}
+            {job.data.period && <p class:list={['num', 'period', { now: isCurrent(job.data.period) }]}>{job.data.period}</p>}
+            {job.data.location && <p class="label">{job.data.location}</p>}
           </div>
           <article>
             <Org class="org-title">{job.data.org}</Org>
             <p class="role">{job.data.role}</p>
-            <div class="summary muted"><Content /></div>
+            <div class="summary"><Content /></div>
             {job.data.projects.length > 0 && (
               <dl class="projects" aria-label={d.experience.projects}>
                 {job.data.projects.map((p) => (
                   <div>
                     <dt>{p.name}</dt>
-                    <dd class="muted">{p.description}</dd>
+                    <dd>{p.description}</dd>
                   </div>
                 ))}
               </dl>
@@ -58,11 +57,9 @@ const jobs = await Promise.all((await getJobs(lang)).map(async (job) => ({ job, 
               {job.data.stack.map((s) => <li class="tag">{s}</li>)}
             </ul>
             {(job.data.caseStudy || job.data.url) && (
-              <p class="case">
+              <p class="case links">
                 {job.data.caseStudy && (
-                  <a class="link" href={href(lang, 'engineering', job.data.caseStudy)}>
-                    {d.experience.relatedCase}<ArrowRight aria-hidden="true" />
-                  </a>
+                  <a class="link" href={href(lang, 'engineering', job.data.caseStudy)}>{d.experience.relatedCase}</a>
                 )}
                 {job.data.url && (
                   <ExtLink href={job.data.url} lang={lang} class="link">{new URL(job.data.url).host}</ExtLink>
@@ -77,114 +74,132 @@ const jobs = await Promise.all((await getJobs(lang)).map(async (job) => ({ job, 
 }
 
 <style>
-  /* Compact rows */
+  /* Compact: a register of posts, the period in its own mono column. */
   .rows li {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 0.25rem 2rem;
-    padding-block: 1.25rem;
-    border-bottom: 1px solid var(--border);
+    gap: var(--space-2xs) var(--gap-columns);
+    padding-block: var(--space-lg);
+    align-items: baseline;
   }
 
-  .rows li:first-child {
-    border-top: 1px solid var(--border-strong);
+  /* The current post: its period in the signal colour. */
+  .now .when,
+  .entry .period.now {
+    color: var(--color-current, var(--color-ink));
   }
 
   .org {
-    font-size: var(--text-lg);
-    font-weight: 600;
-    letter-spacing: -0.015em;
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--text-title);
+    letter-spacing: var(--tracking-display);
+    max-width: none;
   }
 
-  .rows .when {
-    padding-top: 0.4rem;
+  .rows .role {
+    color: var(--color-ink-2);
   }
 
-  @media (min-width: 40rem) {
+  .when {
+    color: var(--color-ink-2);
+  }
+
+  @media (min-width: 48rem) {
     .rows li {
-      grid-template-columns: 11rem minmax(0, 1fr);
+      grid-template-columns: minmax(0, 3fr) minmax(0, 5fr) minmax(0, 4fr);
     }
   }
 
   /* Full entries */
   .entry {
     display: grid;
-    gap: 1rem var(--col-gap);
-    padding-block: clamp(2.5rem, 5vw, 4rem);
-    border-top: 1px solid var(--border);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-md) var(--gap-columns);
+    padding-block: var(--space-2xl);
   }
 
   .entry:first-child {
-    border-top-color: var(--border-strong);
+    padding-top: var(--space-lg);
+  }
+
+  h2.org-title {
+    font-size: var(--text-section);
   }
 
   .entry .when {
     display: grid;
-    gap: 0.4rem;
+    gap: var(--space-2xs);
     align-content: start;
   }
 
   .period {
-    color: var(--text);
+    font-size: var(--text-md);
+    color: var(--color-ink);
   }
 
   .org-title {
-    font-size: var(--text-2xl);
+    max-width: none;
+    font-size: var(--text-head);
+    text-transform: none;
+    line-height: 1.1;
+    text-wrap: balance;
   }
 
-  .role {
-    margin-top: 0.6rem;
-    font-size: var(--text-lg);
-    color: var(--accent);
+  .entry .role {
+    margin-top: var(--space-xs);
+    font-size: var(--text-lead);
+    font-weight: 500;
   }
 
   .summary {
-    margin-top: 1.25rem;
-    max-width: 60ch;
+    margin-top: var(--space-md);
+    color: var(--color-ink-2);
+  }
+
+  .summary :global(p) {
+    max-width: 65ch;
   }
 
   .projects {
-    margin-top: 2rem;
-    border-top: 1px solid var(--border);
+    margin-top: var(--space-lg);
+    border: var(--rule-hair) solid var(--color-rule);
   }
 
   .projects > div {
     display: grid;
-    gap: 0.25rem 1.5rem;
-    padding-block: 1rem;
-    border-bottom: 1px solid var(--border);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2xs) var(--space-lg);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .projects > div + div {
+    border-top: var(--rule-hair) solid var(--color-rule-2);
   }
 
   .projects dt {
-    font-weight: 600;
+    font-weight: 500;
   }
 
-  .tags {
-    margin-top: 1.75rem;
-  }
-
-  .case {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 1.5rem;
-    margin-top: 1.75rem;
+  .projects dd {
     font-size: var(--text-sm);
+    color: var(--color-ink-2);
+  }
+
+  .entry .tags,
+  .case {
+    margin-top: var(--space-lg);
+  }
+
+  @media (min-width: 48rem) {
+    .projects > div {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
+    }
   }
 
   @media (min-width: 60rem) {
     .entry {
       grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
-    }
-
-    .entry .when {
-      position: sticky;
-      top: 6rem;
-      align-self: start;
-      padding-top: 0.7rem;
-    }
-
-    .projects > div {
-      grid-template-columns: 11rem minmax(0, 1fr);
     }
   }
 </style>
