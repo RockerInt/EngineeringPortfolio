@@ -13,6 +13,8 @@ interface Props {
 
 const { lang, page, sub } = Astro.props;
 const d = t(lang);
+// Open Source pages sit under Engineering in the header.
+const isUnder = (key: PageKey) => page === 'openSource' && key === 'engineering';
 ---
 
 <header class="site-header">
@@ -34,7 +36,7 @@ const d = t(lang);
           NAV.map((key) => (
             <li>
               {/* On a detail page the parent section stays highlighted but is not "the current page". */}
-              <a href={href(lang, key)} aria-current={page === key ? (sub ? 'true' : 'page') : undefined}>
+              <a href={href(lang, key)} aria-current={page === key ? (sub ? 'true' : 'page') : isUnder(key) ? 'true' : undefined}>
                 {d.nav[key]}
               </a>
             </li>
@@ -176,7 +178,7 @@ const d = t(lang);
     display: block;
   }
 
-  @media (max-width: 72rem) {
+  @media (max-width: 64rem) {
     .toggle {
       display: grid;
     }

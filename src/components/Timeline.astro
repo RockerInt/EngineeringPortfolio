@@ -16,6 +16,8 @@ interface Props {
 const { lang, compact = false, level = 2 } = Astro.props;
 const Org = `h${level}` as const;
 const d = t(lang);
+// The open-ended period is the current role; it gets the single accent dot.
+const isCurrent = (period?: string) => /Present/.test(period ?? '');
 const jobs = await Promise.all((await getJobs(lang)).map(async (job) => ({ job, Content: (await render(job)).Content })));
 ---
 
@@ -24,11 +26,9 @@ const jobs = await Promise.all((await getJobs(lang)).map(async (job) => ({ job, 
     <ol class="rows">
       {jobs.map(({ job }) => (
         <li class="reveal">
-          <p class="mono when">{job.data.period}</p>
-          <div>
-            <p class="org">{job.data.org}</p>
-            <p class="muted">{job.data.role}</p>
-          </div>
+          <p class="org">{job.data.org}</p>
+          <p class="muted">{job.data.role}</p>
+          <p class:list={['mono', 'when', { now: isCurrent(job.data.period) }]}>{job.data.period}</p>
         </li>
       ))}
     </ol>
@@ -37,7 +37,7 @@ const jobs = await Promise.all((await getJobs(lang)).map(async (job) => ({ job, 
       {jobs.map(({ job, Content }) => (
         <li class="entry reveal">
           <div class="when">
-            {job.data.period && <p class="mono period">{job.data.period}</p>}
+            {job.data.period && <p class:list={['mono', 'period', { now: isCurrent(job.data.period) }]}>{job.data.period}</p>}
             {job.data.location && <p class="mono">{job.data.location}</p>}
           </div>
           <article>
@@ -77,11 +77,11 @@ const jobs = await Promise.all((await getJobs(lang)).map(async (job) => ({ job, 
 }
 
 <style>
-  /* Compact rows */
+  /* Compact rows: organization, role, period — the date sits right, like a ledger. */
   .rows li {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 0.25rem 2rem;
+    gap: 0.15rem 2rem;
     padding-block: 1.25rem;
     border-bottom: 1px solid var(--border);
   }
@@ -97,12 +97,29 @@ const jobs = await Promise.all((await getJobs(lang)).map(async (job) => ({ job, 
   }
 
   .rows .when {
-    padding-top: 0.4rem;
+    margin-top: 0.35rem;
   }
 
-  @media (min-width: 40rem) {
+  .now::before {
+    content: '';
+    display: inline-block;
+    width: 0.4rem;
+    height: 0.4rem;
+    margin-right: 0.6rem;
+    border-radius: 50%;
+    background: var(--accent);
+    vertical-align: 0.1em;
+  }
+
+  @media (min-width: 48rem) {
     .rows li {
-      grid-template-columns: 11rem minmax(0, 1fr);
+      grid-template-columns: minmax(0, 5fr) minmax(0, 5fr) minmax(0, 3fr);
+      align-items: baseline;
+    }
+
+    .rows .when {
+      margin-top: 0;
+      text-align: right;
     }
   }
 
@@ -135,7 +152,7 @@ const jobs = await Promise.all((await getJobs(lang)).map(async (job) => ({ job, 
   .role {
     margin-top: 0.6rem;
     font-size: var(--text-lg);
-    color: var(--accent);
+    color: var(--muted);
   }
 
   .summary {

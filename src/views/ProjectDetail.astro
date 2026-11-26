@@ -6,6 +6,7 @@ import Base from '@/layouts/Base.astro';
 import PageHero from '@/components/PageHero.astro';
 import ExtLink from '@/components/ExtLink.astro';
 import ModuleMap from '@/components/ModuleMap.astro';
+import ArchDiagram from '@/components/ArchDiagram.astro';
 import ContactCta from '@/components/ContactCta.astro';
 import { href, t, type Lang } from '@/i18n';
 import { getProjects, projectHref, slugOf, type Project } from '@/lib/content';
@@ -57,6 +58,8 @@ const host = data.url ? new URL(data.url).host : undefined;
         </div>
       )
     }
+
+    {slugOf(project.id) === 'dsr-architecture' && <div class="container figure"><ArchDiagram lang={lang} /></div>}
 
     <div class="container layout">
       <aside class="meta">
@@ -148,6 +151,14 @@ const host = data.url ? new URL(data.url).host : undefined;
 <style>
   .cover {
     margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .figure {
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .figure > :global(*) {
+    max-width: 60rem;
   }
 
   .layout {

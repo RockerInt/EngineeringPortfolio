@@ -5,3 +5,6 @@ dist/
 .env
 .env.*
 .DS_Store
+
+# Third-party reference captures (not ours to publish)
+docs/design/screenshots/references/

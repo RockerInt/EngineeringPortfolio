@@ -11,15 +11,16 @@ interface Props {
   /** Larger layout with image and text side by side. */
   wide?: boolean;
   eager?: boolean;
+  level?: 2 | 3 | 4;
 }
 
-const { project, lang, wide = false, eager = false } = Astro.props;
+const { project, lang, wide = false, eager = false, level } = Astro.props;
 const { title, summary, category, url, cover, coverAlt, role } = project.data;
 const d = t(lang).common;
 const detail = projectHref(lang, project);
 const host = url ? new URL(url).host : undefined;
 // Wide features sit directly under the page <h1>; compact ones live inside a titled section.
-const Heading = wide ? 'h2' : 'h3';
+const Heading = `h${level ?? (wide ? 2 : 3)}` as const;
 ---
 
 <article class:list={['feature', 'reveal', { wide }]}>
@@ -108,6 +109,10 @@ const Heading = wide ? 'h2' : 'h3';
       grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
       gap: var(--col-gap);
       align-items: center;
+    }
+
+    .wide:nth-child(even) {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
     }
 
     .wide:nth-child(even) .shot {

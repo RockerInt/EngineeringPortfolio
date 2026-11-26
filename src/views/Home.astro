@@ -9,7 +9,10 @@ import SkillGroups from '@/components/SkillGroups.astro';
 import ContactCta from '@/components/ContactCta.astro';
 import Portrait from '@/components/Portrait.astro';
 import { href, t, type Lang } from '@/i18n';
-import { getProjects } from '@/lib/content';
+import ArchDiagram from '@/components/ArchDiagram.astro';
+import Status from '@/components/Status.astro';
+import ExtLink from '@/components/ExtLink.astro';
+import { getProjects, projectHref, slugOf } from '@/lib/content';
 import { SITE } from '@/lib/site';
 
 interface Props {
@@ -19,13 +22,13 @@ interface Props {
 const { lang } = Astro.props;
 const d = t(lang);
 const h = d.home;
-const featured = (await getProjects(lang)).filter((p) => p.data.featured);
-const engineeringWork = featured.filter((p) => p.data.section !== 'digital');
-const digitalWork = featured.filter((p) => p.data.section === 'digital');
-const areas = [
-  { key: 'engineering', letter: 'A', tone: 'var(--accent)', ...d.areas.engineering },
-  { key: 'digital', letter: 'B', tone: 'var(--warm)', ...d.areas.digital },
-] as const;
+const engineering = (await getProjects(lang)).filter((p) => p.data.featured && p.data.section !== 'digital');
+// The framework leads the engineering chapter with its diagram; the rest follow as rows.
+const lead = engineering.find((p) => slugOf(p.id) === 'dsr-architecture');
+const rows = engineering.filter((p) => p !== lead);
+const [digitalLead, ...digitalRest] = await getProjects(lang, 'digital');
+const A = d.areas.engineering;
+const B = d.areas.digital;
 ---
 
 <Base lang={lang} page="home" title={h.title} description={h.description}>
@@ -46,8 +49,8 @@ const areas = [
           <p class="lead">{d.valueProp}</p>
           <div class="btn-row">
             <a class="btn btn-primary" href="#work">{h.cta.work}<ArrowRight aria-hidden="true" /></a>
-            <a class="btn" href={href(lang, 'resume')}>{h.cta.resume}</a>
-            <a class="btn" href={href(lang, 'contact')}>{h.cta.contact}</a>
+            <a class="link" href={href(lang, 'resume')}>{h.cta.resume}</a>
+            <a class="link" href={href(lang, 'contact')}>{h.cta.contact}</a>
           </div>
         </div>
         <dl class="spec rise" style="--i:4" aria-label={h.spec.label}>
@@ -73,35 +76,68 @@ const areas = [
     <p class="reveal more"><a class="link" href={href(lang, 'about')}>{h.intro.link}<ArrowRight aria-hidden="true" /></a></p>
   </Section>
 
-  <Section label={h.areasLabel} title={h.areasTitle}>
-    <div class="areas">
-      {
-        areas.map((area) => (
-          <article class="area reveal" style={`--tone:${area.tone}`}>
-            <p class="letter" aria-hidden="true">{area.letter}</p>
-            <h3>{area.title}</h3>
-            <p class="muted">{area.text}</p>
-            <ul>
-              {area.items.map((item) => <li>{item}</li>)}
-            </ul>
-            <p><a class="link" href={href(lang, area.key)}>{area.cta}<ArrowRight aria-hidden="true" /></a></p>
-          </article>
-        ))
-      }
-    </div>
-    <p class="areas-note mono reveal">{h.areasNote}</p>
-  </Section>
+  <section class="section" id="work">
+    <div class="container">
+      <header class="section-grid">
+        <p class="section-label mono">{h.work.label}</p>
+        <div>
+          <h2 class="section-title reveal">{h.work.title}</h2>
+          <p class="muted work-note reveal">{h.areasNote}</p>
+        </div>
+      </header>
 
-  <Section label={h.work.label} title={h.work.title} id="work">
-    <p class="mono group">{h.work.engineering}</p>
-    <ul>
-      {engineeringWork.map((project, i) => <WorkRow project={project} lang={lang} index={i + 1} />)}
-    </ul>
-    <p class="mono group digital">{h.work.digital}</p>
-    <div class="pair">
-      {digitalWork.map((project) => <WorkFeature project={project} lang={lang} />)}
+      <div class="chapter">
+        <header class="chapter-head reveal">
+          <p class="mono letter" aria-hidden="true">A</p>
+          <div>
+            <h3>{A.title}</h3>
+            <p class="muted">{A.text}</p>
+          </div>
+          <p class="all"><a class="link" href={href(lang, 'engineering')}>{A.cta}<ArrowRight aria-hidden="true" /></a></p>
+        </header>
+
+        {
+          lead && (
+            <article class="flagship">
+              <ArchDiagram lang={lang} />
+              <div class="lead-text reveal">
+                <p class="mono">01 — {lead.data.category}</p>
+                <h4><a href={projectHref(lang, lead)}>{lead.data.title}</a></h4>
+                <p class="muted">{lead.data.summary}</p>
+                <p><Status project={lead} lang={lang} /></p>
+                <p class="mono stack">{lead.data.stack.slice(0, 5).join(' · ')}</p>
+                <p class="links">
+                  <a class="link" href={projectHref(lang, lead)} aria-label={`${d.common.caseStudy}: ${lead.data.title}`}>
+                    {d.common.caseStudy}<ArrowRight aria-hidden="true" />
+                  </a>
+                  {lead.data.repo && <ExtLink href={lead.data.repo} lang={lang} class="link">{d.common.repository}</ExtLink>}
+                </p>
+              </div>
+            </article>
+          )
+        }
+        <ul class="rows">
+          {rows.map((project, i) => <WorkRow project={project} lang={lang} index={i + 2} level={4} />)}
+        </ul>
+      </div>
+
+      <div class="chapter digital">
+        <header class="chapter-head reveal">
+          <p class="mono letter" aria-hidden="true">B</p>
+          <div>
+            <h3>{B.title}</h3>
+            <p class="muted">{B.text}</p>
+          </div>
+          <p class="all"><a class="link" href={href(lang, 'digital')}>{B.cta}<ArrowRight aria-hidden="true" /></a></p>
+        </header>
+
+        <div>{digitalLead && <WorkFeature project={digitalLead} lang={lang} wide level={4} />}</div>
+        <div class="pair">
+          {digitalRest.map((project) => <WorkFeature project={project} lang={lang} level={4} />)}
+        </div>
+      </div>
     </div>
-  </Section>
+  </section>
 
   <Section label={h.experience.label} title={h.experience.title}>
     <Timeline lang={lang} compact />
@@ -124,32 +160,13 @@ const areas = [
     overflow: hidden;
   }
 
-  /* Blueprint grid, fading out from the top-right corner. */
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 4.5rem 4.5rem;
-    background-position: center top;
-    mask-image: radial-gradient(ellipse 75% 85% at 85% 0%, #000, transparent 72%);
-    opacity: 0.55;
-    pointer-events: none;
-  }
-
-  .hero .container {
-    position: relative;
-  }
-
   .id {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0.4rem 1.25rem;
-    font-size: var(--text-lg);
-    letter-spacing: -0.015em;
+    font-size: var(--text-xl);
+    letter-spacing: -0.02em;
   }
 
   .id .role {
@@ -199,13 +216,19 @@ const areas = [
   .foot {
     display: grid;
     gap: 3rem var(--col-gap);
-    margin-top: clamp(3rem, 7vw, 5.5rem);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
   }
 
   .pitch {
     display: grid;
     gap: 2rem;
     align-content: start;
+  }
+
+  .pitch .btn-row {
+    align-items: center;
+    gap: 1rem 1.75rem;
+    font-size: var(--text-sm);
   }
 
   .pitch .lead {
@@ -257,92 +280,98 @@ const areas = [
     font-size: var(--text-sm);
   }
 
-  /* ----- Areas diptych ----- */
-  .areas {
-    display: grid;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
+  /* ----- Selected work: two chapters, each with its own composition ----- */
+  .work-note {
+    margin-top: 1.25rem;
+    max-width: 52ch;
   }
 
-  .area {
-    position: relative;
-    display: grid;
-    gap: 1rem;
-    align-content: start;
-    padding: clamp(1.5rem, 3.5vw, 2.75rem);
-    border-top: 2px solid var(--tone);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--tone) 5%, transparent), transparent 45%);
+  .chapter {
+    margin-top: clamp(3.5rem, 7vw, 6rem);
   }
 
-  .area + .area {
-    border-left: 0;
+  .digital {
+    --accent: var(--warm);
+  }
+
+  .chapter-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem var(--col-gap);
+    padding-block: 1.5rem clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--border-strong);
   }
 
   .letter {
-    font-family: var(--font-mono);
-    font-size: clamp(3rem, 6vw, 4.5rem);
-    line-height: 1;
-    font-weight: 300;
-    color: transparent;
-    -webkit-text-stroke: 1px var(--tone);
+    font-size: var(--text-sm);
+    color: var(--accent);
   }
 
-  .area h3 {
-    font-size: var(--text-xl);
-    margin-top: 0.5rem;
+  .letter::after {
+    content: ' /';
+    color: var(--border-strong);
   }
 
-  .area ul {
-    margin-block: 0.75rem;
-    border-top: 1px solid var(--border);
+  .chapter-head h3 {
+    font-size: var(--text-2xl);
+    letter-spacing: -0.03em;
   }
 
-  .area li {
-    padding-block: 0.7rem;
-    border-bottom: 1px solid var(--border);
+  .chapter-head .muted {
+    margin-top: 0.75rem;
+    max-width: 48ch;
+  }
+
+  .all {
     font-size: var(--text-sm);
   }
 
-  .area .link {
-    font-size: var(--text-sm);
+  .flagship {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem var(--col-gap);
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
   }
 
-  .area .link:hover {
-    color: var(--tone);
-    border-color: var(--tone);
+  .lead-text {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.9rem;
+    align-content: start;
+    justify-items: start;
   }
 
-  @media (min-width: 52rem) {
-    .areas {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .area + .area {
-      border-left: 1px solid var(--border);
-    }
+  .lead-text h4 {
+    font-size: var(--text-2xl);
+    letter-spacing: -0.03em;
   }
 
-  .areas-note {
-    margin-top: 1.5rem;
+  .lead-text h4 a {
+    transition: color var(--fast) var(--ease);
+  }
+
+  .lead-text h4 a:hover {
+    color: var(--accent);
+  }
+
+  .lead-text .stack {
     text-transform: none;
     letter-spacing: 0;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-top: 0.5rem;
     font-size: var(--text-sm);
-  }
-
-  /* ----- Selected work ----- */
-  .group {
-    margin-bottom: 1rem;
-  }
-
-  .group.digital {
-    margin-top: clamp(3.5rem, 7vw, 5.5rem);
-    margin-bottom: 1.75rem;
   }
 
   .pair {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 3.5rem var(--col-gap);
+    margin-top: clamp(3.5rem, 7vw, 6rem);
   }
 
   @media (min-width: 52rem) {
@@ -353,6 +382,28 @@ const areas = [
     /* Offset the second column so the two features do not read as a card grid. */
     .pair > :global(:nth-child(even)) {
       margin-top: 5rem;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .chapter-head {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr);
+      align-items: start;
+    }
+
+    .all {
+      justify-self: end;
+      padding-top: 0.6rem;
+    }
+
+    .flagship {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+
+    .lead-text {
+      position: sticky;
+      top: 6rem;
+      align-self: start;
     }
   }
 

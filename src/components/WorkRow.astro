@@ -10,9 +10,11 @@ interface Props {
   index: number;
   /** Optional editorial note shown instead of the summary. */
   note?: string;
+  level?: 3 | 4;
 }
 
-const { project, lang, index, note } = Astro.props;
+const { project, lang, index, note, level = 3 } = Astro.props;
+const Heading = `h${level}` as const;
 const { title, summary, category, stack } = project.data;
 ---
 
@@ -20,7 +22,7 @@ const { title, summary, category, stack } = project.data;
   <a class="row" href={projectHref(lang, project)}>
     <span class="mono idx" aria-hidden="true">{String(index).padStart(2, '0')}</span>
     <div class="body">
-      <h3>{title}</h3>
+      <Heading class="title">{title}</Heading>
       <p>{note ?? summary}</p>
       <p class="mono stack">{stack.slice(0, 5).join(' · ')}</p>
     </div>
@@ -70,12 +72,12 @@ const { title, summary, category, stack } = project.data;
     padding-top: 0.55rem;
   }
 
-  h3 {
+  .title {
     font-size: var(--text-xl);
     transition: color var(--fast) var(--ease);
   }
 
-  .row:hover h3 {
+  .row:hover .title {
     color: var(--accent);
   }
 
@@ -86,6 +88,7 @@ const { title, summary, category, stack } = project.data;
   }
 
   .body .stack {
+    max-width: none;
     margin-top: 1rem;
     text-transform: none;
     letter-spacing: 0;

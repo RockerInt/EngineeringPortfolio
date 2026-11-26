@@ -134,8 +134,6 @@ export const en = {
       ],
       link: 'More about me',
     },
-    areasLabel: 'Two lines of work',
-    areasTitle: 'One practice, two expressions.',
     areasNote: 'Both come from the same capability: designing, building and delivering digital solutions.',
     work: {
       label: 'Selected work',
@@ -301,6 +299,32 @@ export const en = {
     ],
   },
 
+  diagram: {
+    label: 'Architecture diagram of DSR.Architecture: three nested layers with dependencies pointing inward.',
+    caption: 'Fig. 1 — Package layers of DSR.Architecture. Each layer depends only on the ones inside it.',
+    note: 'Conceptual diagram, drawn from the structure of the public repository.',
+    dependsOn: 'depends on',
+    nothing: 'nothing',
+    infrastructure: {
+      name: 'Infrastructure',
+      text: 'Implements the contracts for a specific store.',
+      items: ['EF Core', 'MongoDB', 'SQL Server', 'SQLite', 'HTTP provider'],
+    },
+    application: {
+      name: 'Application',
+      text: 'Commands and queries pass through a pipeline of behaviors before reaching their use case.',
+      pipeline: 'Pipeline',
+      items: ['Validation', 'Authorization', 'Transaction', 'Idempotency', 'Logging', 'Metrics', 'Exceptions'],
+      contracts: 'Contracts',
+      contractItems: ['Read repository', 'Write repository', 'Unit of work'],
+    },
+    domain: {
+      name: 'Domain',
+      text: 'Knows nothing about infrastructure.',
+      items: ['Aggregates', 'Entities', 'Value objects', 'Domain events', 'Result', 'Specifications'],
+    },
+    planned: { name: 'Planned', text: 'Not in the repository yet.', items: ['Outbox', 'Event Sourcing'] },
+  },
   cta: {
     label: 'Contact',
     title: 'Have a system to design or an experience to build?',

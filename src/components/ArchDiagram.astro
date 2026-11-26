@@ -1,0 +1,188 @@
+---
+import { t, type Lang } from '@/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+// Conceptual figure of DSR.Architecture. Every label maps to a package or type that exists in the
+// public repository; planned packages are drawn outside the layers, dashed.
+const g = t(Astro.props.lang).diagram;
+---
+
+<figure class="arch reveal" aria-label={g.label}>
+  <div class="ring">
+    <p class="head">
+      <span class="mono name">{g.infrastructure.name}</span>
+      <span class="mono dep">{g.dependsOn} ↓</span>
+    </p>
+    <p class="hint">{g.infrastructure.text}</p>
+    <ul class="mono items">{g.infrastructure.items.map((item) => <li>{item}</li>)}</ul>
+
+    <div class="ring">
+      <p class="head">
+        <span class="mono name">{g.application.name}</span>
+        <span class="mono dep">{g.dependsOn} ↓</span>
+      </p>
+      <p class="hint">{g.application.text}</p>
+      <dl class="lines">
+        <div>
+          <dt class="mono">{g.application.pipeline}</dt>
+          <dd><ol class="mono items flow">{g.application.items.map((item) => <li>{item}</li>)}</ol></dd>
+        </div>
+        <div>
+          <dt class="mono">{g.application.contracts}</dt>
+          <dd><ul class="mono items">{g.application.contractItems.map((item) => <li>{item}</li>)}</ul></dd>
+        </div>
+      </dl>
+
+      <div class="ring core">
+        <p class="head">
+          <span class="mono name">{g.domain.name}</span>
+          <span class="mono dep">{g.dependsOn} — {g.nothing}</span>
+        </p>
+        <p class="hint">{g.domain.text}</p>
+        <ul class="concepts">{g.domain.items.map((item) => <li>{item}</li>)}</ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ring planned">
+    <p class="head">
+      <span class="mono name">{g.planned.name}</span>
+      <span class="mono dep">{g.planned.text}</span>
+    </p>
+    <ul class="mono items">{g.planned.items.map((item) => <li>{item}</li>)}</ul>
+  </div>
+
+  <figcaption>{g.caption} <span>{g.note}</span></figcaption>
+</figure>
+
+<style>
+  .arch {
+    --pad: clamp(0.85rem, 2.2vw, 1.5rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* Nested hairline frames: the nesting itself is the dependency rule. */
+  .ring {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.6rem;
+    padding: var(--pad);
+    border: 1px solid var(--border-strong);
+  }
+
+  .ring .ring {
+    margin-top: 0.6rem;
+  }
+
+  .core {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+
+  .planned {
+    border-style: dashed;
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+
+  .name {
+    color: var(--text);
+  }
+
+  .core .name {
+    color: var(--accent);
+  }
+
+  .planned .name,
+  .planned .dep {
+    color: var(--warm);
+  }
+
+  .dep {
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .hint {
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--muted);
+    max-width: 52ch;
+  }
+
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text);
+  }
+
+  .items li:not(:last-child)::after {
+    content: '·';
+    margin-inline: 0.6em;
+    color: var(--muted);
+  }
+
+  .flow li:not(:last-child)::after {
+    content: '→';
+  }
+
+  .lines {
+    display: grid;
+    gap: 0.5rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .lines > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem 1rem;
+  }
+
+  .concepts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.1rem 0;
+    font-size: var(--text-lg);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .concepts li:not(:last-child)::after {
+    content: '/';
+    margin-inline: 0.55em;
+    font-weight: 400;
+    color: var(--border-strong);
+  }
+
+  figcaption {
+    margin-top: 0.35rem;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  figcaption span {
+    display: block;
+  }
+
+  @media (min-width: 40rem) {
+    .lines > div {
+      grid-template-columns: 6rem minmax(0, 1fr);
+      align-items: baseline;
+    }
+  }
+</style>

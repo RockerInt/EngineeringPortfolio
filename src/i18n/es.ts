@@ -132,8 +132,6 @@ export const es: Dict = {
       ],
       link: 'Más sobre mí',
     },
-    areasLabel: 'Dos líneas de trabajo',
-    areasTitle: 'Una práctica, dos expresiones.',
     areasNote: 'Ambas nacen de la misma capacidad: diseñar, construir y entregar soluciones digitales.',
     work: {
       label: 'Trabajo seleccionado',
@@ -299,6 +297,32 @@ export const es: Dict = {
     ],
   },
 
+  diagram: {
+    label: 'Diagrama de arquitectura de DSR.Architecture: tres capas anidadas con dependencias que apuntan hacia adentro.',
+    caption: 'Fig. 1 — Capas de paquetes de DSR.Architecture. Cada capa depende solo de las que contiene.',
+    note: 'Diagrama conceptual, elaborado a partir de la estructura del repositorio público.',
+    dependsOn: 'depende de',
+    nothing: 'nada',
+    infrastructure: {
+      name: 'Infraestructura',
+      text: 'Implementa los contratos para un almacenamiento específico.',
+      items: ['EF Core', 'MongoDB', 'SQL Server', 'SQLite', 'Proveedor HTTP'],
+    },
+    application: {
+      name: 'Aplicación',
+      text: 'Comandos y consultas pasan por un pipeline de behaviors antes de llegar a su caso de uso.',
+      pipeline: 'Pipeline',
+      items: ['Validación', 'Autorización', 'Transacción', 'Idempotencia', 'Logging', 'Métricas', 'Excepciones'],
+      contracts: 'Contratos',
+      contractItems: ['Repositorio de lectura', 'Repositorio de escritura', 'Unidad de trabajo'],
+    },
+    domain: {
+      name: 'Dominio',
+      text: 'No conoce la infraestructura.',
+      items: ['Agregados', 'Entidades', 'Objetos de valor', 'Eventos de dominio', 'Result', 'Especificaciones'],
+    },
+    planned: { name: 'Planeado', text: 'Aún no está en el repositorio.', items: ['Outbox', 'Event Sourcing'] },
+  },
   cta: {
     label: 'Contacto',
     title: '¿Un sistema por diseñar o una experiencia por construir?',

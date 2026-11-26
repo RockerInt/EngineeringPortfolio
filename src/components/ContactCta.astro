@@ -19,36 +19,24 @@ const title = Astro.props.title ?? d.cta.title;
     <p class="mono reveal">{d.cta.label}</p>
     <h2 class="reveal">{title}</h2>
     <p class="lead reveal">{d.cta.text}</p>
-    <div class="btn-row reveal">
-      <a class="btn btn-primary" href={href(lang, 'contact')}>{d.cta.primary}<ArrowRight aria-hidden="true" /></a>
-      <a class="btn" href={`mailto:${SITE.email}`}>{SITE.email}</a>
-      <ExtLink href={SITE.linkedin} lang={lang} class="btn">LinkedIn</ExtLink>
-      <ExtLink href={SITE.github} lang={lang} class="btn">GitHub</ExtLink>
-    </div>
+    <p class="reveal"><a class="mail" href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+    <p class="links reveal">
+      <a class="link" href={href(lang, 'contact')}>{d.cta.primary}<ArrowRight aria-hidden="true" /></a>
+      <ExtLink href={SITE.linkedin} lang={lang} class="link">LinkedIn</ExtLink>
+      <ExtLink href={SITE.github} lang={lang} class="link">GitHub</ExtLink>
+    </p>
   </div>
 </section>
 
 <style>
   .cta {
-    position: relative;
     border-top: 1px solid var(--border);
     padding-block: var(--space-section);
-    overflow: hidden;
-  }
-
-  /* A single, quiet light source: the only gradient on the site besides the hero. */
-  .cta::before {
-    content: '';
-    position: absolute;
-    inset: auto 0 0;
-    height: 70%;
-    background: radial-gradient(ellipse 60% 100% at 20% 100%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 70%);
-    pointer-events: none;
   }
 
   .inner {
-    position: relative;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
     justify-items: start;
   }
@@ -59,7 +47,28 @@ const title = Astro.props.title ?? d.cta.title;
     max-width: 18ch;
   }
 
-  .btn-row {
+  /* The address is the call to action: set as type, not as a button. */
+  .mail {
+    display: inline-block;
     margin-top: 1rem;
+    padding-bottom: 0.2em;
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+    border-bottom: 1px solid var(--accent);
+    transition: color var(--fast) var(--ease);
+  }
+
+  .mail:hover {
+    color: var(--accent);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.75rem;
+    font-size: var(--text-sm);
   }
 </style>

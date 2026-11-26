@@ -30,19 +30,13 @@ const d = t(lang);
 </figure>
 
 <style>
-  .portrait {
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius);
-    overflow: hidden;
-    background: var(--surface);
-  }
-
   /* The source is square; a 4:5 crop anchored to the top keeps the face and crossed arms. */
   .portrait :global(img) {
     width: 100%;
     aspect-ratio: 4 / 5;
     object-fit: cover;
     object-position: 50% 0;
+    background: var(--surface);
   }
 
   figcaption {
@@ -50,8 +44,7 @@ const d = t(lang);
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 0.25rem 1rem;
-    padding: 0.7rem 0.9rem;
-    border-top: 1px solid var(--border);
+    padding-top: 0.7rem;
   }
 
   figcaption span:first-child {
